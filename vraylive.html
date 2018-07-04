@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VRAY™ - Live</title>
+        
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="VRAY Live" property="og:title">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    
+    <!-- Google sign-in meta -->
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="653011359022-2qt02n46nn4j92b0d8k4manqpq3gp3q9.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <link rel="shortcut icon" href="images/shopping_cart_3.ico"> 
+    
+    <link href="css/normalize.css" rel="stylesheet" type="text/css">
+    <link href="css/components.css" rel="stylesheet" type="text/css">
+    <link href="css/gcs-checkout.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/css" rel="stylesheet" type="text/css">
+    <link type="text/css" href="css/kprofile.css" rel="stylesheet">
+    <link type="text/css" href="css/kform.css" rel="stylesheet">
+    <link type="text/css" href="css/kcart.css" rel="stylesheet">
+
+    <!-- JQuery Library -->
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/jquery-3.2.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.js"></script>
+    
+    <!-- Spinner Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+//        $(document).ready(function(){
+//            $(document).ajaxStart(function(){
+//                $("#waitForAuthorization").css("display", "block");
+//                document.getElementById('mobilepay').innerHTML='Please authorize payment from your mobile device...'; 
+//            });
+//            
+//            $(document).ajaxComplete(function(){
+//                setTimeout(function() {
+//                    $("#waitForAuthorization").css("display", "none");
+//                    document.getElementById('mobilepay').innerHTML='';
+//                }, 10000); // 10 seconds
+//            });
+//            
+//            $("button").click(function(){
+//                 $("#mobilepay").load("demo.asp");
+//            });
+//        });
+    </script>
+    
+    <!-- VRAY Payment -->
+    <script src="js/paymentservices.js"></script> 
+    <script src="js/chargeservices.js"></script>  
+        
+    <!-- HMAC Library -->
+    <script src="js/digest.js" type="text/javascript"></script>
+    <script>
+    function calculateHMAC(message) {
+
+        ////////////////////////////////////////////////////////////////////
+        // Calculate payment request MAC
+        var mac = new Digest.HMAC_SHA256();        
+        mac.setKey(APPSERVER.vrayHost.getMACKey());         
+        mac.update(message);
+
+        return mac.finalize();  
+    }
+    </script>
+    
+    <!-- GCS Stuff -->
+    <script src="misc/539772449560969" async=""></script>
+    <script async="" src="js/fbevents.js"></script>
+    <script async="" src="js/gtm.js"></script>
+    <script src="js/modernizr.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        WebFont.load({
+      google: {
+        families: ["Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic","Oswald:300,400,700","Lato:100,100italic,300,300italic,400,400italic,700,700italic,900,900italic","Fjalla One:regular"]
+      }
+    });
+    </script>
+    <script src="js/checkout.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/kvalidator.js"></script>
+    <script type="text/javascript" src="js/klander.js"></script>
+    <script type="text/javascript" src="js/kcart.js"></script>
+    
+    <script type="text/javascript">
+    window.addEventListener('load',function()
+    {
+
+	kform = new klander;
+	kform.disableBack = false;
+	kform.requirePayInfo = false;
+	kform.autoImportLead = true;
+	kform.config = {"isWordpress":false,"resourceDir":"resources\/","baseDir":null,"mobileRedirectUrl":null,"desktopRedirectUrl":null,"continents":{"US":"NA"},"countries":{"US":"United States"},"coupons":{"SUMMER5":{"couponDiscountPrice":"5.00","couponDiscountPerc":null,"applyTo":"BASE_PRICE","isRecurring":0,"recurringDiscountPrice":null,"recurringDiscountPerc":null,"maxCycles":null,"campaignProductId":null,"couponMax":1}},"currencySymbol":"$","insureShipPrice":null,"landerType":"SINGLE","offers":{"75":{"productId":75,"name":"Green Canoe Shake - 1 Tub","description":"*No description available","imagePath":"https:\/\/images.konnektive.com\/neuliven_health\/product9.jpeg","imageId":8,"price":"49.99","shipPrice":"0.00","category":"Energy"}},"upsells":[],"products":[],"shipProfiles":[],"states":{"US":{"AL":"Alabama","AK":"Alaska","AZ":"Arizona","AR":"Arkansas","CA":"California","CO":"Colorado","CT":"Connecticut","DE":"Delaware","DC":"District of Columbia","FL":"Florida","GA":"Georgia","HI":"Hawaii","ID":"Idaho","IL":"Illinois","IN":"Indiana","IA":"Iowa","KS":"Kansas","KY":"Kentucky","LA":"Louisiana","ME":"Maine","MD":"Maryland","MA":"Massachusetts","MI":"Michigan","MN":"Minnesota","MS":"Mississippi","MO":"Missouri","MT":"Montana","NE":"Nebraska","NV":"Nevada","NH":"New Hampshire","NJ":"New Jersey","NM":"New Mexico","NY":"New York","NC":"North Carolina","ND":"North Dakota","OH":"Ohio","OK":"Oklahoma","OR":"Oregon","PA":"Pennsylvania","RI":"Rhode Island","SC":"South Carolina","SD":"South Dakota","TN":"Tennessee","TX":"Texas","UT":"Utah","VT":"Vermont","VA":"Virginia","WA":"Washington","WV":"West Virginia","WI":"Wisconsin","WY":"Wyoming","PR":"Puerto Rico"}},"taxes":{"US-CA":"0.0775"},"webPages":{"checkoutPage":{"disableBack":0,"url":"https:\/\/www.greencanoeshake.com\/checkout\/gcs1\/index.php","autoImportLead":1,"productId":75},"thankyouPage":{"disableBack":1,"url":"https:\/\/www.greencanoeshake.com\/checkout\/gcs1\/thankyou.php","createAccountDialog":0,"reorderUrl":null,"allowReorder":0}},"authString":"9d85a9c1b38d82056c7454b0cf70caac","autoUpdate_allowedIps":["80.248.30.132"],"campaignId":13,"shipOptions":[],"googleTrackingId":null,"enableFraudPlugin":0,"companyName":"neuliven_health"};
+	kform.defaultProduct = 75;
+	kform.isShoppingCart = false;
+	kform.displayPixels = true;
+	kform.reorderURL = '';
+	kform.redirectsTo = '/thankyou.php';
+	kform.resourceDir = 'resources/';
+	kform.upsellId = null;
+	kform.orderItems = {};
+	kform.customer = null;
+	kform.replaceProductId = null;
+	kform.checkoutPageUrl = '/index.php';
+	kform.signInEmail = '';
+        kform.construct("checkoutPage");
+    });
+    </script>
+    
+    <script charset="utf-8" src="js/bundle.js"></script>
+    
+    <script charset="utf-8" src="js/fblogin.js"></script>
+    <script charset="utf-8" src="js/glogin.js"></script>
+        
+    <style type="text/css">
+        .ub-emb-iframe-wrapper {
+            display: none;
+            position: relative;
+            vertical-align: middle;
+        }
+
+            .ub-emb-iframe-wrapper.ub-emb-visible {
+                display: inline-block;
+            }
+
+            .ub-emb-iframe-wrapper.ub-emb-mobile {
+                max-width: 100vw;
+            }
+
+            .ub-emb-iframe-wrapper .ub-emb-close {
+                background-color: hsla(0,0%,100%,.6);
+                border: 0;
+                border-radius: 50%;
+                color: #525151;
+                cursor: pointer;
+                font: 18px Arial,sans-serif;
+                height: 18px;
+                line-height: .9;
+                outline: none;
+                padding: 0;
+                position: absolute;
+                right: 18px;
+                top: 18px;
+                transition: background-color .2s ease-in-out,-webkit-transform .2s ease-in-out;
+                transition: transform .2s ease-in-out,background-color .2s ease-in-out;
+                transition: transform .2s ease-in-out,background-color .2s ease-in-out,-webkit-transform .2s ease-in-out;
+                width: 18px;
+                z-index: 1;
+            }
+
+                .ub-emb-iframe-wrapper .ub-emb-close:before {
+                    content: "";
+                    height: 200%;
+                    position: absolute;
+                    right: -50%;
+                    top: -50%;
+                    width: 200%;
+                }
+
+            .ub-emb-iframe-wrapper.ub-emb-mobile .ub-emb-close {
+                font-size: 24px;
+                height: 30px;
+                right: 10px;
+                top: 10px;
+                width: 30px;
+                transition: none;
+            }
+
+            .ub-emb-iframe-wrapper .ub-emb-close:hover {
+                background-color: #fff;
+                -webkit-transform: scale(1.2);
+                -ms-transform: scale(1.2);
+                transform: scale(1.2);
+            }
+
+            .ub-emb-iframe-wrapper .ub-emb-close:active, .ub-emb-iframe-wrapper .ub-emb-close:focus {
+                background: hsla(0,0%,100%,.35);
+                color: #444;
+                outline: none;
+            }
+
+            .ub-emb-iframe-wrapper .ub-emb-iframe {
+                border: 0;
+                max-height: 100%;
+                max-width: 100%;
+            }
+
+        .ub-emb-overlay .ub-emb-iframe-wrapper .ub-emb-iframe {
+            box-shadow: 0 0 12px rgba(0,0,0,.3),0 1px 5px rgba(0,0,0,.2);
+        }
+
+        .ub-emb-bar .ub-emb-close {
+            bottom: 18px;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .ub-emb-bar.ub-emb-mobile .ub-emb-close {
+            bottom: 10px;
+        }
+    </style>
+    <style type="text/css">
+        .ub-emb-overlay {
+            transition: visibility .3s;
+            visibility: hidden;
+        }
+
+            .ub-emb-overlay.ub-emb-visible {
+                transition: none;
+                visibility: visible;
+            }
+
+            .ub-emb-overlay .ub-emb-backdrop, .ub-emb-overlay .ub-emb-scroll-wrapper {
+                opacity: 0;
+                position: fixed;
+                transition: opacity .3s ease,z-index .3s;
+                z-index: -1;
+            }
+
+            .ub-emb-overlay .ub-emb-backdrop {
+                background: rgba(0,0,0,.6);
+                top: -1000px;
+                bottom: -1000px;
+                left: -1000px;
+                right: -1000px;
+            }
+
+            .ub-emb-overlay .ub-emb-scroll-wrapper {
+                box-sizing: border-box;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                overflow: auto;
+                padding: 30px;
+                text-align: center;
+                width: 100%;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+                .ub-emb-overlay .ub-emb-scroll-wrapper:before {
+                    content: "";
+                    display: inline-block;
+                    height: 100%;
+                    vertical-align: middle;
+                }
+
+            .ub-emb-overlay.ub-emb-mobile .ub-emb-scroll-wrapper {
+                padding: 30px 0;
+            }
+
+            .ub-emb-overlay.ub-emb-visible .ub-emb-backdrop, .ub-emb-overlay.ub-emb-visible .ub-emb-scroll-wrapper {
+                opacity: 1;
+                transition: opacity .4s ease;
+                z-index: 2147483647;
+            }
+    </style>
+    <style type="text/css">
+        .ub-emb-bar {
+            transition: visibility .2s;
+            visibility: hidden;
+        }
+
+            .ub-emb-bar.ub-emb-visible {
+                transition: none;
+                visibility: visible;
+            }
+
+            .ub-emb-bar .ub-emb-bar-frame {
+                left: 0;
+                position: fixed;
+                right: 0;
+                text-align: center;
+                transition: bottom .2s ease-in-out,top .2s ease-in-out,z-index .2s;
+                z-index: -1;
+            }
+
+            .ub-emb-bar.ub-emb-ios .ub-emb-bar-frame {
+                right: auto;
+                width: 100vw;
+            }
+
+            .ub-emb-bar.ub-emb-visible .ub-emb-bar-frame {
+                transition: bottom .3s ease-in-out,top .3s ease-in-out;
+                z-index: 2147483646;
+            }
+    </style>
+    
+    <!-- Signup Modal -->
+   <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 5%; /* Location of the box */
+        padding-bottom: 5%;
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 10px;
+        border: 1px solid #888;
+        width: 35%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    
+    @media only screen and (max-width: 1080px){
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 10px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+    }
+    
+    @media only screen and (max-width: 640px){
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 10px;
+            border: 1px solid #888;
+            width: 100%;
+        }
+    }
+    
+</style>
+</head>
+
+<body onsubmit="return false">
+    <!-- VRAY's Store Live... -->
+    <div>
+        <!--Begin Hero Shot-->
+        <div class="cart-wrap w-container">
+            <img sizes="(max-width: 760px) 100vw, (max-width: 990px) 700px, 920px" src="images/souvenir_pen.jpg" srcset="images/souvenir_pen.jpg 500w, images/souvenir_pen.jpg 800w, images/souvenir_pen.jpg 1080w, images/souvenir_pen.jpg 1600w, images/souvenir_pen 1880w" width="940">
+        </div>
+        <!--End Hero Shot-->
+        
+        <!-- ################ -->
+        <div class="forms-wrap w-container">
+            <div class="w-form">     
+                
+            <!-- BEGIN OF KFORM-->
+            <form id="kform" class="kform" onsubmit="return false">
+            <div class="w-row"> 
+                <!-- Contract & Shipping -->
+                <div class="form-col-1 w-col w-col-6">
+                    <label class="field-label" for="name">Contact Information</label>        
+                    <input class="text-field w-input" id="name" name="name" type="text" placeholder="Name" />  
+                    <input class="text-field w-input" id="emailAddress" name="emailAddress" type="email" placeholder="Email"/>
+                    <input class="text-field w-input" id="phoneNumber" maxlength="15" name="phoneNumber" type="tel" placeholder="Mobile#"/>
+
+                    <label class="field-label">Shipping Information</label>
+                    <input class="text-field w-input" id="address1" name="address1" type="text" placeholder="Address Line 1"/>
+                    <input class="text-field w-input" id="city" name="city" type="text" placeholder="City"/>
+
+                    <select class="w-select" id="state" name="state" style="display: inline-block;">
+                        <option value="">Select State</option><option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option><option value="PR">Puerto Rico</option></select>
+                    <input type="hidden" id="country" name="country" value="US"/>
+                    <input class="text-field w-input" id="postalCode" maxlength="5" name="postalCode" type="text"/>
+                </div>
+
+                <!-- Summary & Payment -->
+                <div class="form-col-2 w-col w-col-6">     
+                    <!--Begin Price Summary-->
+                    <label class="field-label">Price Summary</label>
+                    <div class="price-summary" id="priceSummary">
+                        <!--Begin Pricing Values-->
+                        <div class="kcartTotals">
+                          <div class="pricing-line-item-div w-clearfix">
+                            <div class="pricing">Sub Total</div>
+                              <div class="kcartSubTotal price-line-item" id="price"></div>
+                          </div>
+                          <div class="pricing-line-item-div w-clearfix">
+                            <div class="pricing">Shipping</div>
+                              <div class="kcartShipTotal price-line-item">$0.00</div>
+                          </div>
+                          <div class="pricing-line-item-div w-clearfix">
+                            <div class="pricing">Sales Tax</div>
+                              <div class="kcartSalesTax price-line-item">$0.00</div>
+                          </div>
+
+                          <div class="pricing-line-item-div w-clearfix">
+                            <div class="pricing"><strong>Grand Total</strong></div>
+                            <div class="kcartGrandTotal price-line-item" id="total"></div>
+                          </div>
+                        </div>
+                        <!--End Pricing Values-->
+                    </div>
+                    <!--End Price Summary-->
+
+                    <!--Begin Payment Method Logo Icon -->  
+                    <label class="field-label">Payment Accepted</label>
+                    <div style="vertical-align:middle; text-align:center">
+                        <p style="vertical-align:middle; text-align:center">
+                            <img sizes="(max-width: 1200px) 50vw, (max-width: 1400px) 60vw, (max-width: 1600px) 160px, 260px" src="images/Mobile_Payment_Logos.png" srcset="images/Mobile_Payment_Logos.png 500w 600w" width="280">
+                        </p>
+                    </div>
+
+                    <div style="vertical-align:middle; text-align:center">
+                        <p style="vertical-align:middle; text-align:center">
+                            <img sizes="(max-width: 1200px) 50vw, (max-width: 1400px) 60vw, (max-width: 1600px) 167px, 260px" src="images/creditcards.png" srcset="images/creditcards.png 500w, images/credit-card-logo.png 600w" width="280">
+                        </p>
+                    </div>   
+                    
+                    <!-- Pay Button -->
+                    <div >       
+                        <div style="vertical-align:middle; text-align:center">                                     
+                            <div style="vertical-align:middle; text-align:center" >
+                                <input type="button" onclick="submitVRAYPay()" value="Pay with Mobile" id="pay-with-mobile-button" class="orange-button w-button" onsubmit="return false">
+                            </div>
+                            <div id="mobilepay"></div>
+                            <div id="waitForAuthorization" style="display:none;width:50px;height:50px;border:2px;position:absolute;top:25%;left: 25%;">
+                                <img src='images/spinner_green_dot.gif' width="50" height="50" />
+                            </div>
+                            <script>
+                            function submitVRAYPay() {  
+
+                                event.preventDefault();  // Stop automatic submits form 
+
+                                //$("#mobilepay").load("demo.asp"); // Start the spinner 
+
+                                ////////////////////////////////////////////////////////////////////
+                                // VRAY's Server Configuration:
+                                //
+                                APPSERVER.vrayHost.setDomainURL("https://vraystaging.azurewebsites.net");
+
+                                ////////////////////////////////////////////////////////////////////
+                                // Merchants Configuration:
+                                //
+                                MERCHANT.configure("merchant.com.vray.vpay", "VRAY");
+
+                                ////////////////////////////////////////////////////////////////////
+                                // Cardholder's Info
+                                //
+                                var name         = document.forms["kform"]["name"].value;
+                                var streetAddr   = document.forms["kform"]["address1"].value;
+                                var city         = document.forms["kform"]["city"].value;
+                                var state        = document.forms["kform"]["state"].value;
+                                var zipCode      = document.forms["kform"]["postalCode"].value;
+                                var shippingAddr = [streetAddr, city, state, zipCode];
+                                var phoneNumber  = document.forms["kform"]["phoneNumber"].value; 
+                                var vId          = document.forms["kform"]["emailAddress"].value;
+                                CARDHOLDER.configure(vId, name, phoneNumber, shippingAddr);
+
+                                ////////////////////////////////////////////////////////////////////
+                                // Payment Request:
+                                //
+                                TRANSACTION.init();                                  
+                                var totalAmount  = document.getElementById("total").textContent.slice(1);  
+                                var purchaseItems = "1 - Souvenir Pen";
+                                var purchaseOrder = PAYMENT.create(totalAmount, purchaseItems);
+                                var hmac = calculateHMAC(purchaseOrder);  
+                                PAYMENT.authorizationRequest(hmac);           
+                            }
+                            </script>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <!-- END OF KFORM-->
+            </div>
+        </div>
+    </div>
+
+    <!--The SIGN-UP Modal-->
+    <div id="signupModal" class="modal">
+
+        <div class="modal-content">
+            <span class="close" onclick="closeModal();">&times;</span>
+            <div class="forms-wrap w-container">
+                 
+                <div class="account-checkout">
+
+                    <button class="span" onClick="continueWithFacebook();">
+                    <img src="images/facebook.png" alt=""/>
+                    <i style="font-size: 1.0em;">Sign Up with Facebook</i>
+                    </button>
+
+                    <button id="customBtn" class="span2">
+                    <img src="images/google-logo.png" alt=""/>
+                    <i style="font-size: 1.0em;">Sign Up with Google</i> 
+                    </button>
+                    
+                    <button class="security-span" onClick="securityPopup();">
+                    <i>Sign Up with Security Question</i> 
+                    </button>
+                </div>	
+                 
+            </div>
+        </div>   
+    </div>
+
+    <!-- The Security Question Modal -->
+    <div id="securitySignupModal" class="modal">
+        <!-- Content -->    
+        <div class="modal-content">
+            <span class="close" onclick="closeSecurityModal();">&times;</span>
+            <div class="forms-wrap w-container" style="@media screen and (max-width: 640px){padding: 0;}">
+                <div class="w-form"> 
+                    <div id="security-signup" class="form-col-1 w-col">
+                        <label for="securityQuestion">Security Question:</label>
+                        <select class="w-select" id="securityQuestion" style="display: inline-block;">
+                            <option value=1> What was the name of your elementary school? </option>
+                            <option value=2> What was the name of your first pet? </option>
+                            <option value=3> What is the city of your birth? </option>
+                            <option value=4> What is the title of your favorite movie? </option>
+                            <option value=5> What was the model of your first car? </option>
+                            <option value=6> What street name did you grow up on? </option>
+                            <option value=7> What city did you get married in?</option>
+                            <option value=8> How old were you when you got your first job? </option>
+                        </select><br>
+
+                        <label for="securityAnswer">Security Answer:</label>
+                        <input class="text-field w-input" id="securityAnswer" type="text"/><br>
+
+                        <div style="vertical-align:middle; text-align:center;">
+                            <input style="height: 40px; font-size: 1em;" type="button" id="signupSecurityQ" value="SIGNUP" onclick="signupWithSecurityQ();" class="orange-button w-button" onsubmit="return false"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <script> appStart();</script>
+    
+    <script>
+    // Get the modal
+    var modal = document.getElementById('signupModal');
+    var securityModal = document.getElementById('securitySignupModal');
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    };
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        };
+    };
+    
+    function closeModal() {
+        modal.style.display = "none";
+        $("#waitForAuthorization").css("display", "none");
+        document.getElementById('mobilepay').innerHTML='';
+    }
+    
+    function closeSecurityModal() {
+        securityModal.style.display = "none";
+    }
+    </script>
+    
+    <script>
+    function signupWithSecurityQ() {                
+        // Stop automatic submits the form 
+        event.preventDefault();  // Stop automatic submits form 
+
+        var email = document.getElementById("emailAddress").value;
+        CARDHOLDER.id = email;
+
+        var mobile = document.getElementById("phoneNumber").value;
+        CARDHOLDER.phone = mobile;
+
+        var securityQID = document.getElementById("securityQuestion").value;
+        var securityAnswer = document.getElementById("securityAnswer").value;
+
+        if(securityAnswer) {
+            var signupRequest = CARDHOLDER.setSecurityQA(securityQID, securityAnswer);
+            var hmac = calculateHMAC(signupRequest);
+            SIGNUP.configureSecurityQRequest(hmac);
+
+            // Clear the signup modal
+            var modal = document.getElementById('signupModal');
+            modal.style.display = "none";
+            var modal = document.getElementById('securitySignupModal');
+            modal.style.display = "none";
+            $("#waitForAuthorization").css("display", "block");
+            document.getElementById('mobilepay').innerHTML='Please authorize payment from your mobile device...';
+        }
+    }
+    </script>
+    
+    <script>
+        function continueWithFacebook() {
+
+            if (CARDHOLDER.signinAccessToken === null) 
+            { 
+                FB.login(function(response) 
+                {
+                    if (response.authResponse) 
+                    {
+                        if (response.status === 'connected') 
+                        {
+                            SIGNUP.configure3rdPartySigninRequest(1, response.authResponse.accessToken);
+                            
+                            // Get the modal
+                            var modal = document.getElementById('securityQModal');
+                            modal.style.display = "none";
+                            $("#securityQModal").dialog( "close" );
+                        } else 
+                        {
+                            window.alert("ERROR - Facebook login failed.");
+                        }
+                    } 
+                }, 
+                {scope: 'email,public_profile', return_scopes: true});
+            } 
+            else {
+                FB.getLoginStatus(function(response) {
+                
+                    if (response.authResponse) 
+                    {
+                        if (response.status === 'connected') 
+                        {
+                            SIGNUP.configure3rdPartySigninRequest(1, response.authResponse.accessToken);
+                            
+                            // Get the modal
+                            var modal = document.getElementById('securityQModal');
+                            modal.style.display = "none";
+                            $("#securityQModal").dialog( "close" );
+                        } 
+                        else {
+                            window.alert("ERROR - Facebook login failed.");
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+    
+    <script>
+        function securityPopup() {
+            var securityModal = document.getElementById('securitySignupModal');
+            securityModal.style.display = "block";
+        }
+    </script>
+    
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/loadjs.js" type="text/javascript"></script>
+    
+</body>
+</html>
