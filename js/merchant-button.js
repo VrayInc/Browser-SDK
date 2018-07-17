@@ -40,10 +40,9 @@ function digestAdded() {
     
 }
 
+var mobileDetect = null;
 function mobileDetectAdded() {
-    var mobileDetect = new MobileDetect(window.navigator.userAgent);
-    TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
-    
+    mobileDetect = new MobileDetect(window.navigator.userAgent);
 }
 
 function hmacAdded() {
@@ -319,22 +318,10 @@ function calculateHMAC(message)
 // Functions for User
 ///////////////////////////
 var VRAY = {
-    serverId      : null,
-    merchantId    : null,
-    merchantName  : null,
-
-    init  :  function(serverId, merchantId, merchantName) {
-        VRAY.serverId = serverId;
-        VRAY.merchantId = merchantId;
-        VRAY.merchantName = merchantName;
-
-        // Define App Server and Merchant Id & name
-        APPSERVER.vrayHost.setDomainURL(VRAY.serverId);
-        MERCHANT.configure(VRAY.merchantId, VRAY.merchantId);
-    }
-};
-
-var VRAY_PAYFORM = {
+    merchantId  : null,
+    serverId    : null,
+    merchantName: null,
+    
     myVId         : null,
     phoneNumber   : null,
     streetAddr    : null,
@@ -346,107 +333,105 @@ var VRAY_PAYFORM = {
     loginStatus   : 0,
     totalAmount   : 0,
 
-    /**
-     *
-     * @param myVId
-     * @param phoneNumber
-     * @param streetAddr
-     * @param city
-     * @param state
-     * @param zipCode
-     * @param shippingAddr
-     */
-    init : function(myVId, phoneNumber, streetAddr, city, state, zipCode, shippingAddr) {
-        VRAY_PAYFORM.myVId = myVId;
-        VRAY_PAYFORM.phoneNumber = phoneNumber;
-        VRAY_PAYFORM.streetAddr = streetAddr;
-        VRAY_PAYFORM.city = city;
-        VRAY_PAYFORM.state = state;
-        VRAY_PAYFORM.zipCode = zipCode;
-        VRAY_PAYFORM.shippingAddr = shippingAddr;
+    init  :  function(merchantId) {
+        VRAY.serverId = "https://vraystaging.azurewebsites.net";
+        VRAY.merchantId = merchantId;
+        VRAY.merchantName = merchantId;
+
+        // Define App Server and Merchant Id & name
+        APPSERVER.vrayHost.setDomainURL(VRAY.serverId);
+        MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
     },
 
-    definePayment : function() {
-        event.preventDefault();  // Stop automatic submits form
+    setupPayment : function(myVId, phoneNumber, streetAddr, city, state, zipCode, totalAmount, loginStatus) {
+        VRAY.myVId = myVId;
+        VRAY.phoneNumber = phoneNumber;
+        VRAY.streetAddr = streetAddr;
+        VRAY.city = city;
+        VRAY.state = state;
+        VRAY.zipCode = zipCode;
+        VRAY.shippingAddr = [VRAY.streetAddr, VRAY.city, VRAY.state, VRAY.zipCode];
+        VRAY.totalAmount = totalAmount;
+        VRAY.loginStatus = loginStatus;
+    },
+
+    pay : function() {
+        event.preventDefault();  // Stop automatic form submission
+        
+        if(!VRAY.serverId || !VRAY.merchantId || !VRAY.merchantName || !VRAY.myVId || !VRAY.phoneNumber ||
+           !VRAY.streetAddr || !VRAY.city || !VRAY.state || !VRAY.zipCode || !VRAY.shippingAddr ||
+           VRAY.totalAmount === 0) {
+            
+            console.log("Payment information missing!");
+            return;
+        }
 
         CARDHOLDER.configure(
-            VRAY_PAYFORM.getMyVId(),
-            VRAY_PAYFORM.getMyVId(),
-            VRAY_PAYFORM.getPhoneNumber(),
-            VRAY_PAYFORM.getShippingAddr() 
+            VRAY.getMyVId(),
+            VRAY.getMyVId(),
+            VRAY.getPhoneNumber(),
+            VRAY.getShippingAddr() 
         );
 
         // Payment Request:
         TRANSACTION.init();
-        TRANSACTION.deviceType = parseInt(VRAY_PAYFORM.getDeviceType());
-        TRANSACTION.loginStatus = parseInt(VRAY_PAYFORM.getLoginStatus());
+        TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
+        TRANSACTION.loginStatus = parseInt(VRAY.getLoginStatus());
 
         //var amount = document.forms["paymentForm"]["amount"].value;
-        var amount = VRAY_PAYFORM.getTotalAmount();
+        var amount = VRAY.getTotalAmount();
         var purchaseItems = "Item#1, Item#2, Item#3, ...";
         var purchaseOrder = PAYMENT.create(amount, purchaseItems);
         var hmac = calculateHMAC(purchaseOrder);
         PAYMENT.authorizationRequest(hmac);
     },
 
-    /**
-     *
-     * @param deviceType
-     */
     setDeviceType : function(deviceType) {
-        VRAY_PAYFORM.deviceType = deviceType;
+        VRAY.deviceType = deviceType;
     },
 
-    /**
-     *
-     * @param loginStatus
-     */
     setLoginStatus : function(loginStatus) {
-        VRAY_PAYFORM.loginStatus = loginStatus;
+        VRAY.loginStatus = loginStatus;
     },
 
-    /**
-     *
-     * @param totalAmount
-     */
     setTotalAmount : function(totalAmount) {
-        VRAY_PAYFORM.totalAmount = totalAmount;
+        VRAY.totalAmount = totalAmount;
     },
 
 
     getMyVId : function() {
-        return VRAY_PAYFORM.myVId;
+        return VRAY.myVId;
     },
 
     getPhoneNumber : function () {
-        return VRAY_PAYFORM.phoneNumber;
+        return VRAY.phoneNumber;
     },
 
     getStreetAddr : function () {
-        return VRAY_PAYFORM.streetAddr;
+        return VRAY.streetAddr;
     },
 
     getCity : function () {
-        return VRAY_PAYFORM.city;
+        return VRAY.city;
     },
 
     getZipCode : function () {
-        return VRAY_PAYFORM.zipCode;
+        return VRAY.zipCode;
     },
 
     getShippingAddr : function () {
-        return VRAY_PAYFORM.shippingAddr;
+        return VRAY.shippingAddr;
     },
 
     getDeviceType : function() {
-        return VRAY_PAYFORM.deviceType;
+        return VRAY.deviceType;
     },
 
     getLoginStatus : function () {
-        return VRAY_PAYFORM.loginStatus;
+        return VRAY.loginStatus;
     },
 
     getTotalAmount : function () {
-        return VRAY_PAYFORM.totalAmount;
+        return VRAY.totalAmount;
     }
 };
