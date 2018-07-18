@@ -991,7 +991,7 @@ var PAYMENT = {
                         }
                         else
                         {
-                            window.alert("ERROR - unexpected message ID:" + messageId);
+                            UTILS.errorDetected("ERROR - unexpected message ID:" + messageId);
                         }
                     }
                     else {
@@ -1117,7 +1117,7 @@ var PAYMENT = {
         }
         else
         {
-            window.alert("ERROR - Unknown login failure.\n");
+            UTILS.errorDetected("ERROR - Unknown login failure.\n");
             PAYMENT.completed();
             return;
         }
@@ -1426,7 +1426,7 @@ var SIGNUP =
             {  
                 if ((result === null) || (result === undefined) || (result === ""))
                 {
-                    window.alert("ERROR:  Phone Verification Failed.\n");
+                    UTILS.errorDetected("ERROR:  Phone Verification Failed.\n");
                     PAYMENT.completed();
                 }
 
