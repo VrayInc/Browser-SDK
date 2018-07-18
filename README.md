@@ -1,5 +1,20 @@
 # How to use our API #
 
+## Add our script at the beginning of your html page's body - ##
+
+### Example ###
+
+```html
+<body>
+ 
+ <!-- SDK -->
+ <script type="text/javascript" src="https://rawgit.com/VrayInc/Browser-SDK/master/js/merchant-button.js"></script>
+ 
+ <!-- Other code -->
+ 
+</body>
+```
+
 ## The following three methods must be called in order ##
 
 ### VRAY.init() ###
@@ -54,3 +69,5 @@ function myCallback(error) {
   }
 }
 ```
+
+#### A good way to use this would be to call the three methods inside the onclick function of a button. ####
