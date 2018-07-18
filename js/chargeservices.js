@@ -24,12 +24,19 @@ function doChargePayment(token, amount, merchant) {
         chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.send(null);
         
-        window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
-        $("#waitForAuthorization").css("display", "none");
-        document.getElementById('mobilepay').innerHTML='';
+        if(UTILS.debug.enabled()) {
+            window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
+        }
+        UIUtils.hideSpinner();
+        CALLBACK.call(null);
     }
     else {
-        window.alert("Invalid token = " + token.toString());
+        if(UTILS.debug.enabled()) {
+            CALLBACK.call("Invalid token = " + token.toString());
+        }
+        else {
+            CALLBACK.call("Payment failed");
+        }
     }
 }
 
@@ -46,7 +53,12 @@ function sendChargePayment(token, amount, merchant, charge) {
         chargeRequest.send(charge);
     } 
     else {
-        window.alert("Invalid token = " + token);
+        if(UTILS.debug.enabled()) {
+            CALLBACK.call("Invalid token = " + token.toString());
+        }
+        else {
+            CALLBACK.call("Payment failed");
+        }
     }
 }
 

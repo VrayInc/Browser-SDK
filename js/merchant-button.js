@@ -332,6 +332,7 @@ var VRAY = {
     deviceType    : 0,
     loginStatus   : 0,
     totalAmount   : 0,
+    callback      : null,
 
     init  :  function(merchantId) {
         VRAY.serverId = "https://vraystaging.azurewebsites.net";
@@ -343,7 +344,8 @@ var VRAY = {
         MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
     },
 
-    setupPayment : function(myVId, phoneNumber, streetAddr, city, state, zipCode, totalAmount, loginStatus) {
+    setupPayment : function(myVId, phoneNumber, streetAddr, city, state, zipCode,
+                            totalAmount, loginStatus, callback) {
         VRAY.myVId = myVId;
         VRAY.phoneNumber = phoneNumber;
         VRAY.streetAddr = streetAddr;
@@ -353,6 +355,7 @@ var VRAY = {
         VRAY.shippingAddr = [VRAY.streetAddr, VRAY.city, VRAY.state, VRAY.zipCode];
         VRAY.totalAmount = totalAmount;
         VRAY.loginStatus = loginStatus;
+        VRAY.callback = callback;
     },
 
     pay : function() {
@@ -377,6 +380,9 @@ var VRAY = {
         TRANSACTION.init();
         TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
         TRANSACTION.loginStatus = parseInt(VRAY.getLoginStatus());
+        
+        // Setup callbacks
+        CALLBACK.callback = VRAY.callback;
 
         //var amount = document.forms["paymentForm"]["amount"].value;
         var amount = VRAY.getTotalAmount();

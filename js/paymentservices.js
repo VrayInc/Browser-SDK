@@ -1,3 +1,4 @@
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,76 +9,93 @@
 //  Application Servers Instances (Assigned Statically or Dyanmically)
 //
 var APPSERVER = {
-  
-    merchantHost : {
-        domainName  : 'VRAY Live',
-        domainURL   : 'https://www.vraymerchant.com',
-        
-        getDomainName : function () {
+
+    merchantHost:
+    {
+        domainName: 'VRAY Live',
+        domainURL: 'https://www.vraymerchant.com',
+
+        getDomainName: function()
+        {
             return APPSERVER.merchantHost.domainName;
         },
-        
-        getURL : function () {
+
+        getURL: function()
+        {
             return APPSERVER.merchantHost.domainURL;
         },
-        
-        setName : function (name) {
+
+        setName: function(name)
+        {
             APPSERVER.merchantHost.domainName = name;
         },
-        
-        setURL : function (url) {
+
+        setURL: function(url)
+        {
             APPSERVER.merchantHost.domainURL = url;
         }
     },
-    
-    paymentGWHost : {
-        domainName      : 'Stripe',
-        domainURL       : 'https://stripe.com',
-        
-        getDomainName : function () {
+
+    paymentGWHost:
+    {
+        domainName: 'Stripe',
+        domainURL: 'https://stripe.com',
+
+        getDomainName: function()
+        {
             return APPSERVER.paymentGWHost.domainName;
         },
-        
-        getURL : function () {
+
+        getURL: function()
+        {
             return APPSERVER.paymentGWHost.domainURL;
         },
-        
-        setName : function (name) {
+
+        setName: function(name)
+        {
             APPSERVER.paymentGWHost.domainName = name;
         },
-        
-        setURL : function (url) {
+
+        setURL: function(url)
+        {
             APPSERVER.paymentGWHost.domainURL = url;
         }
     },
-    
-    vrayHost : { 
-        domainName  : 'VRAY Host',
-        domainURL   : 'https://vraystaging.azurewebsites.net',
+
+    vrayHost:
+    {
+        domainName: 'VRAY Host',
+        domainURL: 'https://vraystaging.azurewebsites.net',
         //domainURL   : 'https://vrayserverdevapolo.azurewebsites.net',
-        macKey      : '79aa2cd255bda022e5e0d095eaeea9442800c1fa3c74c85b2a6db2e1f988f952',
-        
-        getDomainName : function() {
+        macKey: '79aa2cd255bda022e5e0d095eaeea9442800c1fa3c74c85b2a6db2e1f988f952',
+
+        getDomainName: function()
+        {
             return APPSERVER.vrayHost.domainName;
         },
-        
-        getDomainURL : function () {
+
+        getDomainURL: function()
+        {
             return APPSERVER.vrayHost.domainURL;
         },
-                
-        getMACKey : function() {
+
+        getMACKey: function()
+        {
             return APPSERVER.vrayHost.macKey;
         },
-        
-        setDomainName : function(name) {
-            APPSERVER.vrayHost.domainName= name; 
+
+        setDomainName: function(name)
+        {
+            APPSERVER.vrayHost.domainName = name;
         },
-        
-        setDomainURL : function(url) {
-            APPSERVER.vrayHost.domainURL = url; 
+
+        setDomainURL: function(url)
+        {
+            APPSERVER.vrayHost.domainURL = url;
         },
-        
-        setMACKey : function(key) {
+
+        setMACKey: function(key)
+        {
             APPSERVER.vrayHost.macKey = key;
         }
     }
@@ -104,7 +122,7 @@ var CARDHOLDER =
         CARDHOLDER.id = id;
         CARDHOLDER.name = name;
         CARDHOLDER.phone = phone;
-        CARDHOLDER.shippingAddress   = shippingAddress;
+        CARDHOLDER.shippingAddress = shippingAddress;
     },
     
     setSecurityQA : function (securityQId, securityAnswer) 
@@ -112,7 +130,7 @@ var CARDHOLDER =
         // CARD Holder Info
         CARDHOLDER.securityQId = parseInt(securityQId);
         CARDHOLDER.securityAnswer = securityAnswer;
-        
+
         // Payment Authorization Request
 	var configureSecurityQReq = {
             "msgId"              : MESSAGE.id.BrowserConfigureSecurityQReq,
@@ -132,40 +150,47 @@ var CARDHOLDER =
 //  Merchant Info & Configuration
 //
 var MERCHANT = {
- 
-    id          : 'merchant.com.vray.vpay',
-    name        : 'VRAY',
-    capability  : 1,
-    macKey      : "79aa2cd255bda022e5e0d095eaeea9442800c1fa3c74c85b2a6db2e1f988f952",
-       
-    configure : function (id, name) {
-        
+
+    id: 'merchant.com.vray.vpay',
+    name: 'VRAY',
+    capability: 1,
+    macKey: "79aa2cd255bda022e5e0d095eaeea9442800c1fa3c74c85b2a6db2e1f988f952",
+
+    configure: function(id, name)
+    {
+
         MERCHANT.id = id;
         MERCHANT.name = name;
     },
-    
-    getID : function() {
+
+    getID: function()
+    {
         return MERCHANT.id;
     },
-    
-    getKey : function() {
+
+    getKey: function()
+    {
         return MERCHANT.macKey;
     },
 
-    getName : function() {
+    getName: function()
+    {
         return MERCHANT.name;
     },
-    
-    setID : function(id) {
-        MERCHANT.id = id; 
+
+    setID: function(id)
+    {
+        MERCHANT.id = id;
     },
-   
-    setKey : function(key) {
+
+    setKey: function(key)
+    {
         MERCHANT.macKey = key;
     },
-    
-    setName : function(name) {
-        MERCHANT.id = name; 
+
+    setName: function(name)
+    {
+        MERCHANT.id = name;
     }
 };
 
@@ -174,7 +199,8 @@ var MERCHANT = {
 //
 var MESSAGE = {
 
-    id : {
+    id:
+    {
         // On-line Payment Messages (Browser, Server, Mobile App)
         PaymentRequest                  : 1,
         PaymentResponse                 : 2,
@@ -224,10 +250,11 @@ var MESSAGE = {
 // Payment Processing Services.
 //
 var PAYMENT = {
-    
-    signupCalled : false,
-    
-    authorizationRequest : function (hmac) {
+
+    signupCalled: false,
+
+    authorizationRequest: function(hmac)
+    {
 
         UIUtils.showSpinner();
 
@@ -254,77 +281,82 @@ var PAYMENT = {
         TRANSACTION.paymentRequest = paymentReqParamText;
         
         if(UTILS.debug.enabled()) {
-            window.alert("Payment authorization request: \n\n" + paymentReqParamText + "\n\n");
+            console.log("Payment authorization request: \n\n" + paymentReqParamText + "\n\n");
         }
-        
+
         // Start T1 Timer
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
-        
-        $.ajax({
-            type        : "POST",
-            url         : APPSERVER.vrayHost.getDomainURL()+ "/api/payments/payrequest",
-            contentType : "application/json",
-            data        : paymentReqParamText,
-            timeout     : TRANSACTION.t1Timeout, 
-            dataType    : "text",
-            async       : true,
-            xhrFields   : { withCredentials: true },
-            success     : function(result) {
-                    
-                var  paymentRespond = JSON.parse(result);
-                if (paymentRespond === null) 
+
+        $.ajax(
+        {
+            type: "POST",
+            url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/payrequest",
+            contentType: "application/json",
+            data: paymentReqParamText,
+            timeout: TRANSACTION.t1Timeout,
+            dataType: "text",
+            async: true,
+            xhrFields:
+            {
+                withCredentials: true
+            },
+            success: function(result)
+            {
+                var paymentRespond = JSON.parse(result);
+                if (paymentRespond === null)
                 {
-                    window.alert("ERROR:  Invalid payment authorization respond.\n");
+                    UTILS.errorDetected("ERROR:  Invalid payment authorization respond.\n");
                     return;
                 }
 
                 var tid = parseInt(paymentRespond.tid);
-                if (tid !== Number(TRANSACTION.id)) 
+                if (tid !== Number(TRANSACTION.id))
                 {
-                    window.alert("ERROR:  Invalid transaction ID in payment authorization respond.\n");
+                    UTILS.errorDetected("ERROR:  Invalid transaction ID in payment authorization respond.\n");
                     return;
                 }
-                
+
                 // Clear the T1 transaction timer
-                window.clearTimeout(TRANSACTION.t1Timer); 
-                
+                window.clearTimeout(TRANSACTION.t1Timer);
+
                 var messageId = paymentRespond.msgId;
-                
-                switch (messageId) {
-                    
-                    case MESSAGE.id.PaymentResponse :
+                switch (messageId)
+                {
+
+                    case MESSAGE.id.PaymentResponse:
                         PAYMENT.authorizationResponse(paymentRespond);
                         break;
-                        
-                    case MESSAGE.id.CodeCommand :
+
+                    case MESSAGE.id.CodeCommand:
                         PAYMENT.codeCheckChallenge(paymentRespond);
                         break;
-                        
+
                     case MESSAGE.id.SecurityQuestionRequest:
                         PAYMENT.secretQuestionChallenge(paymentRespond);
                         break;
-                        
-                    case MESSAGE.id.VidRequest :
+
+                    case MESSAGE.id.VidRequest:
                         PAYMENT.vidResponse(paymentRespond);
                         break;
-                        
+
                     case MESSAGE.id.StartPaymentInfoRetrieveIndication:
                         PAYMENT.launchPaymentMethod(paymentRespond);
                         break;
-                        
-                    default :
+
+                    default:
                         PAYMENT.completed();
-                        window.alert("ERROR - Unknown/Unexpected Message ID = " + messageId.toString());
+                        UTILS.errorDetected("ERROR - Unknown/Unexpected Message ID = " + messageId.toString());
                         break;  
                 }
             },
-            error: function(){
+            error: function()
+            {
                 PAYMENT.completed();
             }
         });
     },
-    
-    authorizationResponse : function (paymentResponse) 
+
+    authorizationResponse: function(paymentResponse)
     {
         // Validate message
         if ((paymentResponse === undefined) || (paymentResponse === null) ||
@@ -333,144 +365,146 @@ var PAYMENT = {
             (paymentResponse.status === undefined) || (paymentResponse.status === null) ||
             (paymentResponse.msgId !== 2)) {
         
-            window.alert("ERROR - Unexpected payment response parameters:\n\n" +
+            UTILS.errorDetected("ERROR - Unexpected payment response parameters:\n\n" +
                          JSON.stringify(paymentResponse).toString());
             PAYMENT.completed();
             return;
         }
-        
+
         var tid = parseInt(paymentResponse.tid);
-        if (tid === Number(TRANSACTION.id)) {
-            
-            if (paymentResponse.status === STATUS.code.SUCCESS)  {   
-                
+        if (tid === Number(TRANSACTION.id))
+        {
+            if (paymentResponse.status === STATUS.code.SUCCESS)
+            {
                 var ccToken = paymentResponse.token;
             
                 if(UTILS.debug.enabled()) {
-                    window.alert("Payment authorization accepted.\n\n" +
+                    console.log("Payment authorization accepted.\n\n" +
                          "Credit Card Token = " + ccToken);
                 }     
                 // Charging payment via credit card token
                 doChargePayment(ccToken, TRANSACTION.amount, MERCHANT.name);
-            } 
-            else if (paymentResponse.status === STATUS.code.VIDFailure) {
-                
+            }
+            else if (paymentResponse.status === STATUS.code.VIDFailure)
+            {
                 UIUtils.hideSpinner();
-                
-                var modal = document.getElementById('signupModal');
-                modal.style.display = "block";
+
+                SIGNUP.phoneVerificationRequest();
             }
             else {
-                window.alert ("Payment authorization rejected with status = " + 
+                UTILS.errorDetected("Payment authorization rejected with status = " + 
                                 paymentResponse.status.toString() + " - " +
                                 UTILS.statusText(paymentResponse.status));
             }
         }
         else {
-            window.alert ("ERROR - Invalid transaction ID: " + paymentResponse.tid);
+            UTILS.errorDetected("ERROR - Invalid transaction ID: " + paymentResponse.tid);
         }
         
-        PAYMENT.completed();
+        return;
     },
-    
-    codeCheckChallenge  : function (codeCommand) 
-    {   
+
+    codeCheckChallenge: function(codeCommand)
+    {
         // Sanity Check
         if ((codeCommand === null) || (codeCommand === undefined) ||
             (codeCommand.tid === null) || (codeCommand.tid === undefined) ||
             (codeCommand.code === null) || (codeCommand.code === undefined) ||
             (codeCommand.msgId !== 5)) {
-		
-            window.alert("ERROR - Invalid code check parameters");
+            UTILS.errorDetected("ERROR - Invalid code check parameters")
             return;
         }
-        
+
         var tid = parseInt(codeCommand.tid);
         if (tid !== Number(TRANSACTION.id)) {
-            window.alert ("ERROR - Invalid transaction ID: " + codeCommand.tid);  
+            
+            UTILS.errorDetected("ERROR - Invalid transaction ID: " + codeCommand.tid);
             return;
         }
-        
+
         // Prompt user to enter the code check on corresponding merchant app 
-        window.alert("Security verification is required for the following reason:\n" + 
-              "\t 1. New shipping address.\n" + 
-              "\t 2. Puchase made from an unknow device.\n" +
-              "\t 3. Failed to answer the security question. \n\n" +
-              "Locate the code check feature on " + MERCHANT.name + 
-              " mobile app to enter the security code:\n" +  codeCommand.code.toString());
-	
+        window.alert("Security verification is required for the following reason:\n" +
+            "\t 1. New shipping address.\n" +
+            "\t 2. Puchase made from an unknow device.\n" +
+            "\t 3. Failed to answer the security question. \n\n" +
+            "Locate the code check feature on " + MERCHANT.name +
+            " mobile app to enter the security code:\n" + codeCommand.code.toString());
+
         // Restart T1 Timer to allow user x2 timeout to enter the code
-        TRANSACTION.t1Timer = window.setInterval(UTILS.timerHandler, 
-                                                      TRANSACTION.t1Timeout.toString());    
-                                                      
-	// Send Code Command Verify 
-	var codeCommandVerify = 
-	{
-            "msgId" : 19,
-            "tid"   : codeCommand.tid,
+        TRANSACTION.t1Timer = window.setInterval(UTILS.timerHandler, TRANSACTION.t1Timeout);
+
+        // Send Code Command Verify 
+        var codeCommandVerify = {
+            "msgId": 19,
+            "tid": codeCommand.tid,
             "status": 0
-        };	
-        
-	$.ajax({
-            type        : "POST",
-            url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/codersp",
-            contentType : "application/json",
-            data        : JSON.stringify(codeCommandVerify),
-            timeout     : TRANSACTION.t1Timeout,
-            dataType    : "text",
-            async       : true,
-            xhrFields   : { withCredentials: true },
-            success     : function(result) {
-              
+        };
+
+        $.ajax(
+        {
+            type: "POST",
+            url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/codersp",
+            contentType: "application/json",
+            data: JSON.stringify(codeCommandVerify),
+            timeout: TRANSACTION.t1Timeout,
+            dataType: "text",
+            async: true,
+            xhrFields:
+            {
+                withCredentials: true
+            },
+            success: function(result)
+            {
+
                 // Clear the transaction timer
                 window.clearTimeout(TRANSACTION.t1Timer);
-                
+
                 // Sanity check                  
                 if ((result === null) || (result === undefined)) {
-                    
-                    window.alert("ERROR - Unexpected code command respond.\n");
+                    UTILS.errorDetected("ERROR - Unexpected code command respond.\n");
+
                     return;
                 }
-                
+
                 var codeVerify = JSON.parse(result);
-                if(codeVerify.msgId === 2) {
-                    
+                if (codeVerify.msgId === 2)
+                {
+
                     PAYMENT.authorizationResponse(JSON.parse(result));
                 }
                 else {
-                    window.alert ("ERROR - Code Command got unexpected message ID = " + codeVerify.msgId.toString());
+                    UTILS.errorDetected("ERROR - Code Command got unexpected message ID = " + codeVerify.msgId.toString());
                     PAYMENT.completed();
                 }
             }, // success()	
             error       : function() {
-                window.alert ("ERROR - Code command respond.");
+                UTILS.errorDetected("ERROR - Code command respond.");
                 PAYMENT.completed();
             }
         });
-    }, 
-    
-    completed : function() 
+    },
+
+    completed: function()
     {
         // Accounting Info
         var today = new Date();
         TRANSACTION.endTime = today.getTime();
-         
+
         // MERCHANT Configuration
-        MERCHANT.id = "";
-        MERCHANT.name = "";
-        
+        //MERCHANT.id = "";
+        //MERCHANT.name = "";
+
         // Billing customer information
-        CARDHOLDER.id        = null;
-        CARDHOLDER.name      = null;
-        CARDHOLDER.phone     = null;
-        CARDHOLDER.billingAddress   = null;
-        CARDHOLDER.shippingAddress   = null;
-        CARDHOLDER.signinAccessToken = null;
-        
+        //CARDHOLDER.id = null;
+        //CARDHOLDER.name = null;
+        //CARDHOLDER.phone = null;
+        //CARDHOLDER.billingAddress = null;
+        //CARDHOLDER.shippingAddress = null;
+        //CARDHOLDER.signinAccessToken = null;
+
         // Transaction info
-        TRANSACTION.id = 0; 
-        TRANSACTION.idRetry = 0;
-        TRANSACTION.amount = 0.0;  
+        TRANSACTION.id = 0;
+        TRANSACTION.amount = 0.0;
         TRANSACTION.lineItems = null;
         TRANSACTION.date = null;
         TRANSACTION.startTime = 0;
@@ -482,52 +516,52 @@ var PAYMENT = {
         window.clearTimeout(TRANSACTION.t1Timer);
         TRANSACTION.t1Timer = null;
     },
-    
-    create : function(amount, items) 
+
+    create: function(amount, items)
     {
         // Sanity Check
         if ((amount === null) || (amount === undefined)) {
-            window.alert("ERROR - Invalid or Expired payment authorization request.\n");
+            UTILS.errorDetected("ERROR - Invalid or Expired payment authorization request.\n");
             return;
         }
 
         // Create new transaction                
         var today = new Date();
-        TRANSACTION.date = today.toString(); 
+        TRANSACTION.date = today.toString();
         TRANSACTION.startTime = today.getTime();
-        TRANSACTION.amount = amount;  
+        TRANSACTION.amount = amount;
         TRANSACTION.lineItems = items;
-        TRANSACTION.id = Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11;  // postive # 0 - 7FFF,FFFF,FFFF,FFFF
-                         
-	var paymentReqParam = {
-            "msgId"             : MESSAGE.id.PaymentRequest,
-            "tid"               : TRANSACTION.id,
-            "ttime"             : TRANSACTION.date,
-            "vid"               : CARDHOLDER.id,
-            "deviceType"        : TRANSACTION.deviceType,
-            "loginStatus"       : TRANSACTION.loginStatus,
-            "phoneNumber"       : CARDHOLDER.phone,
-            "shippingInfo"      : CARDHOLDER.shippingAddress,
-            "amount"            : TRANSACTION.amount,
-            "countryCode"       : TRANSACTION.countryCode,
-            "currencyCode"      : TRANSACTION.currencyCode,
+        TRANSACTION.id = Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11; // postive # 0 - 7FFF,FFFF,FFFF,FFFF
+
+        var paymentReqParam = {
+            "msgId": MESSAGE.id.PaymentRequest,
+            "tid": TRANSACTION.id,
+            "ttime": TRANSACTION.date,
+            "vid": CARDHOLDER.id,
+            "deviceType": TRANSACTION.deviceType,
+            "loginStatus": TRANSACTION.loginStatus,
+            "phoneNumber": CARDHOLDER.phone,
+            "shippingInfo": CARDHOLDER.shippingAddress,
+            "amount": TRANSACTION.amount,
+            "countryCode": TRANSACTION.countryCode,
+            "currencyCode": TRANSACTION.currencyCode,
             "merchantIdentifier": MERCHANT.id,
-            "merchantName"      : MERCHANT.name,
-            "lineItems"         : TRANSACTION.lineItems,
-            "messageAuthenticationCode": ""            
+            "merchantName": MERCHANT.name,
+            "lineItems": TRANSACTION.lineItems,
+            "messageAuthenticationCode": ""
         };
-       
+
         return JSON.stringify(paymentReqParam).toString();
     },
-    
-    createToken : function (token, code, status) 
+
+    createToken: function(token, code, status)
     {
         if(token === null) {
-            window.alert("ERROR - Invalid Payment Token.\n");
+            UTILS.errorDetected("ERROR - Invalid Payment Token.\n");
             PAYMENT.completed();
             return;
         }
-        
+
         var paymentInfo = {
             "msgId"              : MESSAGE.id.BrowserTokenIndication,
             "tid"                : TRANSACTION.id,
@@ -538,23 +572,23 @@ var PAYMENT = {
             "authorizationCode"  : code,
             "messageAuthenticationCode" : ""
         };
-        
-        var  paymentInfoText =  JSON.stringify(paymentInfo).toString();
-        var  hmac = calculateHMAC(paymentInfoText);
+
+        var paymentInfoText = JSON.stringify(paymentInfo).toString();
+        var hmac = calculateHMAC(paymentInfoText);
         paymentInfo.messageAuthenticationCode = UTILS.ab2hexText(hmac);
-        paymentInfoText =  JSON.stringify(paymentInfo).toString();
-        
+        paymentInfoText = JSON.stringify(paymentInfo).toString();
+
         return paymentInfoText;
     },
-    
-    createAndSubmitToken : function (token, code, status) 
+
+    createAndSubmitToken: function(token, code, status)
     {
         if(token === null) {
-            window.alert("ERROR - Invalid Payment Token.\n");
+            UTILS.errorDetected("ERROR - Invalid Payment Token.\n");
             PAYMENT.completed();
             return;
         }
-        
+
         var paymentInfo = {
             "msgId"              : MESSAGE.id.BrowserTokenIndication,
             "tid"                : TRANSACTION.id,
@@ -565,14 +599,14 @@ var PAYMENT = {
             "authorizationCode"  : code,
             "messageAuthenticationCode" : ""
         };
-        
-        var  paymentInfoText =  JSON.stringify(paymentInfo).toString();
-        var  hmac = calculateHMAC(paymentInfoText);
+
+        var paymentInfoText = JSON.stringify(paymentInfo).toString();
+        var hmac = calculateHMAC(paymentInfoText);
         paymentInfo.messageAuthenticationCode = UTILS.ab2hexText(hmac);
         paymentInfoText =  JSON.stringify(paymentInfo).toString();
           
         if(UTILS.debug.enabled()) {
-            window.alert("Submit token: = " + paymentInfoText + "\n");
+            console.log("Submit token: = " + paymentInfoText + "\n");
         }
         
         $.ajax({
@@ -589,32 +623,31 @@ var PAYMENT = {
                 PAYMENT.completed();
             },
             error: function(){
-                
-                window.alert("ERROR - Token not accepted.\n");
+                UTILS.errorDetected("ERROR - Token not accepted.\n")
                 PAYMENT.completed();  
             }
         });
     },
-    
-    getPaymentInfo : function (tid) 
+
+    getPaymentInfo: function(tid)
     {
         var valid = false;
        
         if(!tid) {
-            window.alert("ERROR - Invalid transaction ID.\n");
+            UTILS.errorDetected("ERROR - Invalid transaction ID.\n");
             PAYMENT.completed();
             return valid;
         }
-        
+
         var getPaymentInfo = {
-            "msgId"             : MESSAGE.id.BroswerRetrievePaymentInfo,
-            "tid"               : tid
+            "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
+            "tid": tid
         };
        
         var  getPaymentInfoText =  JSON.stringify(getPaymentInfo).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
+            console.log("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
         }
         
         $.ajax({
@@ -630,66 +663,66 @@ var PAYMENT = {
                     
                 if(!result) 
                 {
-                    window.alert("ERROR - Invalid browser payment info.\n");
+                    UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
                     PAYMENT.completed();
                     return valid;
                 }
-                
+
                 var paymentInfoRespond = JSON.parse(result);
                 if (!paymentInfoRespond) 
                 {   
-                    window.alert("ERROR - Invalid browser payment info respond.\n");
+                    UTILS.errorDetected("ERROR - Invalid browser payment info respond.\n");
                     PAYMENT.completed();
                     return valid;
                 }
-                
-                var messageId = paymentInfoRespond.msgId;               
-                if (messageId === MESSAGE.id.BrowserPaymentIndication) {  // Payment Authorization Response
-                    
+
+                var messageId = paymentInfoRespond.msgId;
+                if (messageId === MESSAGE.id.BrowserPaymentIndication)
+                { // Payment Authorization Response
+
                     PAYMENT.provision(paymentInfoRespond);
                     valid = true;
                 }
-                
+
                 return valid;
             },
-            error: function(){
+            error: function()
+            {
                 return valid;
             }
         });
-        
+
         return valid;
     },
-    
-    launchPaymentMethod : function(payment) 
+
+    launchPaymentMethod: function(payment)
     {
-        if((!payment) || 
-           (TRANSACTION.deviceType !== 1)) 
+        if ((!payment) ||
+            (TRANSACTION.deviceType !== 1))
         {
             return;
         }
-        
+
         var tid = parseInt(payment.tid);
-        if(tid !== Number(TRANSACTION.id)) 
+        if (tid !== Number(TRANSACTION.id))
         {
-            window.alert("ERROR - launchPaymentMethod() got invalid transaction ID:" + tid);
+            UTILS.errorDetected("ERROR - launchPaymentMethod() got invalid transaction ID:" + tid);
             return;
         }
+
         
-        //document.getElementById('vray-payment-tid').innerHTML = TRANSACTION.id;
-        //document.getElementById('vray-payment-merchant').innerHTML = MERCHANT.name;
-        //document.getElementById('vray-payment-amount').innerHTML = TRANSACTION.amount;
         launchPayment();
         return;
     },
-    
-    provision(paymentInfo) 
+
+    provision(paymentInfo)
     {
         CARDHOLDER.id = paymentInfo.vid;
-        
-        MERCHANT.id= paymentInfo.merchantIdentifier;
+
+        MERCHANT.id = paymentInfo.merchantIdentifier;
         MERCHANT.name = paymentInfo.merchantName;
         MERCHANT.capability = paymentInfo.merchantCapabilities;
-        
+
         TRANSACTION.id = paymentInfo.tid;
         TRANSACTION.amount = paymentInfo.amount;
         TRANSACTION.countryCode = paymentInfo.countryCode;
@@ -699,13 +732,13 @@ var PAYMENT = {
         TRANSACTION.tokenType = paymentInfo.paymentMethodTokenizationType;
         TRANSACTION.publicKey = paymentInfo.publicKey;
     },
-    
-    reauthorizationRequest : function () 
+
+    reauthorizationRequest: function()
     {
         if(UTILS.debug.enabled()) {
-            window.alert("Resending payment authorization request: \n\n");
+            console.log("Resending payment authorization request: \n\n");
         }
-       
+
         // Retart T1 Timer
         window.clearTimeout(TRANSACTION.t1Timer);
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
@@ -723,41 +756,45 @@ var PAYMENT = {
                     
                 var paymentRespond = JSON.parse(result);
                 if (paymentRespond === null) {
-                    
-                    window.alert("ERROR:  Invalid payment authorization respond.\n");
+                    UTILS.errorDetected("ERROR:  Invalid payment authorization respond.\n");
                     return;
                 }
-                
+
                 // Clear the transaction timer
-                window.clearTimeout(TRANSACTION.t1Timer); 
-                
-                var messageId = paymentRespond.msgId;               
-                if (messageId === MESSAGE.id.PaymentResponse) {  // Payment Authorization Response
-                    
+                window.clearTimeout(TRANSACTION.t1Timer);
+
+                var messageId = paymentRespond.msgId;
+                if (messageId === MESSAGE.id.PaymentResponse)
+                { // Payment Authorization Response
+
                     PAYMENT.authorizationResponse(paymentRespond);
                 }
-                else if (messageId === MESSAGE.id.CodeCommand) { // Security Code Check Challenge
-                    
+                else if (messageId === MESSAGE.id.CodeCommand)
+                { // Security Code Check Challenge
+
                     PAYMENT.codeCheckChallenge(paymentRespond);
                 }
-                else if (messageId === MESSAGE.id.SecurityQuestionRequest) { // Security Question Challenge
-                    
+                else if (messageId === MESSAGE.id.SecurityQuestionRequest)
+                { // Security Question Challenge
+
                     PAYMENT.secretQuestionChallenge(paymentRespond);
-                } 
-                else {
+                }
+                else
+                {
                     PAYMENT.completed();
-                    window.alert("ERROR - Unknown/Unexpected Message ID = " + messageId.toString());
+                    UTILS.errorDetected("ERROR - Unknown/Unexpected Message ID = " + messageId.toString());
                 }
             },
-            error: function(result){
-                
+            error: function(result)
+            {
+
                 PAYMENT.completed();
-                window.alert("ERROR:  Bad Re-Authorization result: \n" + result.status.toLocaleString());
+                UTILS.errorDetected("ERROR:  Bad Re-Authorization result: \n" + result.status.toLocaleString());
             }
         });
     },
-    
-    requestContinue : function () 
+
+    requestContinue: function()
     {
 	var paymentRequestContinue = {
             "msgId"              : MESSAGE.id.PaymentRequestContinueIndication,
@@ -767,19 +804,19 @@ var PAYMENT = {
             "merchantName"       : MERCHANT.name,
             "messageAuthenticationCode": ""
         };
-        
-        var  paymentRequestContinueText =  JSON.stringify(paymentRequestContinue).toString();
-        var  hmac = calculateHMAC(paymentRequestContinueText);
+
+        var paymentRequestContinueText = JSON.stringify(paymentRequestContinue).toString();
+        var hmac = calculateHMAC(paymentRequestContinueText);
         paymentRequestContinue.messageAuthenticationCode = UTILS.ab2hexText(hmac);
         paymentRequestContinueText =  JSON.stringify(paymentRequestContinue).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Payment Request Continue Indication \n\n" + paymentRequestContinueText + "\n\n");
+            console.log("Payment Request Continue Indication \n\n" + paymentRequestContinueText + "\n\n");
         }
         
         $.ajax({
             type        : "POST",
-            url         : APPSERVER.vrayHost.getDomainURL() + "api/payments/api/payments/PaymentRequestContinueIndication",
+            url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/PaymentRequestContinueIndication",
             contentType : "application/json",
             data        : paymentRequestContinueText,
             timeout     : 0, 
@@ -795,24 +832,24 @@ var PAYMENT = {
             }
         });
     },
-    
-    retrieveToken : function (tid) 
+
+    retrieveToken: function(tid)
     {
         if(!tid) {
-            window.alert("ERROR - Invalid transaction ID.\n");
+            UTILS.errorDetected("ERROR - Invalid transaction ID.\n");
             PAYMENT.completed();
             return;
         }
-        
+
         var getPaymentInfo = {
-            "msgId"             : MESSAGE.id.BroswerRetrievePaymentInfo,
-            "tid"               : tid
+            "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
+            "tid": tid
         };
        
         var  getPaymentInfoText =  JSON.stringify(getPaymentInfo).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
+            console.log("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
         }
         
         $.ajax({
@@ -828,74 +865,79 @@ var PAYMENT = {
                     
                 if((result === null) || (result === undefined) || (result === "")) {
                     
-                    window.alert("ERROR - Invalid browser payment info.\n");
+                    UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
                     PAYMENT.completed();
                     return;
                 }
-                
+
                 var paymentInfoRespond = JSON.parse(result);
                 if (paymentInfoRespond === null) {
                          
-                    window.alert("ERROR - Invalid browser payment info respond.\n");
+                    UTILS.errorDetected("ERROR - Invalid browser payment info respond.\n");
                     PAYMENT.completed();
                     return;
                 }
-                
-                var messageId = paymentInfoRespond.msgId;               
-                if (messageId === MESSAGE.id.BrowserPaymentIndication) {  // Payment Authorization Response
-                    
+
+                var messageId = paymentInfoRespond.msgId;
+                if (messageId === MESSAGE.id.BrowserPaymentIndication)
+                { // Payment Authorization Response
+
                     PAYMENT.provision(paymentInfoRespond);
-                    
+
                     var token = document.getElementById('newtoken').innerHTML;
                     PAYMENT.createAndSubmitToken(token, 1, 0);
                 }
-                else {
+                else
+                {
                     PAYMENT.completed();
-                    window.alert("ERROR - Receive unexpected message ID = " + messageId.toString());
+                    UTILS.errorDetected("ERROR - Receive unexpected message ID = " + messageId.toString());
                 }
             },
-            error: function(result){
-                
+            error: function(result)
+            {
+
                 PAYMENT.completed();
-                window.alert("ERROR - Payment Info Response result = \n" + result.toString());
+                UTILS.errorDetecteds("ERROR - Payment Info Response result = \n" + result.toString());
             }
         });
     },
-    
-    secretQuestionChallenge : function (secret) 
+
+    secretQuestionChallenge: function(secret)
     {
         // Sanity Check
-        if ((secret === null) || (secret === undefined) || 
-            (secret.tid === null) || (secret.tid === undefined) || 
+        if ((secret === null) || (secret === undefined) ||
+            (secret.tid === null) || (secret.tid === undefined) ||
             (secret.vid === null) || (secret.vid === undefined) ||
             (secret.securityQ === null) || (secret.securityQ === undefined) || 
             (secret.msgId !== MESSAGE.id.SecurityQuestionRequest)) {
                             
-            window.alert("ERROR - Invalid secret question challenge parameters.\n" +
-                         JSON.stringify(secret).toString());
+            UTILS.errorDetected("ERROR - Invalid secret question challenge parameters.\n" +
+                                JSON.stringify(secret).toString());
             return;
         }
-            
+
         var tid = parseInt(secret.tid);
         if (tid !== Number(TRANSACTION.id)) {
             
-            window.alert ("ERROR - Invalid transaction ID: " + secret.tid);  
+            UTILS.errorDetected("ERROR - Invalid transaction ID: " + secret.tid);  
             return;
         }
-        
+
         var secretQuestion = secret.securityQ.toString();
         var secretAnswer = "";
 
-        if(SIGNUP.signUpDone) {
+        if (SIGNUP.signUpDone)
+        {
             secretAnswer = CARDHOLDER.securityAnswer;
         }
-        else {
+        else
+        {
             secretAnswer = window.prompt("Please answer the following security question:\n\n" + secretQuestion,
-                                         "answer");
+                "answer");
         }
-	
-        if (secretAnswer !== null) {
-            
+
+        if (secretAnswer !== null)
+        {
             // Restart T1 Timer
             TRANSACTION.t1Timer = window.setInterval(UTILS.timerHandler, 
                                                      TRANSACTION.t1Timeout.toString());
@@ -917,72 +959,76 @@ var PAYMENT = {
                 dataType    : "text",
                 async       : true,
                 xhrFields   : { withCredentials: true },
-                success     : function(result) {
-			
-                // Clear the transaction timer
-                window.clearTimeout(TRANSACTION.t1Timer);
-                
-                if ((result === null) || (result === undefined)) {
-                    window.alert("ERROR - Unexpected secret answer result.");
-                    return;
-                }
-                
-                var securityAnswerRsp = JSON.parse(result);
-                if(securityAnswerRsp !== null)   {
-                
-                    var messageId = securityAnswerRsp.msgId;
-                    if (messageId === MESSAGE.id.PaymentResponse) {
-                        
-                        PAYMENT.authorizationResponse(securityAnswerRsp);
-                    } // success()	
-                    else if (messageId === MESSAGE.id.CodeCommand){
-                    
-                        PAYMENT.codeCheckChallenge(securityAnswerRsp);
+                success     : function(result) 
+                {
+                    // Clear the transaction timer
+                    window.clearTimeout(TRANSACTION.t1Timer);
+
+                    if ((result === null) || (result === undefined)) {
+                        UTILS.errorDetected("ERROR - Unexpected secret answer result.");
+                        return;
                     }
-                    else if (messageId === MESSAGE.id.SecurityQuestionRequest) {
-                
-                        PAYMENT.secretQuestionChallenge(securityAnswerRsp);
-                    }
-                    else if (messageId === MESSAGE.id.StartPaymentInfoRetrieveIndication) {
-                        
-                        PAYMENT.launchPaymentMethod(securityAnswerRsp);
+
+                    var securityAnswerRsp = JSON.parse(result);
+                    if(securityAnswerRsp !== null)   
+                    {
+                        var messageId = securityAnswerRsp.msgId;
+                        if (messageId === MESSAGE.id.PaymentResponse) {
+
+                            PAYMENT.authorizationResponse(securityAnswerRsp);
+                        } // success()	
+                        else if (messageId === MESSAGE.id.CodeCommand){
+
+                            PAYMENT.codeCheckChallenge(securityAnswerRsp);
+                        }
+                        else if (messageId === MESSAGE.id.SecurityQuestionRequest)
+                        {
+                            PAYMENT.secretQuestionChallenge(securityAnswerRsp);
+                        }
+                        else if (messageId === MESSAGE.id.StartPaymentInfoRetrieveIndication)
+                        {
+                            PAYMENT.launchPaymentMethod(securityAnswerRsp);
+                        }
+                        else
+                        {
+                            window.alert("ERROR - unexpected message ID:" + messageId);
+                        }
                     }
                     else {
-                        window.alert("ERROR - unexpected message ID:" + messageId);
+                        UTILS.errorDetected("ERROR - unexpected message ID:" + messageId);
                     }
+                },
+                error: function()
+                {
+                    alert("ERROR - Unable to verify security answer.");
+                    PAYMENT.completed();
                 }
-                else {
-                    window.alert("ERROR - Invalid security answer response.");
-                }
-            },   
-            error   : function() {
-                
-                alert ("ERROR - Unable to verify security answer.");
-                PAYMENT.completed();
-            }});
+            });
         }
-        else {
+        else
+        {
             PAYMENT.completed();
         }
-    }, 
-    
-    validateTransaction : function (tid) 
+    },
+
+    validateTransaction: function(tid)
     {
         var valid = false;
-       
-        if(!tid) {
+
+        if (!tid)
+        {
             return false;
         }
-        
+
         var getPaymentInfo = {
-            "msgId"             : MESSAGE.id.BroswerRetrievePaymentInfo,
-            "tid"               : tid
+            "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
+            "tid": tid
         };
        
         var  getPaymentInfoText =  JSON.stringify(getPaymentInfo).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
+            console.log("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
         }
         
         $.ajax({
@@ -994,20 +1040,30 @@ var PAYMENT = {
             dataType    : "text",
             async       : false,
             xhrFields   : { withCredentials: true },
-            success     : function(result) {
-                    
-                if(!result) {
+            success     : function(result) 
+            {
+                if(!result) 
+                {
                     return valid;
                 }
                 
                 var paymentInfoRespond = JSON.parse(result);
-                if (!paymentInfoRespond) { 
+                if (!paymentInfoRespond) 
+                { 
                     return valid;
                 }
                             
-                if (paymentInfoRespond.msgId === MESSAGE.id.BrowserPaymentIndication) {
-                    if (paymentInfoRespond.tid === tid){  // Payment Authorization Response
+                if (paymentInfoRespond.msgId === MESSAGE.id.BrowserPaymentIndication) 
+                {
+                    if (paymentInfoRespond.tid === Number(parseInt(tid)))
+                    {  
                         valid = true;
+                        
+                        PAYMENT.provision(paymentInfoRespond);
+                        if(TRANSACTION.deviceType === 1) 
+                        {
+                            PAYMENT.requestContinue();
+                        }
                     }
                 }
                 
@@ -1020,100 +1076,93 @@ var PAYMENT = {
         
         return valid;
     },
-    
-    vidResponse : function (vidRequest) 
+
+    vidResponse: function(vidRequest)
     {
         // Sanity Check
-        if ((vidRequest === null) || (vidRequest === undefined) || 
+        if ((vidRequest === null) || (vidRequest === undefined) ||
             (vidRequest.tid === null) || (vidRequest.tid === undefined) ||
             (vidRequest.status === null) || (vidRequest.status === undefined)) {
                             
-            window.alert("ERROR - Invalid secret question challenge parameters.\n" +
-                         JSON.stringify(vidRequest).toString());
+            UTILS.errorDetected("ERROR - Invalid secret question challenge parameters.\n" +
+                                 JSON.stringify(vidRequest).toString());
             return;
         }
-            
+
         var tid = parseInt(vidRequest.tid);
         if (tid !== Number(TRANSACTION.id)) {
             
-            window.alert ("ERROR - Invalid transaction ID: " + vidRequest.tid);  
+            UTILS.errorDetected("ERROR - Invalid transaction ID: " + vidRequest.tid);  
             return;
         }
-        
+
         var vid = CARDHOLDER.id;
-        if (TRANSACTION.idRetry < TRANSACTION.idRetryMAX) 
-        {
-            if (vidRequest.status === STATUS.code.VIDNotFound) {
-                UIUtils.hideSpinner();
-                
-                var modal = document.getElementById('signupModal');
-                if((modal.style.display === "") || (modal.style.display === "none")) {
-                    PAYMENT.signupCalled = true;
-                    //if (confirm(CARDHOLDER.id + ' has not been registered. Would you like to signup?')) {
-                    modal.style.display = "block";
-                    //} else {
-                      //  modal.style.display = "none";
-                    //}
-                }
-            }
-            else if (vidRequest.status === STATUS.code.VIDBlocked){
-
-                vid = window.prompt("The " + vid + " has been blocked.\n\n" + 
-                                    "Please use different email: \n\n");
-                CARDHOLDER.id = vid;
-            } else if (vidRequest.status === STATUS.code.AnotherVID) {
-                window.alert("Another email, " + vidRequest.anotherEmail + ", had been register with mobile# " + CARDHOLDER.phone + "\n\n" + 
-                                    "Click OK to continue.\n\n");
-                vid = vidRequest.anotherEmail;         
-                CARDHOLDER.id = vid;
-            }
-            else {
-                window.alert ("ERROR - Unknown login failure.\n");
-                PAYMENT.completed();
-                return;
-            }
         
-            TRANSACTION.idRetry += 1;
+        if (vidRequest.status === STATUS.code.VIDNotFound)
+        {
+            UIUtils.hideSpinner();
+        }
+        else if (vidRequest.status === STATUS.code.VIDBlocked)
+        {
+            vid = window.prompt("The " + vid + " has been blocked.\n\n" +
+                "Please use different email: \n\n");
+            CARDHOLDER.id = vid;
+        }
+        else if (vidRequest.status === STATUS.code.AnotherVID)
+        {
+            window.alert("Another email, " + vidRequest.anotherEmail + ", had been register with mobile# " + CARDHOLDER.phone + "\n\n" +
+                "Click OK to continue.\n\n");
+            vid = vidRequest.anotherEmail;
+            CARDHOLDER.id = vid;
+        }
+        else
+        {
+            window.alert("ERROR - Unknown login failure.\n");
+            PAYMENT.completed();
+            return;
+        }
 
-            // Restart T1 Timer
-            TRANSACTION.t1Timer = window.setInterval(UTILS.timerHandler, 
-                                                     TRANSACTION.t1Timeout.toString());
-            var idResponse = 
+        // Restart T1 Timer
+        TRANSACTION.t1Timer = window.setInterval(UTILS.timerHandler, TRANSACTION.t1Timeout);
+        var idResponse = {
+            "msgId": MESSAGE.id.VidResponse,
+            "tid": tid,
+            "vid": vid
+        };
+
+        $.ajax(
+        {
+            type: "POST",
+            url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/VidRetry",
+            contentType: "application/json",
+            data: JSON.stringify(idResponse).toString(),
+            timeout: TRANSACTION.t1Timeout,
+            dataType: "text",
+            async: true,
+            xhrFields:
             {
-                "msgId"     : MESSAGE.id.VidResponse,
-                "tid"       : tid,
-                "vid"       : vid
-            };
-
-            $.ajax({
-                type        : "POST",
-                url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/VidRetry",
-                contentType : "application/json",
-                data        : JSON.stringify(idResponse).toString(),
-                timeout     : TRANSACTION.t1Timeout,
-                dataType    : "text",
-                async       : true,
-                xhrFields   : { withCredentials: true },
-                success     : function(result) {
-
+                withCredentials: true
+            },
+            success: function(result)
+            {
                 var paymentRespond = JSON.parse(result);
                 if (paymentRespond === null) {
 
-                    window.alert("ERROR:  Invalid vid retry respond.\n");
+                    UTILS.errorDetected("ERROR:  Invalid vid retry respond.\n");
                     return;
                 }
 
                 // Clear the T1 transaction timer
-                window.clearTimeout(TRANSACTION.t1Timer); 
+                window.clearTimeout(TRANSACTION.t1Timer);
 
                 var messageId = paymentRespond.msgId;
-                switch (messageId) {
-
-                    case MESSAGE.id.PaymentResponse :
+                switch (messageId)
+                {
+                    case MESSAGE.id.PaymentResponse:
                         PAYMENT.authorizationResponse(paymentRespond);
                         break;
 
-                    case MESSAGE.id.CodeCommand :
+                    case MESSAGE.id.CodeCommand:
                         PAYMENT.codeCheckChallenge(paymentRespond);
                         break;
 
@@ -1121,53 +1170,35 @@ var PAYMENT = {
                         PAYMENT.secretQuestionChallenge(paymentRespond);
                         break;
 
-                    case MESSAGE.id.VidRequest :
+                    case MESSAGE.id.VidRequest:
                         PAYMENT.vidResponse(paymentRespond);
                         break;
 
-                    default :
+                    default:
                         PAYMENT.completed();
-                        window.alert("ERROR - Unexpected Message ID = " + messageId.toString());
+                        UTILS.errorDetected("ERROR - Unexpected Message ID = " + messageId.toString());
                         break;  
                 }
             },   
             error   : function() {
 
-                window.alert ("ERROR - Vid retry failed.\n");
+                UTILS.errorDetected("ERROR - Vid retry failed.\n");
                 PAYMENT.completed();
-            }});
-        } // MAX Retry
-        else 
-        {
-            UIUtils.hideSpinner();
-            
-            var modal = document.getElementById('signupModal');
-            if((modal.style.display === "") || (modal.style.display === "none")) {
-                if(!PAYMENT.signupCalled) {
-                    //if (confirm(CARDHOLDER.id + ' has not been registered. Would you like to signup?')) {
-                    modal.style.display = "block";
-                    //} else {
-                      //  modal.style.display = "none";
-                    //}
-                }
-                else
-				{
-                    PAYMENT.signupCalled = false;
-                }      
             }
-        }
+        });
     }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Registration & Singup Services.
+///////////////////////////////////////////////////////////////////////////////
 var SIGNUP = 
 {
     popupWindow: null,
-    
-    signUpDone : false,
-    
-    browserSignupComplete : function () 
+
+    signUpDone: false,
+
+    browserSignupComplete: function()
     {
 	var signupComplete = {
             "msgId"              : MESSAGE.id.BrowserSignupCompleteIndication,
@@ -1177,14 +1208,14 @@ var SIGNUP =
             "merchantName"       : MERCHANT.name,
             "messageAuthenticationCode": ""
         };
-        
-        var  signupCompleteText =  JSON.stringify(signupComplete).toString();
-        var  hmac = calculateHMAC(signupCompleteText);
+
+        var signupCompleteText = JSON.stringify(signupComplete).toString();
+        var hmac = calculateHMAC(signupCompleteText);
         signupComplete.messageAuthenticationCode = UTILS.ab2hexText(hmac);
         signupCompleteText =  JSON.stringify(signupComplete).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Browser Signup Completed Indication \n\n" + signupCompleteText + "\n\n");
+            console.log("Browser Signup Completed Indication \n\n" + signupCompleteText + "\n\n");
         }
         
         $.ajax({
@@ -1200,14 +1231,14 @@ var SIGNUP =
  
                 // From 9, step 150b. Start Payment Info Indication(tid, vid)
                 var startPaymentInfoRetrieveInd = JSON.parse(result);
-                if(!startPaymentInfoRetrieveInd) 
+                if (!startPaymentInfoRetrieveInd)
                 {
-                    window.alert("ERROR - Unexpected start payment info indication.\n");  
+                    UTILS.errorDetected("ERROR - Unexpected start payment info indication.\n");  
                     PAYMENT.completed();    
                     return;
                 }
-                
-                if(startPaymentInfoRetrieveInd.msgId === MESSAGE.id.StartPaymentInfoRetrieveIndication)
+
+                if (startPaymentInfoRetrieveInd.msgId === MESSAGE.id.StartPaymentInfoRetrieveIndication)
                 {
                     PAYMENT.launchPaymentMethod(startPaymentInfoRetrieveInd);
                 }
@@ -1216,36 +1247,35 @@ var SIGNUP =
                     PAYMENT.authorizationResponse(startPaymentInfoRetrieveInd);
                 }
                 else {
-                    window.alert("ERROR - Unexpected browser signup complete response.\n");  
+                    //UTILS.errorDetected("ERROR - Unexpected browser signup complete response.\n");  
                     PAYMENT.completed();    
                 }
             },
             error: function()
             {
-                window.alert("ERROR - Unexpected browser signup complete indication.\n");  
+                //UTILS.errorDetected("ERROR - Unexpected browser signup complete indication.\n");  
                 PAYMENT.completed();    
             }
         });
     },
-    
-    configureSecurityQRequest : function (hmac) 
+
+    configureSecurityQRequest: function(hmac)
     {
-        
-        // Payment Authorization Request
-	var configureSecurityQReq = {
-            "msgId"              : MESSAGE.id.BrowserConfigureSecurityQReq,
-            "vid"                : CARDHOLDER.id,
-            "merchantIdentifier" : MERCHANT.id,
-            "merchantName"       : MERCHANT.name,
-            "securityQid"        : CARDHOLDER.securityQId,
-            "securityA"          : CARDHOLDER.securityAnswer,
-            "messageAuthenticationCode": UTILS.ab2hexText(hmac)            
+        // Configure Security Request
+        var configureSecurityQReq = {
+            "msgId": MESSAGE.id.BrowserConfigureSecurityQReq,
+            "vid": CARDHOLDER.id,
+            "merchantIdentifier": MERCHANT.id,
+            "merchantName": MERCHANT.name,
+            "securityQid": CARDHOLDER.securityQId,
+            "securityA": CARDHOLDER.securityAnswer,
+            "messageAuthenticationCode": UTILS.ab2hexText(hmac)
         };
        
         var  configureSecurityQText =  JSON.stringify(configureSecurityQReq).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Broswer Security Question Configure Request: \n\n" + configureSecurityQText + "\n\n");
+            console.log("Broswer Security Question Configure Request: \n\n" + configureSecurityQText + "\n\n");
         }
         
         $.ajax({
@@ -1260,60 +1290,62 @@ var SIGNUP =
             success     : function(result) {
                 
                 // Clear the T1 transaction timer
-                window.clearTimeout(TRANSACTION.t1Timer); 
-                
+                window.clearTimeout(TRANSACTION.t1Timer);
+
                 var configureSecurityQResp = JSON.parse(result);
-                
+
                 if ((configureSecurityQResp === null) || (configureSecurityQResp === undefined) ||
                     (configureSecurityQResp.msgId !== MESSAGE.id.BrowserConfigureSecurityQResp)) {
                     
-                    window.alert("ERROR:  Invalid configure security question respond.\n");   
+                    UTILS.errorDetected("ERROR:  Invalid configure security question respond.\n");   
                     PAYMENT.completed();    
                     return;
                 }
-                
+
                 if ((configureSecurityQResp.vid === CARDHOLDER.id) &&
-                    (configureSecurityQResp.status === STATUS.code.SUCCESS)) { 
-                
+                    (configureSecurityQResp.status === STATUS.code.SUCCESS))
+                {
+
                     SIGNUP.phoneVerificationRequest();
                 }
                 else {
-                    window.alert("ERROR: Signup vid = " + configureSecurityQResp.vid);
+                    UTILS.errorDetected("ERROR: Signup vid = " + configureSecurityQResp.vid);
                          
                     PAYMENT.completed();    
                 }               
             },
-            error: function(){
+            error: function()
+            {
                 PAYMENT.completed();
             }
         });
     },
-    
-    configure3rdPartySigninRequest : function (signinType, accessToken) 
+
+    configure3rdPartySigninRequest: function(signinType, accessToken)
     {
-        
+
         // Payment Authorization Request
         CARDHOLDER.signinType = parseInt(signinType);
         CARDHOLDER.signinAccessToken = accessToken;
-        
-	var signinRequest = {
-            "msgId"              : MESSAGE.id.Configure3rdPartySigninRequest,
-            "vid"                : CARDHOLDER.id,
-            "signinType"         : CARDHOLDER.signinType,
-            "userAccessToken"    : accessToken,
-            "convertFlag"        : ((signinType === 1) ? 1:0),
-            "merchantIdentifier" : MERCHANT.id,
-            "merchantName"       : MERCHANT.name,
+
+        var signinRequest = {
+            "msgId": MESSAGE.id.Configure3rdPartySigninRequest,
+            "vid": CARDHOLDER.id,
+            "signinType": CARDHOLDER.signinType,
+            "userAccessToken": accessToken,
+            "convertFlag": ((signinType === 1) ? 1 : 0),
+            "merchantIdentifier": MERCHANT.id,
+            "merchantName": MERCHANT.name,
             "messageAuthenticationCode": ""
         };
-        
-        var  signinRequestText =  JSON.stringify(signinRequest).toString();
-        var  hmac = calculateHMAC(signinRequestText);
+
+        var signinRequestText = JSON.stringify(signinRequest).toString();
+        var hmac = calculateHMAC(signinRequestText);
         signinRequest.messageAuthenticationCode = UTILS.ab2hexText(hmac);
         signinRequestText =  JSON.stringify(signinRequest).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Configure 3rd Party Sign-in: \n\n" + signinRequestText + "\n\n");
+            console.log("Configure 3rd Party Sign-in: \n\n" + signinRequestText + "\n\n");
         }
         
         $.ajax({
@@ -1328,179 +1360,174 @@ var SIGNUP =
             success     : function(result) {
                     
                 var signinResp = JSON.parse(result);
-                if ((signinResp === null) || (signinResp === undefined) ||
+                if ((signinResp === null) || (signinResp === undefined) ||WWW
                     (signinResp.msgId !== MESSAGE.id.Configure3rdPartySigninResponse)) {
                     
-                    window.alert("ERROR:  Invalid configure 3rd party sign-in response.\n");   
+                    UTILS.errorDetected("ERROR:  Invalid configure 3rd party sign-in response.\n");   
                     PAYMENT.completed();    
                     return;
                 }
-                
+
                 // TODO:  Remove the status == 1, invalid MAC status
-                if ((signinResp.vid === CARDHOLDER.id) && 
-                    (signinResp.status === STATUS.code.SUCCESS)) { 
-                
+                if ((signinResp.vid === CARDHOLDER.id) &&
+                    (signinResp.status === STATUS.code.SUCCESS))
+                {
+
                     SIGNUP.phoneVerificationRequest();
                 }
                 else {
-                    window.alert("ERROR: Sign-in failed with status = " + signinResp.status);
+                    UTILS.errorDetected("ERROR: Sign-in failed with status = " + signinResp.status);
                 }               
             },
             error: function(result){
-                window.alert("ERROR:  Configure 3rd Party Sign-in failed w/ status = " + result.status);
+                UTILS.errorDetected("ERROR:  Configure 3rd Party Sign-in failed w/ status = " + result.status);
                 PAYMENT.completed();
             }
         });
     },
-    
-    phoneVerificationRequest : function () 
+
+    phoneVerificationRequest: function()
     {
-        // Payment Authorization Request
-	var phoneVerificationReq = {
-            "msgId"         : MESSAGE.id.BrowserVerificationRequest,
-            "phoneNumber"   : CARDHOLDER.phone,
-            "emailAddress"  : CARDHOLDER.id,
-            "merchantIdentifier" : MERCHANT.id,
-            "merchantName"       : MERCHANT.name,
-            "messageAuthenticationCode": ""     
+        // Phone Verification Request
+        var phoneVerificationReq = {
+            "msgId": MESSAGE.id.BrowserVerificationRequest,
+            "phoneNumber": CARDHOLDER.phone,
+            "emailAddress": CARDHOLDER.id,
+            "merchantIdentifier": MERCHANT.id,
+            "merchantName": MERCHANT.name,
+            "messageAuthenticationCode": ""
         };
-        
-        var  phoneVerificationText =  JSON.stringify(phoneVerificationReq).toString();
-        var  hmac = calculateHMAC(phoneVerificationText);
+
+        var phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
+        var hmac = calculateHMAC(phoneVerificationText);
         phoneVerificationReq.messageAuthenticationCode = UTILS.ab2hexText(hmac);
-        phoneVerificationText =  JSON.stringify(phoneVerificationReq).toString();
         
-        if(UTILS.debug.enabled()) {
-            window.alert("Broswer Phone Verification Request: \n\n" + phoneVerificationText + "\n\n");
+        phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
+
+        if (UTILS.debug.enabled())
+        {
+            console.log("Broswer Phone Verification Request: \n\n" + phoneVerificationText + "\n\n");
         }
-        
-        $.ajax({
-            type        : "POST",
-            url         : APPSERVER.vrayHost.getDomainURL() + "/api/accounts/BrowserPhoneVerification",
-            contentType : "application/json",
-            data        : phoneVerificationText,
-            timeout     : TRANSACTION.t15Timeout,
-            dataType    : "text",
-            async       : true,
-            xhrFields   : { withCredentials: true },
-            success     : function(result) {
-                          
-                if((result === null) || (result === undefined) || (result === "")) {
-                    
-                   window.alert("ERROR:  Phone Verification Failed.\n");
-                   PAYMENT.completed();
+
+        $.ajax(
+        {
+            type: "POST",
+            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/BrowserPhoneVerification",
+            contentType: "application/json",
+            data: phoneVerificationText,
+            timeout: TRANSACTION.t15Timeout,
+            dataType: "text",
+            async: true,
+            xhrFields:
+            {
+                withCredentials: true
+            },
+            success: function(result)
+            {  
+                if ((result === null) || (result === undefined) || (result === ""))
+                {
+                    window.alert("ERROR:  Phone Verification Failed.\n");
+                    PAYMENT.completed();
                 }
-                
+
                 var phoneVerificationResp = JSON.parse(result);
-                
+
                 if ((phoneVerificationResp === null) || (phoneVerificationResp === undefined) ||
                     (phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse)) {
                     
-                    window.alert("ERROR:  Invalid phone verification respond.\n");   
+                    UTILS.errorDetected("ERROR:  Invalid phone verification respond.\n");   
                     PAYMENT.completed();    
                     return;
                 }
-                
-                if((phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse) &&
-                   (phoneVerificationResp.status === STATUS.code.SUCCESS)) 
-                {
-                     if(SIGNUP.popupWindow !== null) {
-                        SIGNUP.popupWindow.close();
-                    }
 
-                    if(!SIGNUP.signUpDone) {
-                        SIGNUP.signUpDone = true;
-                        //$('#pay-with-mobile-button').click();
-                    }
+                if ((phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse) &&
+                    (phoneVerificationResp.status === STATUS.code.SUCCESS))
+                {
+                    SIGNUP.browserSignupComplete();
                 }
-                else {
-                    window.alert("ERROR - Signup phone verification = " + phoneVerificationResp.phoneNumber +  
-                                 " failed w/ status = " + phoneVerificationResp.status);
-                         
-                    PAYMENT.completed();    
-                } 
+                else
+                {
+                    UTILS.errorDetected("ERROR - Signup phone verification = " + phoneVerificationResp.phoneNumber +
+                        " failed w/ status = " + phoneVerificationResp.status);
+
+                    PAYMENT.completed();
+                }
             },
-            error: function(){
-                var smsCode = window.prompt("Enter verification code sent to mobile#: " + CARDHOLDER.phone);
+            error: function()
+            {
+                var smsCode = window.prompt("Enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
                 CARDHOLDER.phoneCode = smsCode;
-                if(smsCode) 
-                SIGNUP.phoneVerificationIndication();
+                if (smsCode)
+                    SIGNUP.phoneVerificationIndication();
             }
         });
         
-        window.alert("For security purpose, a 6-digit verification code will be send to: " + CARDHOLDER.phone + "\n");
+        window.alert("For security purpose, a 6-digit verification code will be sent to mobile#: " + CARDHOLDER.phone + "\n");
     },
-    
-    phoneVerificationIndication : function () 
-    {
-	var phoneVerificationIndication = {
-            "msgId"              : MESSAGE.id.BrowserCodeIndication,
-            "merchantIdentifier" : MERCHANT.id,
-            "merchantName"       : MERCHANT.name,
-            "rxCode"             : CARDHOLDER.phoneCode,
-            "phoneNumber"        : CARDHOLDER.phone,
-            "messageAuthenticationCode": ""     
+
+    phoneVerificationIndication: function()
+    { 
+        var phoneVerificationIndication = {
+            "msgId": MESSAGE.id.BrowserCodeIndication,
+            "merchantIdentifier": MERCHANT.id,
+            "merchantName": MERCHANT.name,
+            "rxCode": CARDHOLDER.phoneCode,
+            "phoneNumber": CARDHOLDER.phone,
+            "messageAuthenticationCode": ""
         };
-        
-        var  phoneIndicationText =  JSON.stringify(phoneVerificationIndication).toString();
-        var  hmac = calculateHMAC(phoneIndicationText);
+
+        var phoneIndicationText = JSON.stringify(phoneVerificationIndication).toString();
+        var hmac = calculateHMAC(phoneIndicationText);
         phoneVerificationIndication.messageAuthenticationCode = UTILS.ab2hexText(hmac);
         phoneIndicationText =  JSON.stringify(phoneVerificationIndication).toString();
         
         if(UTILS.debug.enabled()) {
-            window.alert("Broswer Phone Code Verification: \n\n" + phoneIndicationText + "\n\n");
+            console.log("Broswer Phone Code Verification: \n\n" + phoneIndicationText + "\n\n");
         }
- 
-        $.ajax({
-            type        : "POST",
-            url         : APPSERVER.vrayHost.getDomainURL() + "/api/accounts/BrowserCodeIndication",
-            contentType : "application/json",
-            data        : phoneIndicationText,
-            timeout     : TRANSACTION.t15Timeout, 
-            dataType    : "text",
-            async       : true,
-            xhrFields   : { withCredentials: true },
-            success     : function(result) {
-                    
+
+        $.ajax(
+        {
+            type: "POST",
+            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/BrowserCodeIndication",
+            contentType: "application/json",
+            data: phoneIndicationText,
+            timeout: TRANSACTION.t15Timeout,
+            dataType: "text",
+            async: true,
+            xhrFields:
+            {
+                withCredentials: true
+            },
+            success: function(result)
+            {
                 var phoneVerificationResp = JSON.parse(result);
-                
+
                 if ((phoneVerificationResp === null) || (phoneVerificationResp === undefined) ||
-                    (phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse)) 
+                    (phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse))
                 {
-                    window.alert("ERROR - Invalid configure security question respond.\n");  
+                    UTILS.errorDetected("ERROR - Invalid configure security question respond.\n");  
                     PAYMENT.completed();    
                     return;
                 }
-                
-                if ((phoneVerificationResp.phoneNumber === CARDHOLDER.phone) && 
-                    (phoneVerificationResp.status === STATUS.code.SUCCESS)) { 
-                
-                    if(SIGNUP.popupWindow !== null) {
-                        SIGNUP.popupWindow.close();
-                    }
 
-                    if(!SIGNUP.signUpDone) {
-                        SIGNUP.signUpDone = true;
-                        //$('#pay-with-mobile-button').click(); 
-                    }
-                    
+                if ((phoneVerificationResp.phoneNumber === CARDHOLDER.phone) &&
+                    (phoneVerificationResp.status === STATUS.code.SUCCESS))
+                {
+                    window.alert("Phone verification completed.\n" + 
+                                 "Please check your mobile phone for payment notification.");
+                         
                     SIGNUP.browserSignupComplete();
-
-                    //window.alert("Sign-up successfully completed.");
                 }
-                else {
-                    var smsCode = window.prompt("Re-enter verification send to mobile#: " + CARDHOLDER.phone);
+                else
+                {
+                    var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
                     CARDHOLDER.phoneCode = smsCode;
                     SIGNUP.phoneVerificationIndication();
-                }               
+                }
             },
             error: function(){
-                window.alert("ERROR - Security code verification failed.");
+                UTILS.errorDetected("ERROR - Security code verification failed.");
                 PAYMENT.completed();
-                
-                if(SIGNUP.popupWindow !== null) {
-                        SIGNUP.popupWindow.close();
-                }
             }
         });
     }
@@ -1511,9 +1538,10 @@ var SIGNUP =
 //
 var STATUS = {
 
-    code : {
+    code:
+    {
         //
-	SUCCESS : 0,
+	SUCCESS 		: 0,
         //
         VIDFailure              : 1,
         CodeFailure             : 2,
@@ -1547,7 +1575,7 @@ var TRANSACTION =
         idRetry         : 0,
         idRetryMAX      : 1,
         lineItems       : null,
-        loginStatus     : 0,     // Logged into merchant account = YES = 0
+        loginStatus     : 1,     // Logged into merchant account = NO = 1
         t1Timer         : null,
         t1Timeout       : 300000, // msec
         t14Timeout      : 20000,
@@ -1578,8 +1606,6 @@ var TRANSACTION =
             TRANSACTION.paymentRequest = null;
             TRANSACTION.currencyCode = "usd";
             TRANSACTION.countryCode = "US";
-            TRANSACTION.loginStatus = 0; // Signed in w/ merchant site
-            TRANSACTION.deviceType = 0; // Mobile = Phone or Tablet
         }
 };
 
@@ -1618,20 +1644,19 @@ var UTILS =
             case 0:
                 return "OK";
             case 1:
-                return "1 - Invalid ID.";
-            case 2 :
-                return "2 - Incorrect Code Check.";
-            case 3 :
-                return "3 - Invalid Merchant ID.";
-            case 4 :
-                return "4 - Transaction Timed Out.";
-            case 5 :
-                return "5 - Mobile App Failure.";
-            case 6 :
-                return "6 - Un-Matched MAC.";
-            
+                return "Invalid ID.";
+            case 2:
+                return "Incorrect Code Check.";
+            case 3:
+                return "Invalid Merchant ID.";
+            case 4:
+                return "Transaction Timed Out.";
+            case 5:
+                return "Mobile App Failure.";
+            case 6:
+                return "Un-Matched MAC.";
             default:
-                return status.toString() + " - Unknown";	               
+                return status.toString() + " - Unknown";
         }
     },
     
@@ -1639,46 +1664,58 @@ var UTILS =
         
         if(UTILS.debug.enabled()) {
             
-            window.alert("ERROR - T1 Timer Expired.\n" + 
-                             "Retry payment authorization request...\n");
+            UTILS.errorDetected("ERROR - T1 Timer Expired.\n" + 
+                                "Retry payment authorization request...\n");
         }
-            
-        if ((CARDHOLDER.id !== null) && (TRANSACTION.id !== 0)) {
-            
-            if(TRANSACTION.paymentRetry < TRANSACTION.paymentRetryMAX) {
-                
+
+        if ((CARDHOLDER.id !== null) && (TRANSACTION.id !== 0))
+        {
+
+            if (TRANSACTION.paymentRetry < TRANSACTION.paymentRetryMAX)
+            {
+
                 // Re-submit the payment request
-                PAYMENT.reauthorizationRequest();   
-                                         
+                PAYMENT.reauthorizationRequest();
+
                 TRANSACTION.paymentRetry++;
             }
             else {     
                 if(UTILS.debug.enabled()) {
                     
-                    window.alert("ERROR - Exceeded max retry of payment authorization request.\n");
+                    UTILS.errorDetected("ERROR - Exceeded max retry of payment authorization request.\n");
                 }
                 PAYMENT.completed();
             }
         }
     },
-    
-    validPhoneNumber : function (inputtxt)  {  
-        var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;  
-        if(inputtxt.value.match(phoneno)) {
-            return true;  
+
+    validPhoneNumber: function(inputtxt)
+    {
+        var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if (inputtxt.value.match(phoneno))
+        {
+            return true;
         }
         else {  
-            alert("Invalid phone#: " + inputtxt.toString());  
+            UTILS.errorDetected("Invalid phone#: " + inputtxt.toString());  
             return false;  
         }  
-    } 
+    },
+    
+    errorDetected(error) {
+        if(UTILS.debug.enabled()) {
+            CALLBACK.call(error);
+        }
+        else {
+            CALLBACK.call("Payment failed");
+        }
+    }
 };
 
 //////////////////////////////////////////////////////////
 // UI changes for payment transactions
 /////////////////////////////////////////////////////////
 var UIUtils = {
-
     showSpinner : function () {
         document.getElementById('waitForAuthorization').style.display = "block";
         document.getElementById('mobilepay').innerHTML='Please authorize payment from your mobile device...';
@@ -1687,5 +1724,22 @@ var UIUtils = {
     hideSpinner : function () {
         document.getElementById('waitForAuthorization').style.display = "none";
         document.getElementById('mobilepay').innerHTML='';
+    }
+}
+
+/////////////////////////////////////////////////////////
+// CALLBACK once payment is done
+////////////////////////////////////////////////////////
+
+var CALLBACK = {
+    callback: null,
+    
+    call: function(error) {
+        if(!CALLBACK.callback) {
+            console.log("Invalid callback function!");
+        }
+        else {
+            CALLBACK.callback(error);
+        }
     }
 }
