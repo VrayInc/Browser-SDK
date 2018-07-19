@@ -19,7 +19,7 @@
 
 ### VRAY.init() ###
 
-* Parameter : merchantId - The ID provided by VRAY
+* Parameter : merchantId (MID) - The ID provided by payment processor.
 
 ### VRAY.setupPayment() ###
 
