@@ -158,7 +158,6 @@ var MERCHANT =
 
     configure: function(id, name)
     {
-
         MERCHANT.id = id;
         MERCHANT.name = name;
     },
@@ -323,7 +322,6 @@ var PAYMENT =
                 var messageId = paymentRespond.msgId;
                 switch (messageId)
                 {
-
                     case MESSAGE.id.PaymentResponse:
                         PAYMENT.authorizationResponse(paymentRespond);
                         break;
@@ -373,36 +371,50 @@ var PAYMENT =
         }
 
         var tid = parseInt(paymentResponse.tid);
-        if (tid === Number(TRANSACTION.id))
+        if (tid !== Number(TRANSACTION.id))
         {
-            if (paymentResponse.status === STATUS.code.SUCCESS)
-            {
-                var ccToken = paymentResponse.token;
-            
-                if(UTILS.debug.enabled()) {
-                    console.log("Payment authorization accepted.\n\n" +
-                         "Credit Card Token = " + ccToken);
-                }     
-                // Charging payment via credit card token
-                doChargePayment(ccToken, TRANSACTION.amount, MERCHANT.name);
-            }
-            else if (paymentResponse.status === STATUS.code.VIDFailure)
-            {
-                UIUtils.hideSpinner();
-
-                SIGNUP.phoneVerificationRequest();
-            }
-            else {
-                UTILS.errorDetected("Payment authorization rejected with status = " + 
-                                paymentResponse.status.toString() + " - " +
-                                UTILS.statusText(paymentResponse.status));
-            }
-        }
-        else
-        {
-            window.alert("ERROR - Invalid transaction ID: " + paymentResponse.tid);
+            UTILS.errorDetected("ERROR - Invalid transaction ID: " + paymentResponse.tid);
+            return;
         }
         
+        if (paymentResponse.status === STATUS.code.SUCCESS)
+        {
+            var ccToken = paymentResponse.token;
+
+            if(UTILS.debug.enabled()) 
+            {
+                console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
+            }     
+
+            // Charging payment via token
+            doChargePayment(ccToken, TRANSACTION.amount, MERCHANT.name);
+        }
+        else if ((paymentResponse.status === STATUS.code.VIDFailure) || 
+                 (paymentResponse.status === STATUS.code.PhoneVerificationTrigger))
+        {
+            SIGNUP.phoneVerificationRequest();
+            return;
+        }
+        else if (paymentResponse.status === STATUS.code.InvalidPhoneNumber)
+        {
+            var newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
+                                         "Please enter the mobile# associated with " + CARDHOLDER.id +  ".\n");
+            CARDHOLDER.id = newPhone;
+            SIGNUP.phoneVerificationRequest();
+            return;
+        }
+        else if (paymentResponse.status === STATUS.code.Cancel) 
+        {
+            window.alert("User cancelled the payment.");
+        }
+        else 
+        {
+            UTILS.errorDetected("Payment authorization request failed with status = " + 
+                            paymentResponse.status.toString() + " - " +
+                            UTILS.statusText(paymentResponse.status));
+        }
+       
+        PAYMENT.completed();
         return;
     },
 
@@ -413,7 +425,7 @@ var PAYMENT =
             (codeCommand.tid === null) || (codeCommand.tid === undefined) ||
             (codeCommand.code === null) || (codeCommand.code === undefined) ||
             (codeCommand.msgId !== 5)) {
-            UTILS.errorDetected("ERROR - Invalid code check parameters")
+            UTILS.errorDetected("ERROR - Invalid code check parameters");
             return;
         }
 
@@ -486,6 +498,8 @@ var PAYMENT =
 
     completed: function()
     {
+        UIUtils.hideSpinner();
+
         // MERCHANT Configuration
         //MERCHANT.id = "";
         //MERCHANT.name = "";
@@ -621,7 +635,7 @@ var PAYMENT =
                 PAYMENT.completed();
             },
             error: function(){
-                UTILS.errorDetected("ERROR - Token not accepted.\n")
+                UTILS.errorDetected("ERROR - Token not accepted.\n");
                 PAYMENT.completed();  
             }
         });
@@ -1107,7 +1121,7 @@ var PAYMENT =
         }
         else if (vidRequest.status === STATUS.code.AnotherVID)
         {
-            window.alert("Another email, " + vidRequest.anotherEmail + ", had been register with mobile# " + CARDHOLDER.phone + "\n\n" +
+            window.alert("Another email, " + vidRequest.anotherEmail + ", had been associated with mobile# " + CARDHOLDER.phone + "\n\n" +
                 "Click OK to continue.\n\n");
             vid = vidRequest.anotherEmail;
             CARDHOLDER.id = vid;
@@ -1435,10 +1449,17 @@ var SIGNUP =
                     return;
                 }
 
-                if ((phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse) &&
-                    (phoneVerificationResp.status === STATUS.code.SUCCESS))
+                if (phoneVerificationResp.status === STATUS.code.SUCCESS)
                 {
                     SIGNUP.browserSignupComplete();
+                }
+                else if (phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber)
+                {
+                    var newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
+                                                 "Please enter the mobile# associated with " + CARDHOLDER.id +  ".\n");
+                    CARDHOLDER.id = newPhone;
+                    SIGNUP.phoneVerificationRequest();
+                    return;
                 }
                 else
                 {
@@ -1506,7 +1527,7 @@ var SIGNUP =
                 if ((phoneVerificationResp.phoneNumber === CARDHOLDER.phone) &&
                     (phoneVerificationResp.status === STATUS.code.SUCCESS))
                 {
-                    window.alert("Phone verification completed.\n" + 
+                    window.alert("Phone verification completed.\n\n" + 
                                  "Please check your mobile phone for payment notification.");
                          
                     SIGNUP.browserSignupComplete();
@@ -1544,6 +1565,9 @@ var STATUS =
         MobileFailure           : 5,
         MACVerificationFailure  : 6, 
         MobileSDKFailure        : 7,
+        Cancel                  : 8,
+        InvalidPhoneNumber      : 9,
+        PhoneVerificationTrigger: 10,
         //
 	VIDBlocked              : 11,
 	VIDNotFound             : 12,
@@ -1647,7 +1671,21 @@ var UTILS =
             case 5:
                 return "Mobile App Failure.";
             case 6:
-                return "Un-Matched MAC.";
+                return "Browser SDK Unmatched MAC failure.";
+            case 7:   
+                return "Mobile SDK Unmatched MAC failure.";
+            case 8:
+                return "User cancelled payment request.";
+            case 9:
+                return "Invalid phone number.";
+            case 10:
+                return "Phone verification process initiated.";
+            case 11:
+                return "VID got blocked.";
+            case 12:
+                return "VID not found.";
+            case 13:
+                return "Another VID is used for the same mobile#.";
             default:
                 return status.toString() + " - Unknown";
         }
@@ -1718,13 +1756,13 @@ var UIUtils = {
         document.getElementById('waitForAuthorization').style.display = "none";
         document.getElementById('mobilepay').innerHTML='';
     }
-}
+};
 
 /////////////////////////////////////////////////////////
 // CALLBACK once payment is done
 ////////////////////////////////////////////////////////
-
-var CALLBACK = {
+var CALLBACK = 
+{
     callback: null,
     
     call: function(error) {
@@ -1735,4 +1773,4 @@ var CALLBACK = {
             CALLBACK.callback(error);
         }
     }
-}
+};
