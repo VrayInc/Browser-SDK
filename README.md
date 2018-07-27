@@ -43,7 +43,7 @@
  * Parameter
    * callback - function that gets called once payment has been processed
  * Valid merchantId, name, emailAddress, phoneNumber, shippingAddress and totalAmount 
-   (greater than 0) are needed for pay() to work.
+   (greater than or equal to 0) are needed for pay() to work.
 
 ### Example usage ###
 
