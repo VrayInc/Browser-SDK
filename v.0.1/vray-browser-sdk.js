@@ -365,7 +365,7 @@ function calculateHMAC(message)
 var VRAY = 
 {
     serverId: null,
-    cardholderName: null,
+    cardHolderName: null,
     merchantId: null,
     merchantName: null,
     myVId: null,
