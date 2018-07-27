@@ -421,8 +421,7 @@ var VRAY =
         if(!VRAY.merchantId || !VRAY.merchantName || 
            !VRAY.cardHolderName || !VRAY.myVId || 
            !VRAY.phoneNumber || !VRAY.totalAmount ||
-           !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
-           !VRAY.shippingAddr || (VRAY.shippingAddr.length !== 4) ||
+           !VRAY.purchaseItem || (VRAY.totalAmount <= 0) ||
            !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1))) 
         {
             CALLBACK.call("ERROR - Missing required payment information!");
@@ -433,8 +432,6 @@ var VRAY =
         TRANSACTION.init();
         TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
         TRANSACTION.loginStatus = VRAY.getLoginStatus();
-
-        
 
         var amount = VRAY.totalAmount;
         var purchaseItems = VRAY.purchaseItem;
