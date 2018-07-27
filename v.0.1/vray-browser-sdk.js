@@ -399,6 +399,9 @@ var VRAY =
         VRAY.purchaseItem = purchaseItem;
         VRAY.shippingAddr = shippingAddress;
         VRAY.totalAmount = totalAmount;
+        
+        if((VRAY.loginStatus !== 0) && (VRAY.loginStatus !== 1))
+            VRAY.loginStatus = parseInt(loginStatus);
 
         CARDHOLDER.configure(
             VRAY.getCardHolderName(),
