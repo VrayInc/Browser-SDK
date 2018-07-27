@@ -8,7 +8,7 @@
 <body>
  
  <!-- SDK -->
- <script type="text/javascript" src="https://rawgit.com/VrayInc/Browser-SDK/master/js/merchant-button.js"></script>
+ <script type="text/javascript" src="https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/vray-browser-sdk.js"></script>
  
  <!-- Other code -->
  
@@ -54,6 +54,7 @@ VRAY.setupPayment( // Step 2
     "Ms. ABC",
     "abc@xyz.com",
     "9431184567",
+    "Souvenir Pen"
     ["9500 Gilman Drive",
     "La Jolla",
     "CA",
