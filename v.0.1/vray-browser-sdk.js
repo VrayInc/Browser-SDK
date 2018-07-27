@@ -2,11 +2,11 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/js/digest.js', digestAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/js/mobile-detect.js', mobileDetectAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/js/digest.js', digestAdded);
+loadJSFile('https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/js/mobile-detect.js', mobileDetectAdded);
+loadJSFile('https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
