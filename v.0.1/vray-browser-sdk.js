@@ -364,7 +364,6 @@ function calculateHMAC(message)
 ///////////////////////////
 var VRAY = 
 {
-    serverId: null,
     cardHolderName: null,
     merchantId: null,
     merchantName: null,
@@ -380,12 +379,10 @@ var VRAY =
     init: function(merchantId, merchantName)
     {
         // Merchant Configuration
-        VRAY.serverId = "https://vraystaging.azurewebsites.net";
         VRAY.merchantId = merchantId;
         VRAY.merchantName = merchantName;
         
         // Define App Server and Merchant Id & name
-        APPSERVER.vrayHost.setDomainURL(VRAY.serverId);
         MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
     },
     
