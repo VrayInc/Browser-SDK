@@ -418,7 +418,7 @@ var VRAY =
         if(!VRAY.merchantId || !VRAY.merchantName || 
            !VRAY.cardHolderName || !VRAY.myVId || 
            !VRAY.phoneNumber || !VRAY.totalAmount ||
-           !VRAY.purchaseItem ||
+           !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
            !VRAY.shippingAddr || (VRAY.shippingAddr.length !== 4) ||
            !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1))) 
         {
