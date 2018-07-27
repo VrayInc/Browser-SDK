@@ -432,7 +432,7 @@ var VRAY =
         // Transaction Information:
         TRANSACTION.init();
         TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
-        TRANSACTION.loginStatus = parseInt(VRAY.getLoginStatus());
+        TRANSACTION.loginStatus = VRAY.getLoginStatus();
 
         
 
