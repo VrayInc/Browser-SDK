@@ -19,45 +19,50 @@
 
 ### VRAY.init() ###
 
-* Parameter : merchantId (MID) - The ID provided by payment processor.
-
+* Parameters : 
+  * merchantId (MID) - The ID provided by the payment processor.
+  * merchantName - Name of merchant provided by the payment processor.
+  
 ### VRAY.setupPayment() ###
 
 * Parameters :
+  * Buyer's name (string)
   * Buyer's emailAddress (string)
   * Buyer's phoneNumber (string)
-  * Buyer's streetAddress (string)
-  * Buyer's city (string)
-  * Buyer's state (string)
-  * Buyer's zipCode (string)
+  * Buyer's purchaseItem (string)
+  * Buyer's shippingAddress (array of 4 elements)
+    * Buyer's streetAddress (string)
+    * Buyer's city (string)
+    * Buyer's state (string)
+    * Buyer's zipCode (string)
+  * Buyer's loginStatus - whether the buyer is logged in on your website (number - 0 is logged in and 1 is otherwise)  
   * Buyer's totalAmount (string)
-  * Buyer's loginStatus - whether the buyer is logged in on your website (number - 0 is logged in and 1 is otherwise)
-  * callback - function that gets called once payment has been processed
   
  ### VRAY.pay() ###
  
- * No parameters
- * Valid merchantId, emailAddress, phoneNumber, streetAddress, city, state, zipCode and totalAmount 
+ * Parameter
+   * callback - function that gets called once payment has been processed
+ * Valid merchantId, name, emailAddress, phoneNumber, shippingAddress and totalAmount 
    (greater than 0) are needed for pay() to work.
 
 ### Example usage ###
 
 ```javascript
-VRAY.init("merchant.com"); // Step 1
+VRAY.init("merchant.com", "merchant name"); // Step 1
 
 VRAY.setupPayment( // Step 2
+    "Ms. ABC",
     "abc@xyz.com",
     "9431184567",
-    "9500 Gilman Drive",
+    ["9500 Gilman Drive",
     "La Jolla",
     "CA",
-    "92091",
-    "151.00",
-    1,
-    myCallback
+    "92091"],
+    1
+    "151.00"
 );
 
-VRAY.pay(); // Step 3
+VRAY.pay(myCallback); // Step 3
 
 //Define your callback
 function myCallback(error) {
