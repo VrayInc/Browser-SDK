@@ -404,8 +404,8 @@ var VRAY =
             VRAY.loginStatus = parseInt(loginStatus);
 
         CARDHOLDER.configure(
-            VRAY.getCardHolderName(),
             VRAY.getMyVId(),
+            VRAY.getCardHolderName(),
             VRAY.getPhoneNumber(),
             VRAY.getShippingAddr()
         );
