@@ -340,8 +340,30 @@ function launchPayment()
     var tid = TRANSACTION.id;
     var merchant = MERCHANT.name;
     var amount = TRANSACTION.amount;
-    var url = "https://www.vraymerchant.com/payment.html?tid=" + tid + "&name=" + merchant + "&amt=" +
-        amount + "&mac=" + "";
+    
+    var storeFrontURL;  // legacy store
+    switch (MERCHANT.id) 
+    {
+        case 'asiaroom.vraymerchant.com':  
+            storeFrontURL = "https://asiaroom.vraymerchant.com/payment.html";
+            break;
+        case 'gcs.vraymerchant.com':
+            storeFrontURL = "https://gcs.vraymerchant.com/payment.html";
+            break;
+        case 'vraytest.vraymerchant.com':
+            storeFrontURL = "https://vraytest.vraymerchant.com/payment.html";
+            break;
+        case 'vraylive.vraymerchant.com':
+            storeFrontURL = "https://vraylive.vraymerchant.com/payment.html";
+            break;
+        case 'vraylocalhost.ngrok.io':
+            storeFrontURL = "https://vraylocalhost.ngrok.io/VRAYTest/payment.html";
+            break;
+        case 'merchant.com.vray.vpay':
+        default:
+            storeFrontURL = "https://www.vraymerchant.com/payment.html"; 
+    }
+    var url = storeFrontURL + "?tid=" + tid + "&name=" + merchant + "&amt=" + amount + "&mac=" + "";
 
     // TODO - MAC calculation is done at the server backend w/ Key
     var key = "79aa2cd255bda022e5e0d095eaeea9442800c1fa3c74c85b2a6db2e1f988f952";
