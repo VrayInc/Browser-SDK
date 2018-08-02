@@ -807,7 +807,7 @@ var PAYMENT =
 
     requestContinue: function()
     {
-	var paymentRequestContinue = {
+		var paymentRequestContinue = {
             "msgId"              : MESSAGE.id.PaymentRequestContinueIndication,
             "tid"                : TRANSACTION.id,
             "merchantIdentifier" : MERCHANT.id,
@@ -820,6 +820,8 @@ var PAYMENT =
         paymentRequestContinue.messageAuthenticationCode = UTILS.ab2hexText(hmac);
         paymentRequestContinueText =  JSON.stringify(paymentRequestContinue).toString();
         
+		window.alert("Payment Request Continue Indication \n\n" + paymentRequestContinueText + "\n\n");
+		
         if(UTILS.debug.enabled()) {
             console.log("Payment Request Continue Indication \n\n" + paymentRequestContinueText + "\n\n");
         }
@@ -1203,6 +1205,9 @@ var PAYMENT =
                             
                 if (paymentInfoRespond.msgId === MESSAGE.id.BrowserPaymentIndication) 
                 {
+					PAYMENT.provision(paymentInfoRespond);
+					valid = true;
+					
                     if (paymentInfoRespond.tid === Number(parseInt(tid)))
                     {                          
                         var mobileDetect = new MobileDetect(window.navigator.userAgent);
@@ -1211,8 +1216,6 @@ var PAYMENT =
                         {
                             PAYMENT.requestContinue();
                         }
-                        
-                        valid = true;
                     }
                 }
                 
