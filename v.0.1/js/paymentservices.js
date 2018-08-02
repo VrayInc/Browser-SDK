@@ -819,8 +819,6 @@ var PAYMENT =
         var hmac = calculateHMAC(paymentRequestContinueText);
         paymentRequestContinue.messageAuthenticationCode = UTILS.ab2hexText(hmac);
         paymentRequestContinueText =  JSON.stringify(paymentRequestContinue).toString();
-        
-		window.alert("Payment Request Continue Indication \n\n" + paymentRequestContinueText + "\n\n");
 		
         if(UTILS.debug.enabled()) {
             console.log("Payment Request Continue Indication \n\n" + paymentRequestContinueText + "\n\n");
