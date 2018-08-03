@@ -126,7 +126,7 @@ var spinnerString =
         '<img src="https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
     '</div>';
 
-document.head.append(addCSSFile('css/merchant-button-special.css'));
+document.head.append(addCSSFile('https://rawgit.com/VrayInc/Browser-SDK/master/v.0.1/css/merchant-button-special.css'));
 document.body.append(addDiv(spinnerString));
 document.body.append(addDiv(signupModalString));
 document.body.append(addDiv(securityQuestionModalString));
