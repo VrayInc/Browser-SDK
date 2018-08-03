@@ -6,8 +6,8 @@
     text-align: center;
     position: fixed;
     top: 50%;
-    left: 10%;
-    right: 10%;
+    left: 25%;
+    right: 25%;
     transition: background-color 0.5s ease;
     box-shadow: 1px 4px 8px 2px rgba(0,0,0,0.2);
     transition: 0.3s;
@@ -386,6 +386,13 @@ input.w-button {
         padding: 10px;
         border: 1px solid #888;
         width: 80%;
+    }
+    
+    .pay-with-mobile-spinner {
+        position: fixed;
+        top: 50%;
+        left: 15%;
+        right: 15%;
     }
 }
 
