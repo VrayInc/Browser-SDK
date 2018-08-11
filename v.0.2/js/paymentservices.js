@@ -65,8 +65,6 @@ var APPSERVER =
     {
         domainName: 'VRAY Host',
         domainURL: 'https://vraystagingportal.azurewebsites.net',
-        //domainURL   : 'https://vrayserverdevapolo.azurewebsites.net',	
-        macKey: '79aa2cd255bda022e5e0d095eaeea9442800c1fa3c74c85b2a6db2e1f988f952',
 
         getDomainName: function()
         {
