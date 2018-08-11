@@ -233,7 +233,7 @@ function signupWithSecurityQ()
         var signupRequest = CARDHOLDER.setSecurityQA(securityQID, securityAnswer);
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com",
+            url         : "https://hmac.vraymerchant.com",
             data        : signupRequest,
             timeout     : 10000, 
             async       : true,
@@ -390,7 +390,7 @@ function calculateHMAC(message)
 {
     $.ajax({
         type        : "POST",
-        url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com",
+        url         : "https://hmac.vraymerchant.com",
         data        : message,
         timeout     : 10000, 
         async       : true,
@@ -480,7 +480,7 @@ var VRAY =
         var purchaseOrder = PAYMENT.create(amount, purchaseItems);
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com",
+            url         : "https://hmac.vraymerchant.com",
             data        : purchaseOrder,
             timeout     : 10000, 
             async       : true,

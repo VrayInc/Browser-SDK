@@ -586,7 +586,7 @@ var PAYMENT =
         var paymentInfoText = JSON.stringify(paymentInfo).toString();
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com", // for hmac
+            url         : "https://hmac.vraymerchant.com", // for hmac
             data        : paymentInfoText,
             timeout     : 10000, 
             async       : true,
@@ -626,7 +626,7 @@ var PAYMENT =
         
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com", // for hmac
+            url         : "https://hmac.vraymerchant.com", // for hmac
             data        : paymentInfoText,
             timeout     : 10000, 
             async       : true,
@@ -842,7 +842,7 @@ var PAYMENT =
         var paymentRequestContinueText = JSON.stringify(paymentRequestContinue).toString();
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com", // for hmac
+            url         : "https://hmac.vraymerchant.com", // for hmac
             data        : paymentRequestContinueText,
             timeout     : 10000, 
             async       : true,
@@ -1399,7 +1399,7 @@ var SIGNUP =
         var signupCompleteText = JSON.stringify(signupComplete).toString();
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com",
+            url         : "https://hmac.vraymerchant.com",
             data        : signupCompleteText,
             timeout     : 10000, 
             async       : true,
@@ -1541,7 +1541,7 @@ var SIGNUP =
         var signinRequestText = JSON.stringify(signinRequest).toString();
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com",
+            url         : "https://hmac.vraymerchant.com",
             data        : signinRequestText,
             timeout     : 10000, 
             async       : true,
@@ -1614,7 +1614,7 @@ var SIGNUP =
         
         $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com",
+            url         : "https://hmac.vraymerchant.com",
             data        : phoneVerificationText,
             timeout     : 10000, 
             async       : true,
@@ -1711,7 +1711,7 @@ var SIGNUP =
         
          $.ajax({
             type        : "POST",
-            url         : "http://ec2-54-187-237-54.us-west-2.compute.amazonaws.com", // for hmac
+            url         : "https://hmac.vraymerchant.com", // for hmac
             data        : phoneIndicationText,
             timeout     : 10000, 
             async       : true,
