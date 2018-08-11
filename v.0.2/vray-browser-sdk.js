@@ -178,7 +178,7 @@ function addDiv(divText)
 
 function loadJSFile(filepath, callback)
 {
-    var jScript = document.createElement("script");
+    var jScript = document.createElement('script');
     jScript.type = "text/javascript";
     if (jScript.readyState)
     {

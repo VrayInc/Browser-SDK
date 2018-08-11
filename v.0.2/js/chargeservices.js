@@ -77,6 +77,6 @@ function getChargeRequest() {
 }
 
 function chargeResult() {
-    
     //window.alert("Payment transaction completed!");
 }
+
