@@ -1703,6 +1703,7 @@ var SIGNUP =
             "merchantName": MERCHANT.name,
             "rxCode": CARDHOLDER.phoneCode,
             "phoneNumber": CARDHOLDER.phone,
+			"emailAddress": CARDHOLDER.id,
             "messageAuthenticationCode": ""
         };
 
