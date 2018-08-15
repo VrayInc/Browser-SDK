@@ -1241,18 +1241,9 @@ var PAYMENT =
                             
                 if (paymentInfoRespond.msgId === MESSAGE.id.BrowserPaymentIndication) 
                 {
-					PAYMENT.provision(paymentInfoRespond);
 					valid = true;
-					
-                    if (paymentInfoRespond.tid === Number(parseInt(tid)))
-                    {                          
-                        var mobileDetect = new MobileDetect(window.navigator.userAgent);
-                        TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
-                        if(TRANSACTION.deviceType === 1) 
-                        {
-                            PAYMENT.requestContinue();
-                        }
-                    }
+					PAYMENT.provision(paymentInfoRespond);
+					PAYMENT.requestContinue();
                 }
                 
                 return valid;
