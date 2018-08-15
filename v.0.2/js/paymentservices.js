@@ -583,6 +583,7 @@ var PAYMENT =
         };
 
         var paymentInfoText = JSON.stringify(paymentInfo).toString();
+        paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
@@ -622,7 +623,7 @@ var PAYMENT =
         };
 
         var paymentInfoText = JSON.stringify(paymentInfo).toString();
-        
+        paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
@@ -839,6 +840,7 @@ var PAYMENT =
         };
         
         var paymentRequestContinueText = JSON.stringify(paymentRequestContinue).toString();
+        paymentRequestContinueText = UTILS.prepForHMAC(paymentRequestContinueText); 
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
@@ -1396,6 +1398,7 @@ var SIGNUP =
         };
 
         var signupCompleteText = JSON.stringify(signupComplete).toString();
+        signupCompleteText = UTILS.prepForHMAC(signupCompleteText); 
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
@@ -1538,6 +1541,7 @@ var SIGNUP =
         };
 
         var signinRequestText = JSON.stringify(signinRequest).toString();
+        signinRequestText = UTILS.prepForHMAC(signinRequestText); 
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
@@ -1610,7 +1614,7 @@ var SIGNUP =
         };
 
         var phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
-        
+        phoneVerificationText = UTILS.prepForHMAC(phoneVerificationText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
@@ -1707,7 +1711,7 @@ var SIGNUP =
         };
 
         var phoneIndicationText = JSON.stringify(phoneVerificationIndication).toString();
-        
+        phoneIndicationText = UTILS.prepForHMAC(phoneIndicationText);
          $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
@@ -1948,13 +1952,23 @@ var UTILS =
         }  
     },
     
-    errorDetected(error) {
+    errorDetected: function(error) {
         if(UTILS.debug.enabled()) {
             CALLBACK.call(error);
         }
         else {
             CALLBACK.call("Payment failed");
         }
+    },
+
+    prepForHMAC: function(message, cond) {
+        payVal = (cond) ? "yes" : "no";
+        var obj = {
+            "val" : message,
+            "pay" : payVal,
+            "merchantId" : VRAY.merchantId       
+        };
+        return JSON.stringify(obj); 
     }
 };
 

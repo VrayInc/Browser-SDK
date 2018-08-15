@@ -231,6 +231,7 @@ function signupWithSecurityQ()
     if (securityAnswer)
     {
         var signupRequest = CARDHOLDER.setSecurityQA(securityQID, securityAnswer);
+        signupRequest = UTILS.prepForHMAC(signupRequest);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
@@ -388,6 +389,7 @@ function launchPayment()
 
 function calculateHMAC(message)
 {
+    message = UTILS.prepForHMAC(message);
     $.ajax({
         type        : "POST",
         url         : "https://hmac.vraymerchant.com",
@@ -478,6 +480,7 @@ var VRAY =
         var amount = VRAY.totalAmount;
         var purchaseItems = VRAY.purchaseItem;
         var purchaseOrder = PAYMENT.create(amount, purchaseItems);
+        purchaseOrder = UTILS.prepForHMAC(purchaseOrder);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
