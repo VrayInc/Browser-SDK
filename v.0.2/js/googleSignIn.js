@@ -107,4 +107,4 @@ function collectGoogleUser(userId){
     pushToServer();
 }
 
-appStart();
+//appStart();

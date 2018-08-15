@@ -364,8 +364,11 @@ function launchPayment()
         case 'gcs.vraymerchant.com':
             storeFrontURL = "https://gcs.vraymerchant.com/payment.html";
             break;
-        case 'vraytest.vraymerchant.com':
-            storeFrontURL = "https://vraytest.vraymerchant.com/payment.html";
+        case 'live.vraymerchant.com':
+            storeFrontURL = "https://live.vraymerchant.com/payment.html";
+            break;
+        case 'test.vraymerchant.com':
+            storeFrontURL = "https://test.vraymerchant.com/payment.html";
             break;
         case 'vraylive.vraymerchant.com':
             storeFrontURL = "https://vraylive.vraymerchant.com/payment.html";
@@ -373,7 +376,11 @@ function launchPayment()
         case 'vraylocalhost.ngrok.io':
             storeFrontURL = "https://vraylocalhost.ngrok.io/VRAYTest/payment.html";
             break;
+        case 'vraytest.vraymerchant.com':
+            storeFrontURL = "https://vraytest.vraymerchant.com/payment.html";
+            break;
         case 'merchant.com.vray.vpay':
+        case 'www.vraymerchant.com':
         default:
             storeFrontURL = "https://www.vraymerchant.com/payment.html"; 
     }
