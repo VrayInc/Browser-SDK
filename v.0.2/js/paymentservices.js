@@ -1744,14 +1744,26 @@ var SIGNUP =
                             return;
                         }
 
-                        if ((phoneVerificationResp.phoneNumber === CARDHOLDER.phone) &&
-                            (phoneVerificationResp.status === STATUS.code.SUCCESS))
+                        if(phoneVerificationResp.status === STATUS.code.SUCCESS)
                         {
-                            window.alert("Phone verification completed.\n\n" + 
+                            window.alert("Phone verification completed.\n" + 
                                          "Please check your mobile phone for payment notification.");
 
                             SIGNUP.browserSignupComplete();
                         }
+						else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
+							window.alert("Phone verification failed.\n");
+							PAYMENT.completed();
+						}
+						else if(phoneVerificationResp.status === STATUS.code.NumberAlreadyRegistered) {
+							window.alert("Phone already registered.\n" + 
+										 "Please check your mobile phone for payment notification.");
+						}
+						
+						else if(phoneVerificationResp.status === STATUS.code.BrowserCodeCheck) {
+							UTILS.errorDetected("ERROR - Unsupported browser code check.");
+							PAYMENT.completed();
+						}
                         else
                         {
                             var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
@@ -1795,10 +1807,15 @@ var STATUS =
         InvalidPhoneNumber      : 9,
         PhoneVerificationTrigger: 10,
         //
-	VIDBlocked              : 11,
-	VIDNotFound             : 12,
+	    VIDBlocked              : 11,
+	    VIDNotFound             : 12,
         AnotherVID              : 13,
         //
+	    PhoneNumberVerificationFailure : 22, 
+	    NumberAlreadyRegistered: 23,
+	    InvalidPhoneNumber: 24,
+	    BrowserCodeCheck: 25,
+
         UNKNOWN : -1
    }
 };
