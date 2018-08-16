@@ -1377,7 +1377,7 @@ var SIGNUP =
 
     signUpDone: false,
 
-	phoneVerificationCounter : 0;
+	phoneVerificationCounter : 0,
 	
     browserSignupComplete: function()
     {
