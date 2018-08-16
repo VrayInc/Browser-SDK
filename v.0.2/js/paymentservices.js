@@ -1377,7 +1377,7 @@ var SIGNUP =
 
     signUpDone: false,
 
-	phoneVerificationCounter : 0,
+    phoneVerificationCounter : 0,
 	
     browserSignupComplete: function()
     {
@@ -1667,6 +1667,30 @@ var SIGNUP =
                             SIGNUP.phoneVerificationRequest();
                             return;
                         }
+                        else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
+
+                            if(SIGNUP.phoneVerificationCounter < 2) {
+
+                                    SIGNUP.phoneVerificationCounter += 1;
+
+                                    var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
+                                    CARDHOLDER.phoneCode = smsCode;
+                                    SIGNUP.phoneVerificationIndication();
+                            }
+                            else {
+                                    window.alert("Phone verification failed.\n");
+                                    PAYMENT.completed();
+                            }
+                        }
+                        else if(phoneVerificationResp.status === STATUS.code.NumberAlreadyRegistered) {
+                                window.alert("Phone already registered.\n" + 
+                                                         "Please check your mobile phone for payment notification.");
+                        }
+
+                        else if(phoneVerificationResp.status === STATUS.code.BrowserCodeCheck) {
+                                UTILS.errorDetected("ERROR - Unsupported browser code check.");
+                                PAYMENT.completed();
+                        }
                         else
                         {
                             UTILS.errorDetected("ERROR - Signup phone verification = " + phoneVerificationResp.phoneNumber +
@@ -1753,30 +1777,38 @@ var SIGNUP =
 
                             SIGNUP.browserSignupComplete();
                         }
-						else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
-							
-							if(SIGNUP.phoneVerificationCounter < 3) {
-								
-								SIGNUP.phoneVerificationCounter += 1;
-								
-								var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
-								CARDHOLDER.phoneCode = smsCode;
-								SIGNUP.phoneVerificationIndication();
-							}
-							else {
-								window.alert("Phone verification failed.\n");
-								PAYMENT.completed();
-							}
-						}
-						else if(phoneVerificationResp.status === STATUS.code.NumberAlreadyRegistered) {
-							window.alert("Phone already registered.\n" + 
-										 "Please check your mobile phone for payment notification.");
-						}
-						
-						else if(phoneVerificationResp.status === STATUS.code.BrowserCodeCheck) {
-							UTILS.errorDetected("ERROR - Unsupported browser code check.");
-							PAYMENT.completed();
-						}
+                        else if (phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber)
+                        {
+                            var newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
+                                                         "Please enter the mobile# associated with " + CARDHOLDER.id +  ".\n");
+                            CARDHOLDER.id = newPhone;
+                            SIGNUP.phoneVerificationRequest();
+                            return;
+                        }
+                        else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
+
+                            if(SIGNUP.phoneVerificationCounter < 2) {
+
+                                    SIGNUP.phoneVerificationCounter += 1;
+
+                                    var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
+                                    CARDHOLDER.phoneCode = smsCode;
+                                    SIGNUP.phoneVerificationIndication();
+                            }
+                            else {
+                                    window.alert("Phone verification failed.\n");
+                                    PAYMENT.completed();
+                            }
+                        }
+                        else if(phoneVerificationResp.status === STATUS.code.NumberAlreadyRegistered) {
+                                window.alert("Phone already registered.\n" + 
+                                                         "Please check your mobile phone for payment notification.");
+                        }
+
+                        else if(phoneVerificationResp.status === STATUS.code.BrowserCodeCheck) {
+                                UTILS.errorDetected("ERROR - Unsupported browser code check.");
+                                PAYMENT.completed();
+                        }
                         else
                         {
                             UTILS.errorDetected("ERROR - Unknown phone verification status.");
