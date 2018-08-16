@@ -1967,7 +1967,7 @@ var UTILS =
         var obj = {
             "val" : message,
             "pay" : payVal,
-            "merchantId" : VRAY.merchantId       
+            "merchantId" : MERCHANT.id       
         };
         return JSON.stringify(obj); 
     }
