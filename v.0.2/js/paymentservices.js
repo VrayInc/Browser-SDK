@@ -1377,6 +1377,8 @@ var SIGNUP =
 
     signUpDone: false,
 
+	phoneVerificationCounter : 0;
+	
     browserSignupComplete: function()
     {
 	var signupComplete = {
@@ -1752,8 +1754,19 @@ var SIGNUP =
                             SIGNUP.browserSignupComplete();
                         }
 						else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
-							window.alert("Phone verification failed.\n");
-							PAYMENT.completed();
+							
+							if(SIGNUP.phoneVerificationCounter < 3) {
+								
+								SIGNUP.phoneVerificationCounter += 1;
+								
+								var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
+								CARDHOLDER.phoneCode = smsCode;
+								SIGNUP.phoneVerificationIndication();
+							}
+							else {
+								window.alert("Phone verification failed.\n");
+								PAYMENT.completed();
+							}
 						}
 						else if(phoneVerificationResp.status === STATUS.code.NumberAlreadyRegistered) {
 							window.alert("Phone already registered.\n" + 
@@ -1766,9 +1779,8 @@ var SIGNUP =
 						}
                         else
                         {
-                            var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
-                            CARDHOLDER.phoneCode = smsCode;
-                            SIGNUP.phoneVerificationIndication();
+                            UTILS.errorDetected("ERROR - Unknown phone verification status.");
+							PAYMENT.completed();
                         }
                     },
                     error: function(){
