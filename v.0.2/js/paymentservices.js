@@ -1243,7 +1243,7 @@ var PAYMENT =
                 {
 					valid = true;
 					PAYMENT.provision(paymentInfoRespond);
-					//PAYMENT.requestContinue(); // disabled per Server Request
+					PAYMENT.requestContinue(); 
                 }
                 
                 return valid;
