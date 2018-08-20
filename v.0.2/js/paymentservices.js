@@ -280,7 +280,13 @@ var PAYMENT =
         {
             window.alert("Payment authorization request: \n\n" + paymentReqParamText + "\n\n");
         }
-
+        
+        if(!UTILS.validPhoneNumber(paymentReqParam.phoneNumber)){
+            window.alert("Phone number is in invalid form, please insert valid form of phone number");
+        }
+        else if(!UTILS.validVid(paymentReqParam.vid)){
+            window.alert("Email address is in invalid form, please insert valid form of email address");
+        }else {
         // Start T1 Timer
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
 
@@ -350,6 +356,7 @@ var PAYMENT =
                 PAYMENT.completed();
             }
         });
+        }
     },
 
     authorizationResponse: function(paymentResponse)
@@ -2005,6 +2012,18 @@ var UTILS =
             UTILS.errorDetected("Invalid phone#: " + inputtxt.toString());  
             return false;  
         }  
+    },
+
+    validVid: function(inputtxt)
+    {
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(inputtxt.value.match(mailformat)){
+            return true;
+        }
+        else {
+            UTILS.errorDetected("Invalid Email Address: " + inputtxt.toString());  
+            return false;
+        }
     },
     
     errorDetected: function(error) {
