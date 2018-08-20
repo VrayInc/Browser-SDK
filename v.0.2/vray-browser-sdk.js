@@ -2,7 +2,7 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://raw.githubusercontent.com/VrayInc/Browser-SDK/Debug_V.0.2/v.0.2/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/Debug_V.0.2/v.0.2/js/paymentservices.js', paymentServicesAdded);
 loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/v.0.2/js/chargeservices.js', chargeServicesAdded);
 loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/v.0.2/js/digest.js', digestAdded);
 loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/master/v.0.2/js/mobile-detect.js', mobileDetectAdded);
