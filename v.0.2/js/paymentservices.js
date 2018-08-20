@@ -509,6 +509,8 @@ var PAYMENT =
         //CARDHOLDER.shippingAddress = null;
         //CARDHOLDER.signinAccessToken = null;
 
+		SIGNUP.phoneVerificationCounter = 0;
+		
         // Transaction info
         var today = new Date();
         TRANSACTION.endTime = today.getTime();
