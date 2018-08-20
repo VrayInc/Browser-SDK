@@ -281,11 +281,8 @@ var PAYMENT =
             window.alert("Payment authorization request: \n\n" + paymentReqParamText + "\n\n");
         }
         
-        if(!UTILS.validPhoneNumber(paymentReqParam.phoneNumber)){
-            window.alert("Phone number is in invalid form, please insert valid form of phone number");
-        }
-        else if(!UTILS.validVid(paymentReqParam.vid)){
-            window.alert("Email address is in invalid form, please insert valid form of email address");
+        if(!UTILS.validVid(paymentReqParam.vid)){
+
         }else {
         // Start T1 Timer
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
