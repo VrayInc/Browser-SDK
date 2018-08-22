@@ -2080,9 +2080,9 @@ var CALLBACK =
 //////////////////////////////////////////////////////
 var phoneVerificationHandler = {
     showModal : function () {
-        document.getElementById('phoneVerificationModal').style.dsplay = "block";
+        document.getElementById('phoneVerificationDialog').style.dsplay = "block";
     },
     hideModal : function() {
-        document.getElementById('phoneVerificationModal').style.dsplay = "none";
+        document.getElementById('phoneVerificationDialog').style.dsplay = "none";
     }
 };

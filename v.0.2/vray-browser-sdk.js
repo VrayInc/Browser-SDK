@@ -128,11 +128,11 @@ var spinnerString =
 
 var phoneVerificationString =
     '<div id = "phoneVerificationDialog" class ="modal">' +
-    '<div class = "modal-content">' +
-    '<label>Enter the 6-digit verification code sent to mobile#: </label>' +
-    '<Input id="phoneCode"></Input>' +
-    '<button onclick ="phoneCodeClick()">OK</button>' +
-    '</div>' +
+        '<div class = "modal-content">' +
+            '<label>Enter the 6-digit verification code sent to mobile#: </label>' +
+            '<Input id="phoneCode"></Input>' +
+            '<button onclick ="phoneCodeClick()">OK</button>' +
+        '</div>' +
     '</div> ';
 
 
