@@ -1710,11 +1710,11 @@ var SIGNUP =
                         }
                     },
                     error: function()
-                    {
-                        setTimeout(function(){
-                            CARDHOLDER.phoneCode = window.prompt("Enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
-                            SIGNUP.phoneVerificationIndication();
-                        }, TRANSACTION.t13Timeout);
+                    { 
+                        phoneVerificationHandler.showModal();
+                        CARDHOLDER.phoneCode = phoneCodeClick();
+                        SIGNUP.phoneVerificationIndication();
+                        setTimeout(phoneVerificationHandler.hideModal, TRANSACTION.t13Timeout);
                     }
                 });
 
@@ -2072,5 +2072,17 @@ var CALLBACK =
         else {
             CALLBACK.callback(error);
         }
+    }
+};
+
+///////////////////////////////////////////////////////
+// Handle Phone Verification modal
+//////////////////////////////////////////////////////
+var phoneVerificationHandler = {
+    showModal : function () {
+        document.getElementById('phoneVerificationModal').style.dsplay = "block";
+    },
+    hideModal : function() {
+        document.getElementById('phoneVerificationModal').style.dsplay = "none";
     }
 };

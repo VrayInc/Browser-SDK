@@ -126,10 +126,21 @@ var spinnerString =
         '<img src="https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.2/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
     '</div>';
 
+var phoneVerificationString =
+    '<div id = "phoneVerificationDialog" class ="modal">' +
+    '<div class = "modal-content">' +
+    '<label>Enter the 6-digit verification code sent to mobile#: </label>' +
+    '<Input id="phoneCode"></Input>' +
+    '<button onclick ="phoneCodeClick()">OK</button>' +
+    '</div>' +
+    '</div> ';
+
+
 document.head.append(addCSSFile('https://rawgit.com/VrayInc/Browser-SDK/master/v.0.2/css/merchant-button-special.css'));
 document.body.append(addDiv(spinnerString));
 document.body.append(addDiv(signupModalString));
 document.body.append(addDiv(securityQuestionModalString));
+document.body.append(addDiv(phoneVerificationString));
 
 //////////////////////////////////
 // Load Google's external script
@@ -263,6 +274,15 @@ function securityPopup()
     securityModal.style.display = "block";
 }
 
+/**
+ * phoneCodeClick()
+ * This function is to deal with the modal that would be popped up for 
+ * verifying user's phone number.
+ */
+function phoneCodeClick(){
+    var phoneCode = document.getElementById('phoneCode').value;
+    return phoneCode;
+}
 /**
  * continueWithFacebook()
  * If the user clicks the "Sign Up with Facebook," this function will be activated to
