@@ -280,81 +280,83 @@ var PAYMENT =
         {
             window.alert("Payment authorization request: \n\n" + paymentReqParamText + "\n\n");
         }
-        if(!UTILS.validVid(paymentReqParam.vid)){
+
+        if(!UTILS.validVid(paymentReqParam.vid)){ //valid vid check!
 
             window.alert("Emaill Address is invalid\n" + "Try with valid email adress");
             UIUtils.hideSpinner();
 
-        }else {
-        // Start T1 Timer
-        window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
+        }
+        else {
+            // Start T1 Timer
+            window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
 
-        $.ajax(
-        {
-            type: "POST",
-            url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/payrequest",
-            contentType: "application/json",
-            data: paymentReqParamText,
-            timeout: TRANSACTION.t1Timeout,
-            dataType: "text",
-            async: true,
-            xhrFields:
+            $.ajax(
             {
-                withCredentials: true
-            },
-            success: function(result)
-            {
-                var paymentRespond = JSON.parse(result);
-                if (paymentRespond === null)
+                type: "POST",
+                url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/payrequest",
+                contentType: "application/json",
+                data: paymentReqParamText,
+                timeout: TRANSACTION.t1Timeout,
+                dataType: "text",
+                async: true,
+                xhrFields:
                 {
-                    UTILS.errorDetected("ERROR:  Invalid payment authorization respond.\n");
-                    return;
-                }
-
-                var tid = parseInt(paymentRespond.tid);
-                if (tid !== Number(TRANSACTION.id))
+                    withCredentials: true
+                },
+                success: function(result)
                 {
-                    UTILS.errorDetected("ERROR:  Invalid transaction ID in payment authorization respond.\n");
-                    return;
-                }
+                    var paymentRespond = JSON.parse(result);
+                    if (paymentRespond === null)
+                    {
+                        UTILS.errorDetected("ERROR:  Invalid payment authorization respond.\n");
+                        return;
+                    }
 
-                // Clear the T1 transaction timer
-                window.clearTimeout(TRANSACTION.t1Timer);
+                    var tid = parseInt(paymentRespond.tid);
+                    if (tid !== Number(TRANSACTION.id))
+                    {
+                        UTILS.errorDetected("ERROR:  Invalid transaction ID in payment authorization respond.\n");
+                        return;
+                    }
 
-                var messageId = paymentRespond.msgId;
-                switch (messageId)
+                    // Clear the T1 transaction timer
+                    window.clearTimeout(TRANSACTION.t1Timer);
+
+                    var messageId = paymentRespond.msgId;
+                    switch (messageId)
+                    {
+                        case MESSAGE.id.PaymentResponse:
+                            PAYMENT.authorizationResponse(paymentRespond);
+                            break;
+
+                        case MESSAGE.id.CodeCommand:
+                            PAYMENT.codeCheckChallenge(paymentRespond);
+                            break;
+
+                        case MESSAGE.id.SecurityQuestionRequest:
+                            PAYMENT.secretQuestionChallenge(paymentRespond);
+                            break;
+
+                        case MESSAGE.id.VidRequest:
+                            PAYMENT.vidResponse(paymentRespond);
+                            break;
+
+                        case MESSAGE.id.StartPaymentInfoRetrieveIndication:
+                            PAYMENT.launchPaymentMethod(paymentRespond);
+                            break;
+
+                        default:
+                            PAYMENT.completed();
+                            UTILS.errorDetected("ERROR - Unknown/Unexpected Message ID = " + messageId.toString());
+                            break;  
+                    }
+                },
+                error: function()
                 {
-                    case MESSAGE.id.PaymentResponse:
-                        PAYMENT.authorizationResponse(paymentRespond);
-                        break;
-
-                    case MESSAGE.id.CodeCommand:
-                        PAYMENT.codeCheckChallenge(paymentRespond);
-                        break;
-
-                    case MESSAGE.id.SecurityQuestionRequest:
-                        PAYMENT.secretQuestionChallenge(paymentRespond);
-                        break;
-
-                    case MESSAGE.id.VidRequest:
-                        PAYMENT.vidResponse(paymentRespond);
-                        break;
-
-                    case MESSAGE.id.StartPaymentInfoRetrieveIndication:
-                        PAYMENT.launchPaymentMethod(paymentRespond);
-                        break;
-
-                    default:
-                        PAYMENT.completed();
-                        UTILS.errorDetected("ERROR - Unknown/Unexpected Message ID = " + messageId.toString());
-                        break;  
+                    PAYMENT.completed();
                 }
-            },
-            error: function()
-            {
-                PAYMENT.completed();
-            }
-        });
+            });
         }
     },
 
@@ -1709,8 +1711,10 @@ var SIGNUP =
                     },
                     error: function()
                     {
-                        CARDHOLDER.phoneCode = window.prompt("Enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
-                        SIGNUP.phoneVerificationIndication();
+                        setTimeout(function(){
+                            CARDHOLDER.phoneCode = window.prompt("Enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
+                            SIGNUP.phoneVerificationIndication();
+                        }, TRANSACTION.t13Timeout);
                     }
                 });
 
@@ -1890,6 +1894,7 @@ var TRANSACTION =
         loginStatus     : 1,     // Logged into merchant account = NO = 1
         t1Timer         : null,
         t1Timeout       : 300000, // msec
+        t13Timeout      : 90000,  // Phone number verification timer
         t14Timeout      : 20000,
         t15Timeout      : 5000,
         paymentRetry    : 0,
@@ -1984,7 +1989,6 @@ var UTILS =
 
             if (TRANSACTION.paymentRetry < TRANSACTION.paymentRetryMAX)
             {
-
                 // Re-submit the payment request
                 PAYMENT.reauthorizationRequest();
 
