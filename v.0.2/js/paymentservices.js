@@ -1721,6 +1721,7 @@ var SIGNUP =
                         
                         setTimeout(function() {               // Hide phone verification modal
                             phoneVerificationHandler.hideModal();
+                            window.alert("Phone verification failed.\n");
                         }, TRANSACTION.t13Timeout);
                     }
                 });
