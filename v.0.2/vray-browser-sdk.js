@@ -131,7 +131,7 @@ var phoneVerificationString =
         '<div class = "modal-content">' +
             '<label>Enter the 6-digit verification code sent to mobile#: </label>' +
             '<Input id="phoneCode"></Input>' +
-            '<button onclick ="phoneCodeClick()">OK</button>' +
+            '<button id="phoneCodeButton">OK</button>' +
         '</div>' +
     '</div> ';
 
@@ -274,15 +274,6 @@ function securityPopup()
     securityModal.style.display = "block";
 }
 
-/**
- * phoneCodeClick()
- * This function is to deal with the modal that would be popped up for 
- * verifying user's phone number.
- */
-function phoneCodeClick(){
-    var phoneCode = document.getElementById('phoneCode').value;
-    return phoneCode;
-}
 /**
  * continueWithFacebook()
  * If the user clicks the "Sign Up with Facebook," this function will be activated to

@@ -1679,7 +1679,7 @@ var SIGNUP =
                         }
                         else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
 
-                            if(SIGNUP.phoneVerificationCounter < 2) {
+                            if(SIGNUP.phoneVerificationCounter < 1) {
 
                                     SIGNUP.phoneVerificationCounter += 1;
 
@@ -1711,10 +1711,17 @@ var SIGNUP =
                     },
                     error: function()
                     { 
-                        phoneVerificationHandler.showModal();
-                        CARDHOLDER.phoneCode = phoneCodeClick();
-                        SIGNUP.phoneVerificationIndication();
-                        setTimeout(phoneVerificationHandler.hideModal, TRANSACTION.t13Timeout);
+                        phoneVerificationHandler.showModal(); // Show phone verification modal
+
+                        $("#phoneCodeButton").click(function() {
+                            CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
+                            SIGNUP.phoneVerificationIndication();
+                            phoneVerificationHandler.hideModal();
+                        });
+                        
+                        setTimeout(function() {               // Hide phone verification modal
+                            phoneVerificationHandler.hideModal();
+                        }, TRANSACTION.t13Timeout);
                     }
                 });
 
