@@ -1808,12 +1808,20 @@ var SIGNUP =
                         else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
 
                             if(SIGNUP.phoneVerificationCounter < 2) {
+                                    phoneVerificationHandler.showModal(); // Show phone verification modal
 
-                                    SIGNUP.phoneVerificationCounter += 1;
-
-                                    var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
-                                    CARDHOLDER.phoneCode = smsCode;
-                                    SIGNUP.phoneVerificationIndication();
+                                    $("#phoneCodeButton").click(function() {
+                                        CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
+                                        SIGNUP.phoneVerificationIndication();
+                                        phoneVerificationHandler.hideModal();
+                                    });
+                        
+                                    setTimeout(function() {               // Hide phone verification modal
+                                        phoneVerificationHandler.hideModal();
+                                        window.alert("Phone verification failed.\n");
+                                    }, TRANSACTION.t13Timeout);
+                                    
+                                    ++SIGNUP.phoneVerificationCounter;
                             }
                             else {
                                     window.alert("Phone verification failed.\n");
