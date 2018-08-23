@@ -1820,10 +1820,11 @@ var SIGNUP =
                                         phoneVerificationHandler.hideModal();
                                         window.alert("Phone verification failed.\n");
                                     }, TRANSACTION.t13Timeout);
-                                    
+
                                     ++SIGNUP.phoneVerificationCounter;
                             }
                             else {
+                                    phoneVerificationHandler.hideModal();
                                     window.alert("Phone verification failed.\n");
                                     PAYMENT.completed();
                             }
