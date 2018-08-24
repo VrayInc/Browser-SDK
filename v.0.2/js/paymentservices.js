@@ -1712,13 +1712,27 @@ var SIGNUP =
                     error: function()
                     { 
                         phoneVerificationHandler.showModal(); // Show phone verification modal
-
-                        $("#phoneCodeButton").click(function() {
+                        console.log(" phone verification handler : " + phoneVerificationHandler.flag);
+                        
+                        var okBTN = document.getElementById('phoneCodeButton');
+                        okBTN.addEventListener("click", function(event) {
+                            event.preventDefault(); // Cancel the default action, if needed
                             CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
                             SIGNUP.phoneVerificationIndication();
                             phoneVerificationHandler.hideModal();
                         });
                         
+
+                        okBTN.addEventListener("keyup", function(event){
+                            event.preventDefault();
+                            if(event.keycode === 13){
+                                CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
+                                SIGNUP.phoneVerificationIndication();
+                                phoneVerificationHandler.hideModal();
+                            }
+                        });
+
+                        console.log(" Check phone verification handler : " + phoneVerificationHandler.flag);
                         if(phoneVerificationHandler.flag == true) {
                             setTimeout(function() {               // Hide phone verification modal
                                 phoneVerificationHandler.hideModal();
