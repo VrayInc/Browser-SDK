@@ -1714,20 +1714,24 @@ var SIGNUP =
                         document.getElementById('phoneVerificationDialog').style.display = "block"; // Show the dialog
                         if($("#phoneVerificationDialog").is(":visible")){
                             $("#phoneCodeButton").click(function(){
+                                console.log("Clicking!!");
                                 CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
+                                console.log(CARDHOLDER.phoneCode);
                                 SIGNUP.phoneVerificationIndication();
                             });
                             $("#phoneCodeButton").on('keyup', function(e){
                                 if(e.keyCode == 13 ){
+                                    console.log("Enter!!");
                                     CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
+                                    console.log(CARDHOLDER.phoneCode);
                                     SIGNUP.phoneVerificationIndication();
                                 }
                             });
                         
                              setTimeout(function() {
                                 document.getElementById('phoneVerificationDialog').style.display = "none";
-                                window.alert("Phone verification failed.\n");
                                 UIUtils.hideSpinner();
+                                window.alert("Phone verification failed.\n");
                              }, TRANSACTION.t13Timeout);
                         }
                     }
