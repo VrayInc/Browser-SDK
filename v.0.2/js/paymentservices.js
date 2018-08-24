@@ -1711,27 +1711,18 @@ var SIGNUP =
                     },
                     error: function()
                     { 
-                        document.getElementById('phoneVerificationDialog').style.display = "block"; // Show the dialog
-                        if($("#phoneVerificationDialog").is(":visible")){
+                        // Show Modal
+                        document.getElementById('phoneVerificationDialog').style.display = "block"; 
+                
+                        if($("#phoneVerificationDialog").is(":visible")){ // If the modal is shown
                             $("#phoneCodeButton").click(function(){
-                                console.log("Clicking!!");
-                                CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
-                                console.log(CARDHOLDER.phoneCode);
+                                CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;    
                                 SIGNUP.phoneVerificationIndication();
                             });
-                            $("#phoneCodeButton").on('keyup', function(e){
-                                if(e.keyCode == 13 ){
-                                    console.log("Enter!!");
-                                    CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
-                                    console.log(CARDHOLDER.phoneCode);
-                                    SIGNUP.phoneVerificationIndication();
-                                }
-                            });
-                        
-                             setTimeout(function() {
+                            setTimeout(function() { // Setting time to hide the dialog
                                 document.getElementById('phoneVerificationDialog').style.display = "none";
-                                UIUtils.hideSpinner();
                                 window.alert("Phone verification failed.\n");
+                                PAYMENT.completed();
                              }, TRANSACTION.t13Timeout);
                         }
                     }
@@ -1817,18 +1808,24 @@ var SIGNUP =
                             return;
                         }
                         else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
-                            //////////////////////////////////////////////////////
-                            /// Needs to CHANGE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            //////////////////////////////////////////////////////
-                            //////////////////////////////////////////////////////
                             if(SIGNUP.phoneVerificationCounter < 2) {
-                                    var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
-                                    CARDHOLDER.phoneCode = smsCode;
-                                    SIGNUP.phoneVerificationIndication();
 
-                                    ++SIGNUP.phoneVerificationCounter;
+                                if($("#phoneVerificationDialog").is(":visible")){
+                                    $('phoneCode').val(''); // clear the values
+                                    $("#phoneCodeButton").click(function(){
+                                        CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;    
+                                        SIGNUP.phoneVerificationIndication();
+                                        ++SIGUP.phoneVerificationCounter; // Increment the counter
+                                    });
+                                    setTimeout(function() { // Setting time to hide the dialog
+                                        document.getElementById('phoneVerificationDialog').style.display = "none";
+                                        window.alert("Phone verification failed.\n");
+                                        PAYMENT.completed();
+                                     }, TRANSACTION.t13Timeout);
+                                }
                             }
                             else {
+                                    document.getElementById('phoneVerificationDialog').style.display = "none";
                                     window.alert("Phone verification failed.\n");
                                     PAYMENT.completed();
                             }
@@ -2093,21 +2090,5 @@ var CALLBACK =
         else {
             CALLBACK.callback(error);
         }
-    }
-};
-
-///////////////////////////////////////////////////////
-// Handle Phone Verification modal
-//////////////////////////////////////////////////////
-var phoneVerificationHandler = {
-    flag : false,
-
-    showModal : function () {
-        document.getElementById('phoneVerificationDialog').style.display = "block";
-        phoneVerificationHandler.flag = true;
-    },
-    hideModal : function() {
-        document.getElementById('phoneVerificationDialog').style.display = "none";
-        phoneVerificationHandler.flag = false;
     }
 };
