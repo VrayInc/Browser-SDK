@@ -1815,7 +1815,7 @@ var SIGNUP =
                                     $("#phoneCodeButton").click(function(){
                                         CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;    
                                         SIGNUP.phoneVerificationIndication();
-                                        ++SIGUP.phoneVerificationCounter; // Increment the counter
+                                        ++SIGNUP.phoneVerificationCounter; // Increment the counter
                                     });
                                     setTimeout(function() { // Setting time to hide the dialog
                                         document.getElementById('phoneVerificationDialog').style.display = "none";
