@@ -1713,27 +1713,21 @@ var SIGNUP =
                     { 
                         document.getElementById('phoneVerificationDialog').style.display = "block"; // Show the dialog
                         if($("#phoneVerificationDialog").is(":visible")){
-                            var okBTN = document.getElementById('phoneCodeButton');
-                            okBTN.addEventListener("click", function(event) {
-                                event.preventDefault(); // Cancel the default action, if needed
+                            $("#phoneCodeButton").click(function(){
                                 CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
                                 SIGNUP.phoneVerificationIndication();
-                                phoneVerificationHandler.hideModal();
                             });
-                        
-
-                            okBTN.addEventListener("keyup", function(event){
-                                event.preventDefault();
-                                if(event.keycode === 13){
+                            $("#phoneCodeButton").on('keyup', function(e){
+                                if(e.keyCode == 13 ){
                                     CARDHOLDER.phoneCode = document.getElementById('phoneCode').value;
                                     SIGNUP.phoneVerificationIndication();
-                                    phoneVerificationHandler.hideModal();
                                 }
-                             });
-
+                            });
+                        
                              setTimeout(function() {
                                 document.getElementById('phoneVerificationDialog').style.display = "none";
                                 window.alert("Phone verification failed.\n");
+                                UIUtils.hideSpinner();
                              }, TRANSACTION.t13Timeout);
                         }
                     }
