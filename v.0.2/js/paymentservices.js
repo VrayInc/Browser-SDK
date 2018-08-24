@@ -1736,6 +1736,7 @@ var SIGNUP =
                         if(phoneVerificationHandler.flag == true) {
                             setTimeout(function() {               // Hide phone verification modal
                                 phoneVerificationHandler.hideModal();
+                                console.log(" phone verification handler check " + phoneVerificationHandler.flag);
                                 window.alert("Phone verification failed.\n");
                             }, TRANSACTION.t13Timeout);
                         }
