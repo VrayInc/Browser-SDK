@@ -384,7 +384,7 @@ var PAYMENT =
             }     
 
             // Charging payment via token
-            doChargePayment(ccToken, TRANSACTION.amount, MERCHANT.name);
+            doChargePayment(TRANSACTION.id, ccToken, TRANSACTION.amount, MERCHANT.name);
         }
         else if ((paymentResponse.status === STATUS.code.VIDFailure) || 
                  (paymentResponse.status === STATUS.code.PhoneVerificationTrigger))
@@ -514,7 +514,7 @@ var PAYMENT =
         // Transaction info
         var today = new Date();
         TRANSACTION.endTime = today.getTime();
-        TRANSACTION.id = 0;
+        //TRANSACTION.id = 0;
         TRANSACTION.amount = 0.0;
         TRANSACTION.lineItems = null;
         TRANSACTION.date = null;
@@ -544,7 +544,10 @@ var PAYMENT =
         TRANSACTION.lineItems = items;
         TRANSACTION.id = Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11; // postive # 0 - 7FFF,FFFF,FFFF,FFFF
 
-        var paymentReqParam = {
+		var paymentReqParam;
+		
+		if(CARDHOLDER.shippingAddress) {
+            paymentReqParam = {
             "msgId": MESSAGE.id.PaymentRequest,
             "tid": TRANSACTION.id,
             "ttime": TRANSACTION.date,
@@ -560,8 +563,26 @@ var PAYMENT =
             "merchantName": MERCHANT.name,
             "lineItems": TRANSACTION.lineItems,
             "messageAuthenticationCode": ""
-        };
-
+			};
+		}
+		else {
+			paymentReqParam = {
+            "msgId": MESSAGE.id.PaymentRequest,
+            "tid": TRANSACTION.id,
+            "ttime": TRANSACTION.date,
+            "vid": CARDHOLDER.id,
+            "deviceType": TRANSACTION.deviceType,
+            "loginStatus": TRANSACTION.loginStatus,
+            "phoneNumber": CARDHOLDER.phone,
+            "amount": TRANSACTION.amount,
+            "countryCode": TRANSACTION.countryCode,
+            "currencyCode": TRANSACTION.currencyCode,
+            "merchantIdentifier": MERCHANT.id,
+            "merchantName": MERCHANT.name,
+            "lineItems": TRANSACTION.lineItems,
+            "messageAuthenticationCode": ""
+			};
+		}
         return JSON.stringify(paymentReqParam).toString();
     },
 
@@ -2009,10 +2030,10 @@ var UTILS =
     
     errorDetected: function(error) {
         if(UTILS.debug.enabled()) {
-            CALLBACK.call(error);
+            CALLBACK.call(error, TRANSACTION.id);
         }
         else {
-            CALLBACK.call("Payment failed");
+            CALLBACK.call("Payment failed", TRANSACTION.id);
         }
     },
 
@@ -2049,12 +2070,12 @@ var CALLBACK =
 {
     callback: null,
     
-    call: function(error) {
+    call: function(error, data) {
         if(!CALLBACK.callback) {
             console.log("Invalid callback function!");
         }
         else {
-            CALLBACK.callback(error);
+            CALLBACK.callback(error, data);
         }
     }
 };

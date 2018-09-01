@@ -5,7 +5,7 @@
  */
 var IE;
 
-function doChargePayment(token, amount, merchant) {
+function doChargePayment(tid, token, amount, merchant) {
     
     var chargeToken;
     var chargeAmount;
@@ -32,15 +32,15 @@ function doChargePayment(token, amount, merchant) {
     }
     else {
         if(UTILS.debug.enabled()) {
-            CALLBACK.call("Invalid token = " + token.toString());
+            CALLBACK.call("Invalid token = " + token.toString(), tid);
         }
         else {
-            CALLBACK.call("Payment failed");
+            CALLBACK.call("Payment failed", tid);
         }
     }
 }
 
-function sendChargePayment(token, amount, merchant, charge) {
+function sendChargePayment(tid, token, amount, merchant, charge) {
     
     if((token !== undefined) && (token !== null)) {
         
@@ -54,10 +54,10 @@ function sendChargePayment(token, amount, merchant, charge) {
     } 
     else {
         if(UTILS.debug.enabled()) {
-            CALLBACK.call("Invalid token = " + token.toString());
+            CALLBACK.call("Invalid token = " + token.toString(), tid);
         }
         else {
-            CALLBACK.call("Payment failed");
+            CALLBACK.call("Payment failed", tid);
         }
     }
 }
