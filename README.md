@@ -20,7 +20,7 @@
 ### VRAY.init() ###
 
 * Parameters : 
-  * merchantId (MID) - VRAY assigned merchant ID.
+  * merchantId (MID) - VRAY's assigned merchant ID (from merchant portal).
   * merchantName - Name of merchant provided by the payment processor.
   
 ### VRAY.setupPayment() ###
