@@ -8,7 +8,7 @@
 <body>
  
  <!-- SDK -->
- <script type="text/javascript" src="https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.1/vray-browser-sdk.js"></script>
+ <script type="text/javascript" src="https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v.0.2/vray-browser-sdk.js"></script>
  
  <!-- Other code -->
  
@@ -20,7 +20,7 @@
 ### VRAY.init() ###
 
 * Parameters : 
-  * merchantId (MID) - The ID provided by the payment processor.
+  * merchantId (MID) - VRAY assigned merchant ID.
   * merchantName - Name of merchant provided by the payment processor.
   
 ### VRAY.setupPayment() ###
@@ -41,9 +41,12 @@
  ### VRAY.pay() ###
  
  * Parameter
-   * callback - function that gets called once payment has been processed
- * Valid merchantId, name, emailAddress, phoneNumber and totalAmount 
-   (greater than or equal to 0) are needed for pay() to work.
+   * callback(error, tid) - function that gets called once payment has been processed.
+     + error - error message, or null if transaction completed successfully.
+     + tid - the transaction ID.
+    
+ ### Constrains ###
+ * Valid merchantId, name, emailAddress, phoneNumber and totalAmount (greater than 0) are needed for pay() to work.
 
 ### Example usage ###
 
