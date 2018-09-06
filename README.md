@@ -69,12 +69,13 @@ VRAY.setupPayment( // Step 2
 VRAY.pay(myCallback); // Step 3
 
 //Define your callback
-function myCallback(error) {
+function myCallback(error, data) {
   if (error) {
-      console.log(error);
+  
+      console.log("Payment Request w/ transaction ID = " + data + " failed with error = " + error);
   }
   else {
-      console.log("Payment done successfully.");
+      console.log("Payment Request w/ transaction ID = " + data + "completed successfully.");
   }
 }
 ```
