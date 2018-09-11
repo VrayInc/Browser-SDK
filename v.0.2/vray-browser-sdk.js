@@ -222,9 +222,6 @@ function closeSecurityModal()
 
 function signupWithSecurityQ()
 {
-    // Stop automatic submits the form
-    event.preventDefault(); // Stop automatic submits form
-
     var securityQID = document.getElementById("securityQuestion").value;
     var securityAnswer = document.getElementById("securityAnswer").value;
 
@@ -464,8 +461,6 @@ var VRAY =
     
     pay: function(callback)
     {
-        event.preventDefault(); // Stop automatic form submission
-
         // Payment authorization call back code
         CALLBACK.callback = callback;
         
@@ -475,7 +470,7 @@ var VRAY =
            !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
            !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1))) 
         {
-            CALLBACK.call("ERROR - Missing required payment information!");
+            CALLBACK.call("ERROR - Missing required payment information!", VRAY.myVId);
             return;
         }
 
