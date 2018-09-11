@@ -28,7 +28,7 @@ function doChargePayment(tid, token, amount, merchant) {
             window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
         }
         UIUtils.hideSpinner();
-        CALLBACK.call(null);
+        CALLBACK.call(null, tid);
     }
     else {
         if(UTILS.debug.enabled()) {
