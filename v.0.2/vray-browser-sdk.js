@@ -367,6 +367,9 @@ function launchPayment()
         case 'live.vraymerchant.com':
             storeFrontURL = "https://live.vraymerchant.com/payment.html";
             break;
+		case 'mulletsocks.vraymerchant.com':
+            storeFrontURL = "https://mulletsocks.vraymerchant.com/payment.html";
+            break;
         case 'test.vraymerchant.com':
             storeFrontURL = "https://test.vraymerchant.com/payment.html";
             break;
