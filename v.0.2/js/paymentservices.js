@@ -11,8 +11,8 @@ var APPSERVER =
 {
     merchantHost:
     {
-        domainName: 'VRAYMerchantHost',
-        domainURL: 'https://mulletsocks.vraymerchant.com/',
+        domainName: 'VRAY Live',
+        domainURL: 'https://www.vraymerchant.com',
 
         getDomainName: function()
         {
@@ -63,8 +63,8 @@ var APPSERVER =
 
     vrayHost:
     {
-        domainName: 'VRAYServerHost',
-        domainURL: 'https://vrayproduction.azurewebsites.net',
+        domainName: 'VRAY Host',
+        domainURL: 'https://vraystagingportal.azurewebsites.net',
 
         getDomainName: function()
         {
