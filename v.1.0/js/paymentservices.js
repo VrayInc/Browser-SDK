@@ -415,6 +415,11 @@ var PAYMENT =
                             UTILS.statusText(paymentResponse.status));
         }
        
+	    if (paymentResponse.status !== STATUS.code.SUCCESS) {
+			
+			CALLBACK.call(UTILS.statusText(paymentResponse.status), TRANSACTION.id);
+		}
+		
         PAYMENT.completed();
         return;
     },
