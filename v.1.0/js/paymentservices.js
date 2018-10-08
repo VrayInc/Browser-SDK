@@ -2034,8 +2034,8 @@ var UTILS =
     
     errorDetected: function(error) {
       
+		console.log("ERROR - " + error +  " on TID: " + TRANSACTION.id);
         CALLBACK.call(error, TRANSACTION.id);
-        
     },
 
     prepForHMAC: function(message, cond) {
