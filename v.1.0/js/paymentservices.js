@@ -406,7 +406,7 @@ var PAYMENT =
         }
 		else if (paymentResponse.status === STATUS.code.TokenFailure) 
         {
-			UTILS.errorDetected("Failed to retrieve CC Token.");
+			UTILS.errorDetected("Failed to retrieve Credit Card Token.");
         }
         else 
         {
@@ -414,11 +414,6 @@ var PAYMENT =
                             paymentResponse.status.toString() + " - " +
                             UTILS.statusText(paymentResponse.status));
         }
-       
-	    if (paymentResponse.status !== STATUS.code.SUCCESS) {
-			
-			CALLBACK.call(UTILS.statusText(paymentResponse.status), TRANSACTION.id);
-		}
 		
         PAYMENT.completed();
         return;
@@ -2038,12 +2033,9 @@ var UTILS =
     },
     
     errorDetected: function(error) {
-        if(UTILS.debug.enabled()) {
-            CALLBACK.call(error, TRANSACTION.id);
-        }
-        else {
-            CALLBACK.call("Payment failed", TRANSACTION.id);
-        }
+      
+        CALLBACK.call(error, TRANSACTION.id);
+        
     },
 
     prepForHMAC: function(message, cond) {
