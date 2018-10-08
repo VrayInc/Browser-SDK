@@ -403,6 +403,8 @@ var PAYMENT =
         else if (paymentResponse.status === STATUS.code.Cancel) 
         {
 			UTILS.errorDetected("User cancelled payment request.");
+			
+			window.alert("User cancelled payment request.");
         }
 		else if (paymentResponse.status === STATUS.code.TokenFailure) 
         {
@@ -2035,6 +2037,7 @@ var UTILS =
     errorDetected: function(error) {
       
 		console.log("ERROR - " + error +  " on TID: " + TRANSACTION.id);
+		
         CALLBACK.call(error, TRANSACTION.id);
     },
 
