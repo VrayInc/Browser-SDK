@@ -404,6 +404,10 @@ var PAYMENT =
         {
 			UTILS.errorDetected("User cancelled payment request.");
         }
+		else if (paymentResponse.status === STATUS.code.TokenFailure) 
+        {
+			UTILS.errorDetected("Failed to retrieve CC Token.");
+        }
         else 
         {
             UTILS.errorDetected("Payment authorization request failed with status = " + 
@@ -1025,7 +1029,7 @@ var PAYMENT =
                     PAYMENT.provision(paymentInfoRespond);
 
                     var token = document.getElementById('newtoken').innerHTML;
-                    PAYMENT.createAndSubmitToken(token, 1, STATUS.code.cancelled);
+                    PAYMENT.createAndSubmitToken(token, 1, STATUS.code.Cancel);
                 }
                 else
                 {
@@ -1094,7 +1098,7 @@ var PAYMENT =
                     PAYMENT.provision(paymentInfoRespond);
 
                     var token = document.getElementById('newtoken').innerHTML;
-                    PAYMENT.createAndSubmitToken(token, 1, Status.code.TokenFailure);
+                    PAYMENT.createAndSubmitToken(token, 1, STATUS.code.TokenFailure);
                 }
                 else
                 {
