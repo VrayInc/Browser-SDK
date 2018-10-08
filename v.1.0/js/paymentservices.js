@@ -402,7 +402,7 @@ var PAYMENT =
         }
         else if (paymentResponse.status === STATUS.code.Cancel) 
         {
-            window.alert("User cancelled the payment.");
+			UTILS.errorDetected("User cancelled payment request.");
         }
         else 
         {
@@ -1025,7 +1025,7 @@ var PAYMENT =
                     PAYMENT.provision(paymentInfoRespond);
 
                     var token = document.getElementById('newtoken').innerHTML;
-                    PAYMENT.createAndSubmitToken(token, 1, Status.code.Cancel);
+                    PAYMENT.createAndSubmitToken(token, 1, STATUS.code.cancelled);
                 }
                 else
                 {
