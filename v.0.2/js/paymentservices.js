@@ -377,7 +377,13 @@ var PAYMENT =
         if (paymentResponse.status === STATUS.code.SUCCESS)
         {
             var ccToken = paymentResponse.token;
-
+			if(ccToken === "fake-token")
+			{
+				CALLBACK.call("Payment Request Cancelled.", TRANSACTION.id);
+				console.log("Payment Request Cancelled." + "Credit Card Token = " + ccToken);
+				return;
+			}
+			
             if(UTILS.debug.enabled()) 
             {
                 console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
