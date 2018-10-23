@@ -381,7 +381,7 @@ var PAYMENT =
 			if(ccToken === "fake-token")
 			{
 				CALLBACK.call("Payment Request Cancelled.", TRANSACTION.id);
-				console.log("Payment Request Cancelled.." + "Credit Card Token = " + ccToken);
+				console.log("Payment Request Cancelled." + "Credit Card Token = " + ccToken);
 				return;
 			}
 			
@@ -391,7 +391,7 @@ var PAYMENT =
             }     
 
             // Charging payment via token
-            doChargePayment(TRANSACTION.id, ccToken, TRANSACTION.amount, MERCHANT.name);
+            doChargePayment(TRANSACTION.id, ccToken, TRANSACTION.amount, MERCHANT.name, CARDHOLDER.id);
         }
         else if ((paymentResponse.status === STATUS.code.VIDFailure) || 
                  (paymentResponse.status === STATUS.code.PhoneVerificationTrigger))

@@ -5,7 +5,7 @@
  */
 var IE;
 
-function doChargePayment(tid, token, amount, merchant) {
+function doChargePayment(tid, token, amount, merchant, email) {
     
     var chargeToken;
     var chargeAmount;
@@ -18,7 +18,7 @@ function doChargePayment(tid, token, amount, merchant) {
         
         //POST to ChargePaymentServlet.java
         var url = "https://mulletsocks.vraymerchant.com/ChargePayment?action=chargestripe&token=" + chargeToken + 
-                  "&amount=" + chargeAmount + "&merchant=" + merchant;
+                  "&amount=" + chargeAmount + "&merchant=" + merchant + "&email=" + email;
         chargeRequest = getChargeRequest();
         chargeRequest.open("POST", url, true);
         chargeRequest.onreadystatechange = chargeResult;
