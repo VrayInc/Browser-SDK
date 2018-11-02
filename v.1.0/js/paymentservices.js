@@ -785,7 +785,10 @@ var PAYMENT =
             return;
         }
         
-        launchPayment();
+		launchPayment();
+		
+		PAYMENT.requestContinue(); 
+		
         return;
     },
 
@@ -901,7 +904,9 @@ var PAYMENT =
                     dataType    : "text",
                     async       : true,
                     xhrFields   : { withCredentials: true },
-                    success     : function() {         
+                    success     : function() {   
+					
+					
                         return;
                     },
                     error: function()
@@ -1279,7 +1284,7 @@ var PAYMENT =
                 {
 					valid = true;
 					PAYMENT.provision(paymentInfoRespond);
-					PAYMENT.requestContinue(); 
+					//PAYMENT.requestContinue(); 
                 }
                 
                 return valid;
