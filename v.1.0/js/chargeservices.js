@@ -78,5 +78,6 @@ function getChargeRequest() {
 
 function chargeResult() {
     //window.alert("Payment transaction completed!");
+	console.log("Payment charge completed!");
 }
 
