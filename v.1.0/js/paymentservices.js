@@ -870,7 +870,7 @@ var PAYMENT =
 
     requestContinue: function()
     {
-	var paymentRequestContinue = {
+		var paymentRequestContinue = {
             "msgId"              : MESSAGE.id.PaymentRequestContinueIndication,
             "tid"                : TRANSACTION.id,
             "merchantIdentifier" : MERCHANT.id,
@@ -904,8 +904,54 @@ var PAYMENT =
                     dataType    : "text",
                     async       : true,
                     xhrFields   : { withCredentials: true },
-                    success     : function() {   
+                    success     : function(result) {   
 					
+						var paymentResponse = JSON.parse(result);
+                        
+                        if(!paymentResponse) {
+                            UTILS.errorDetected("ERROR - Payment Response.");  
+                            PAYMENT.completed();
+                            return;   
+                        }
+                        
+                        if(paymentResponse.msgId !== MESSAGE.id.PaymentResponse){
+                            UTILS.errorDetected("ERROR - Unexpected message in place of Payment Response.");  
+                            PAYMENT.completed();
+                            return;
+                        }
+                        
+                        var tid = parseInt(paymentResponse.tid);
+                        if (tid !== Number(TRANSACTION.id))
+                        {
+                            UTILS.errorDetected("ERROR - Invalid transaction ID: " + paymentResponse.tid);
+                            PAYMENT.completed();
+                            return;
+                        }
+        
+                        if (paymentResponse.status === STATUS.code.SUCCESS)
+                        {
+                            var ccToken = paymentResponse.token;
+                            if(!ccToken) {
+                                UTILS.errorDetected("ERROR - No CC Token in Payment Response.");  
+                                PAYMENT.completed();
+                                return;
+                            }
+                            else {
+                                console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
+                            }     
+
+                            // Charging payment via token
+                            console.log("TID = " + TRANSACTION.id);
+                            console.log("Amount = " + VRAY.totalAmount);
+                            console.log("Merchant Name = " + MERCHANT.name);
+                            console.log("VID = " + CARDHOLDER.id);
+                            
+                            doChargePayment(TRANSACTION.id, ccToken, VRAY.totalAmount, MERCHANT.name, CARDHOLDER.id);
+                        }
+                        else {
+                            UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
+                            PAYMENT.completed();
+                        }
 					
                         return;
                     },
