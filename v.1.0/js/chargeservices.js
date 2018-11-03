@@ -60,6 +60,8 @@ function sendChargePayment(tid, token, amount, merchant, charge) {
             CALLBACK.call("Payment failed", tid);
         }
     }
+	
+	console.log("Sending payment to charging server: " + url.toLocaleString);
 }
 
 function getChargeRequest() {

@@ -1284,7 +1284,7 @@ var PAYMENT =
                 {
 					valid = true;
 					PAYMENT.provision(paymentInfoRespond);
-					//PAYMENT.requestContinue(); 
+					//PAYMENT.requestContinue(); // Don't send in context of payment.html
                 }
                 
                 return valid;

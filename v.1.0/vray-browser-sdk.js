@@ -2,11 +2,12 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/mulletsocks/v.1.0/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/mulletsocks/v.1.0/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/mulletsocks/v.1.0/js/digest.js', digestAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/mulletsocks/v.1.0/js/mobile-detect.js', mobileDetectAdded);
-loadJSFile('https://rawgit.com/VrayInc/Browser-SDK/mulletsocks/v.1.0/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks/v.1.0/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks/v.1.0/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks/v.1.0/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks/v.1.0/js/mobile-detect.js', mobileDetectAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks/v.1.0/js/hmac-sha256.js', hmacAdded);
+
 
 //////////////////////////
 //Callbacks after JS Files
