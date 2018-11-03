@@ -790,7 +790,6 @@ var PAYMENT =
 		var paymentWindow = window.open("", "paymentWindow", "");
         PAYMENT.requestContinue();
         paymentWindow.location = getPaymentURL(TRANSACTION.id, MERCHANT.id, MERCHANT.name, TRANSACTION.amount);
-	    
 		
         return;
     },
