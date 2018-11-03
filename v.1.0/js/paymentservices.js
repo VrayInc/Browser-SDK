@@ -784,10 +784,12 @@ var PAYMENT =
             UTILS.errorDetected("ERROR - launchPaymentMethod() got invalid transaction ID:" + tid);
             return;
         }
+
+        PAYMENT.requestContinue();
         
-		PAYMENT.requestContinue(); 
-		
-		launchPayment();
+        var paymentWindow = window.open("", "paymentWindow", "");
+        paymentWindow.location = getPaymentURL(TRANSACTION.id, MERCHANT.id, MERCHANT.name, TRANSACTION.amount);
+	//launchPayment();
 		
         return;
     },
@@ -906,7 +908,7 @@ var PAYMENT =
                     xhrFields   : { withCredentials: true },
                     success     : function(result) {   
 					
-						var paymentResponse = JSON.parse(result);
+			var paymentResponse = JSON.parse(result);
                         
                         if(!paymentResponse) {
                             UTILS.errorDetected("ERROR - Payment Response.");  
@@ -942,11 +944,11 @@ var PAYMENT =
 
                             // Charging payment via token
                             console.log("TID = " + TRANSACTION.id);
-                            console.log("Amount = " + VRAY.totalAmount);
+                            console.log("Amount = " + TRANSACTION.amount);
                             console.log("Merchant Name = " + MERCHANT.name);
                             console.log("VID = " + CARDHOLDER.id);
                             
-                            doChargePayment(TRANSACTION.id, ccToken, VRAY.totalAmount, MERCHANT.name, CARDHOLDER.id);
+                            doChargePayment(TRANSACTION.id, ccToken, TRANSACTION.amount, MERCHANT.name, CARDHOLDER.id);
                         }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
@@ -1328,9 +1330,9 @@ var PAYMENT =
                             
                 if (paymentInfoRespond.msgId === MESSAGE.id.BrowserPaymentIndication) 
                 {
-					valid = true;
-					PAYMENT.provision(paymentInfoRespond);
-					//PAYMENT.requestContinue(); // Don't send in context of payment.html
+                    valid = true;
+                    PAYMENT.provision(paymentInfoRespond);
+                    //PAYMENT.requestContinue(); // Don't call in payment.html
                 }
                 
                 return valid;

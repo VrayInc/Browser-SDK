@@ -188,7 +188,10 @@ function loadJSFile(filepath, callback)
             if (jScript.readyState === "loaded" || jScript.readyState === "complete")
             {
                 jScript.onreadystatechange = null;
-                callback();
+                
+                if(callback) {
+                    callback();
+                }
             }
         };
     }
@@ -196,7 +199,9 @@ function loadJSFile(filepath, callback)
     {
         jScript.onload = function()
         {
-            callback();
+            if(callback) {
+                    callback();
+            }
         };
     }
     
@@ -347,6 +352,51 @@ function pushToServer()
     }
 }
 
+function getPaymentURL(tid, merchantID, merchantName, total)
+{
+    var storeFrontURL;  // legacy store
+    switch (merchantID) 
+    {
+        case 'asiaroom.vraymerchant.com':  
+            storeFrontURL = "https://asiaroom.vraymerchant.com/payment.html";
+            break;
+        case 'gcs.vraymerchant.com':
+            storeFrontURL = "https://gcs.vraymerchant.com/payment.html";
+            break;
+        case 'live.vraymerchant.com':
+            storeFrontURL = "https://live.vraymerchant.com/payment.html";
+            break;
+		case 'mulletsocks.vraymerchant.com':
+            storeFrontURL = "https://mulletsocks.vraymerchant.com/payment.html";
+            break;
+        case 'test.vraymerchant.com':
+            storeFrontURL = "https://test.vraymerchant.com/payment.html";
+            break;
+        case 'vraylive.vraymerchant.com':
+            storeFrontURL = "https://vraylive.vraymerchant.com/payment.html";
+            break;
+        case 'vraylocalhost.ngrok.io':
+            storeFrontURL = "https://vraylocalhost.ngrok.io/VRAYTest/payment.html";
+            break;
+        case 'vraytest.vraymerchant.com':
+            storeFrontURL = "https://vraytest.vraymerchant.com/payment.html";
+            break;
+        case 'merchant.com.vray.vpay':
+        case 'www.vraymerchant.com':
+        default:
+            storeFrontURL = "https://www.vraymerchant.com/payment.html"; 
+    }
+    var url = storeFrontURL + "?tid=" + tid + "&name=" + merchantName + "&amt=" + total + "&mac=" + "";
+
+    // TODO - MAC calculation is done at the server backend w/ Key
+    var key = "79aa2cd255bda022e5e0d095eaeea9442800c1fa3c74c85b2a6db2e1f988f952";
+    var hmac = CryptoJS.HmacSHA256(url, key);
+    var hmacBase64 = CryptoJS.enc.Base64.stringify(hmac);
+    TRANSACTION.MAC = hmacBase64;
+    
+    return url + hmacBase64;
+}
+
 function launchPayment()
 {
     var tid = TRANSACTION.id;
@@ -395,6 +445,9 @@ function launchPayment()
     window.location = url + hmacBase64;
 }
 
+////////////////////////////
+// Functions for generate a HMAC
+///////////////////////////
 function calculateHMAC(message)
 {
     message = UTILS.prepForHMAC(message);
