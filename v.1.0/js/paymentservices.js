@@ -785,9 +785,9 @@ var PAYMENT =
             return;
         }
         
-		launchPayment();
-		
 		PAYMENT.requestContinue(); 
+		
+		launchPayment();
 		
         return;
     },
