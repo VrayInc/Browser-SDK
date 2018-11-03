@@ -785,11 +785,12 @@ var PAYMENT =
             return;
         }
 
+		//launchPayment();
+		
+		var paymentWindow = window.open("", "paymentWindow", "");
         PAYMENT.requestContinue();
-        
-        var paymentWindow = window.open("", "paymentWindow", "");
         paymentWindow.location = getPaymentURL(TRANSACTION.id, MERCHANT.id, MERCHANT.name, TRANSACTION.amount);
-	//launchPayment();
+	    
 		
         return;
     },
