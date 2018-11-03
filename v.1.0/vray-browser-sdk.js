@@ -2,11 +2,11 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/mobile-detect.js', mobileDetectAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/mobile-detect.js', mobileDetectAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/hmac-sha256.js', hmacAdded);
 
 
 //////////////////////////
@@ -14,7 +14,7 @@ loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.
 //////////////////////////
 function googleScriptAdded()
 {
-    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/googleSignIn.js", googleSignInAdded);
+    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/googleSignIn.js", googleSignInAdded);
 }
 
 function googleSignInAdded()
@@ -56,7 +56,7 @@ function mobileDetectAdded()
 
 function hmacAdded()
 {
-    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/enc-base64-min.js', encAdded);
+    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/enc-base64-min.js', encAdded);
 }
 
 function encAdded()
@@ -124,10 +124,10 @@ var securityQuestionModalString =
 var spinnerString =
     '<div id="waitForAuthorization" class="pay-with-mobile-spinner">' +
         '<div id="mobilepay" class="processor"></div>' +
-        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
+        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
     '</div>';
 
-document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/css/merchant-button-special.css'));
+document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/css/merchant-button-special.css'));
 document.body.append(addDiv(spinnerString));
 document.body.append(addDiv(signupModalString));
 document.body.append(addDiv(securityQuestionModalString));
@@ -140,7 +140,7 @@ loadJSFile("https://apis.google.com/js/api:client.js", googleScriptAdded);
 ///////////////////////////////////
 // Facebook Sign In Requirements
 //////////////////////////////////
-loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.1/v.1.0/js/facebookSignIn.js", facebookSignInAdded);
+loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@mulletsocks-r.0/v.1.0/js/facebookSignIn.js", facebookSignInAdded);
 
 //////////////////////////////////////
 // Helper functions
