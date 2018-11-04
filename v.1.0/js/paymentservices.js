@@ -786,10 +786,13 @@ var PAYMENT =
         }
 
 		//launchPayment();
+       
+		PAYMENT.requestContinue();
 		
-		var paymentWindow = window.open("", "paymentWindow", "");
-        PAYMENT.requestContinue();
-        paymentWindow.location = getPaymentURL(TRANSACTION.id, MERCHANT.id, MERCHANT.name, TRANSACTION.amount);
+        if(PAYMENT.paymentWindow) {
+            PAYMENT.paymentWindow.location = getPaymentURL(TRANSACTION.id, MERCHANT.id, MERCHANT.name, TRANSACTION.amount);
+            PAYMENT.paymentWindow.focus();
+        }
 		
         return;
     },
