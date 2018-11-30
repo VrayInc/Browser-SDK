@@ -531,8 +531,8 @@ var VRAY =
             return;
         }
 		
-		// Create placeholder for payment.html window
-		var mobileDetect = new MobileDetect(window.navigator.userAgent);
+	// Create placeholder for payment.html window
+	var mobileDetect = new MobileDetect(window.navigator.userAgent);
         TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
         if(TRANSACTION.deviceType === 1) {
             PAYMENT.paymentWindow = window.open("", "paymentWindow", "");
