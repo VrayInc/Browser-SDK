@@ -500,8 +500,9 @@ var VRAY =
     deviceType: 0,
     loginStatus: 0,
     totalAmount: 0,
-    callback: null,
-
+    shippingAddress     : [null], // address: street, city, zip, country
+    shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping 
+    
     init: function(merchantId, merchantName)
     {
         // Merchant Configuration
@@ -646,39 +647,35 @@ var VRAY =
     {
         return VRAY.shippingAddr;
     },
-
+    
     getShippingHistory: function(email, mobile)
     {
-        var shippingHistory = CARDHOLDER.shippingHistory[0];
-        if(shippingHistory[0] !== null) {
-            return shippingHistory;
-        }
-        
-        var historyPromise = new Promise(function(resolve1, reject1) 
+        var historyPromise = new Promise(function(resolve, reject) 
         {
-            var history = CARDHOLDER.prePaymentRequest(email, mobile, resolve1, reject1);  
-            
-            setTimeout(function() {
-                resolve1(history);
-            }, 300);
+            if(!email || !mobile) 
+            {
+                reject("Bad parameters");
+            }
+        
+            CARDHOLDER.getShippingHistory(email, mobile, 
+                function (result) 
+                {
+                    console.log("Shipping address history: " + result.toLocaleString());
+                    resolve(result);
+                }
+            );  
         });
         
         historyPromise.then( 
                 
             function (result) {
                 console.log("Shipping address history: " + result.toLocaleString());
-                
-                if(!CARDHOLDER.shippingAddress || !CARDHOLDER.shippingAddress[0]) 
-                {
-                    CARDHOLDER.shippingAddress = result[0];
-                }
-                
-                CARDHOLDER.shippingHistory = result;
-                
+                VRAY.shippingHistory = result;
+                VRAY.shippingAddress = result[0];
                 return result;
             },
-            function(err) {
-                console.log("Failed to get shipping address: " + err.toString()); 
+            function(error) {
+                console.log("No shipping address: " + error.toString()); 
                 return null;
             }
         );

@@ -102,43 +102,29 @@ var CARDHOLDER =
     signinAccessToken   : null,
     signinType          : 0,
     shippingAddress     : [null], // address: street, city, zip, country
-    shippingHistory     : [[null, null, null, null, null]], // shipping history
+    shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping 
+    shippingHistoryCallBack : 
+    {
+        callback: null,
+
+        call: function(result) 
+        {
+            if(!CARDHOLDER.shippingHistoryCallBack.callback) {
+                console.log("Invalid callback function!");
+            }
+            else {
+                CARDHOLDER.shippingHistoryCallBack.callback(result);
+            }
+        }
+    },
     
-    configure : function (id, name, phone, shippingAddress) 
+    configure : function (vid, name, mobile, shippingAddress) 
     {
         // Billing customer information
-        CARDHOLDER.id = id;
+        CARDHOLDER.id = vid;
         CARDHOLDER.name = name;
-        CARDHOLDER.phone = phone;
+        CARDHOLDER.phone = mobile;
         CARDHOLDER.shippingAddress = shippingAddress;
-
-        var historyPromise = new Promise(function(resolve, reject) 
-        {
-            var history = CARDHOLDER.prePaymentRequest(id, phone);  
-            
-            setTimeout(function() {
-                resolve(history);
-            }, 1000);
-        });
-
-        historyPromise.then( 
-            function (result) 
-            {
-                console.log("Shipping address history: " + result[0].toLocaleString());
-
-                CARDHOLDER.shippingHistory = result;
-                
-                if(!CARDHOLDER.shippingAddress || !CARDHOLDER.shippingAddress[0]) {
-                    CARDHOLDER.shippingAddress = result[0];
-                }
-                
-                return result;
-            },
-            function(err) 
-            {
-                console.log("Failed to get shipping address: " + err.toString()); 
-            }
-        );
     },
     
     emailChange: function(anotherVid)
@@ -221,6 +207,19 @@ var CARDHOLDER =
         });
     },
     
+    getShippingHistory(vid, mobile, historyCallBack)
+    {   
+        if(!vid || !mobile || !historyCallBack) 
+        {
+            UTILS.errorDetected("ERROR - Invalid parameters for getShippingHistory(email, mobile, callback)");              
+            return; 
+        }
+            
+        CARDHOLDER.shippingHistoryCallBack.callback = historyCallBack;
+        
+        CARDHOLDER.prePaymentRequest(vid, mobile);  
+    },
+    
     prePaymentRequest : function(vid, mobile)
     {
         var today = new Date();
@@ -272,7 +271,7 @@ var CARDHOLDER =
                 prePayment.messageAuthenticationCode = UTILS.ab2hexText(hmac);
                 prePaymentText =  JSON.stringify(prePayment).toString();
                 
-                var  historyPromise = new Promise(function(resolve2, reject2) 
+                var  prepaymentPromise = new Promise(function(resolve2, reject2) 
                 {
                 
                 $.ajax({
@@ -320,8 +319,11 @@ var CARDHOLDER =
                             }
                         }
                     }
-                    else if ((prePaymentResp.status === STATUS.code.MACVerificationFailure) ||
-                             (prePaymentResp.status === STATUS.code.VIDFailure))
+                    else if(prePaymentResp.status === STATUS.code.VIDFailure) 
+                    {
+                         CARDHOLDER.shippingHistory = null;  // 1st time user
+                    }
+                    else if (prePaymentResp.status === STATUS.code.MACVerificationFailure) 
                     {
                         UTILS.errorDetected("ERROR - Pre-payment failure: " + prePaymentResp.toString());  
                     }
@@ -337,22 +339,20 @@ var CARDHOLDER =
                     UTILS.errorDetected("ERROR - Unexpected pre-payment response.\n");  
                     reject2("Unexpected pre-payment response");
                 }});  // ajax pre-payment
-                });
+            }); // prepaymetPromise
 
-                historyPromise.then (
-                    function (result) {
-
-                        return result;
-                    },
-                    function (error) {
-                        UTILS.errorDetected("Couldn't get shipping history" + error.toLocaleString()); 
-                        return null;
-                    }
-                );
+            prepaymentPromise.then (
+                function (result) {
+                    CARDHOLDER.shippingHistoryCallBack.call(result);
+                },
+                function (error) {
+                    UTILS.errorDetected("Couldn't get shipping history" + error.toLocaleString()); 
+                    reject2(error);
+                }
+            );
             },
             function(err) {
                 UTILS.errorDetected("Failed to get shipping address: " + err.toString()); 
-                reject("Failed to get shipping history");
             }
         );
     },
