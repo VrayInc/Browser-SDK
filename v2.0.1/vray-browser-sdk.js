@@ -2,11 +2,11 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/mobile-detect.js', mobileDetectAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/mobile-detect.js', mobileDetectAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/hmac-sha256.js', hmacAdded);
 
 
 //////////////////////////
@@ -14,7 +14,7 @@ loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/hma
 //////////////////////////
 function googleScriptAdded()
 {
-    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/googleSignIn.js", googleSignInAdded);
+    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/googleSignIn.js", googleSignInAdded);
 }
 
 function googleSignInAdded()
@@ -56,7 +56,7 @@ function mobileDetectAdded()
 
 function hmacAdded()
 {
-    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/enc-base64-min.js', encAdded);
+    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/enc-base64-min.js', encAdded);
 }
 
 function encAdded()
@@ -66,7 +66,7 @@ function encAdded()
 
 ////////////////////////////
 // Signup Modals
-///////////////////////////
+//////////////////////////
 var signupModalString =
     '<div id="signupModal" class="modal">' +
     '<div class="modal-content">' +
@@ -74,11 +74,11 @@ var signupModalString =
     '<div class="forms-wrap w-container">' +
     '<div class="account-checkout">' +
     '<button class="span" onClick="continueWithFacebook();">' +
-    '<img src="https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v2.0.1/images/facebook.png" alt=""/>' +
+    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/images/facebook.png" alt=""/>' +
     '<i>Sign Up with Facebook</i>' +
     '</button>' +
     '<button id="custom_google_btn" class="span2">' +
-    '<img src="https://raw.githubusercontent.com/VrayInc/Browser-SDK/master/v2.0.1/images/google-logo.png" alt=""/>' +
+    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/images/google-logo.png" alt=""/>' +
     '<i>Sign Up with Google</i>' +
     '</button>' +
     '<button class="security-span" onClick="securityPopup();">' +
@@ -124,10 +124,10 @@ var securityQuestionModalString =
 var spinnerString =
     '<div id="waitForAuthorization" class="pay-with-mobile-spinner">' +
         '<div id="mobilepay" class="processor"></div>' +
-        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
+        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
     '</div>';
 
-document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/css/merchant-button-special.css'));
+document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/css/merchant-button-special.css'));
 document.body.append(addDiv(spinnerString));
 document.body.append(addDiv(signupModalString));
 document.body.append(addDiv(securityQuestionModalString));
@@ -140,7 +140,7 @@ loadJSFile("https://apis.google.com/js/api:client.js", googleScriptAdded);
 ///////////////////////////////////
 // Facebook Sign In Requirements
 //////////////////////////////////
-loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.1/js/facebookSignIn.js", facebookSignInAdded);
+loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/facebookSignIn.js", facebookSignInAdded);
 
 //////////////////////////////////////
 // Helper functions
@@ -648,37 +648,9 @@ var VRAY =
         return VRAY.shippingAddr;
     },
     
-    getShippingHistory: function(email, mobile)
+    getShippingHistory: function(email, mobile, callback)
     {
-        var historyPromise = new Promise(function(resolve, reject) 
-        {
-            if(!email || !mobile) 
-            {
-                reject("Bad parameters");
-            }
-        
-            CARDHOLDER.getShippingHistory(email, mobile, 
-                function (result) 
-                {
-                    console.log("Shipping address history: " + result.toLocaleString());
-                    resolve(result);
-                }
-            );  
-        });
-        
-        historyPromise.then( 
-                
-            function (result) {
-                console.log("Shipping address history: " + result.toLocaleString());
-                VRAY.shippingHistory = result;
-                VRAY.shippingAddress = result[0];
-                return result;
-            },
-            function(error) {
-                console.log("No shipping address: " + error.toString()); 
-                return null;
-            }
-        );
+        CARDHOLDER.getShippingHistory(email, mobile, callback);
     },
     
     getDeviceType: function()
