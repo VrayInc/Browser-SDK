@@ -35,14 +35,29 @@
     * Buyer's city (string)
     * Buyer's state (string)
     * Buyer's zipCode (string)
+    * Buyer's country (string)
   * Buyer's loginStatus - whether the buyer is logged in on your website (number - 0 is logged in and 1 is otherwise)  
   * Buyer's totalAmount (string)
   
  ### VRAY.pay() ###
  
  * Parameter
-   * callback(error, tid) - function that gets called once payment has been processed.
-     + error - error message, or null if transaction completed successfully.
+   * callback(reason, data, tid) - function that gets called once payment has been processed.
+     + reason: 
+       0: AuthorizationStatus
+       1: ConfirmationCode
+       2: Error
+     + data: 
+       reason = 0, this parameter contains the status of payment authorization:
+          1: Approved
+          2: Declined
+       reason = 1, this parameter contains the string of:
+          6-digit confirmation code
+       reason = 2: this parameter contains the error status:
+          0: Cancel
+          1: InvalidPhoneNumber
+          2: PhoneNumberVerificationFailure
+          3: Timeout
      + tid - the transaction ID.
     
  ### Constrains ###
