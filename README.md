@@ -69,15 +69,31 @@ VRAY.setupPayment( // Step 2
 VRAY.pay(myCallback); // Step 3
 
 //Define your callback
-function myCallback(error, data) {
-  if (error) {
-  
-      console.log("Payment Request w/ transaction ID = " + data + " failed with error = " + error);
-  }
-  else {
-      console.log("Payment Request w/ transaction ID = " + data + "completed successfully.");
-  }
-}
-```
+function myCallback(reason, data, tid) 
+ {
+   if(reason === REASON.AuthorizationStatus) 
+   {
+       if (data) {
+           console.log("Payment failed w/ error:" + data);
+           window.alert("Transaction ID " + tid + " failed.  Error: " + error);
+       }
+       else {
+           console.log("Payment done successfully.");
+           window.alert("Transaction ID " + tid + " completed successful.");
+       }
+   }
+   else if (reason === REASON.ConfirmationCode) 
+   {
 
-#### A good way to use this would be to call the three methods inside the onclick function of a button. ####
+           window.alert("Thank You!  \n" + 
+                    "You will receive a text message to authorize payment on your mobile phone.\n" + 
+                    "Please confirm the security code on the phone matches this one: " + 
+                    data + "\n");
+
+           SIGNUP.securityCodeDisplayResponse();
+   }
+   else if(reason === REASON.Error) {
+
+       window.alert("Transaction ID " + tid + " received error call back = " + error);
+   }
+ }
