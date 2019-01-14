@@ -76,7 +76,8 @@ VRAY.setupPayment( // Step 2
     ["9500 Gilman Drive",
     "La Jolla",
     "CA",
-    "92091"],
+    "92091",
+    "US"],
     1
     "151.00"
 );
