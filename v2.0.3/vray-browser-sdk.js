@@ -2,10 +2,8 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
-//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/paymentservices.js', paymentServicesAdded);
-//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/chargeservices.js', chargeServicesAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/digest.js', digestAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/mobile-detect.js', mobileDetectAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/hmac-sha256.js', hmacAdded);
