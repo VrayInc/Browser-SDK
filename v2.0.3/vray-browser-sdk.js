@@ -4,11 +4,11 @@
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
 loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
 loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
-//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/paymentservices.js', paymentServicesAdded);
-//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/mobile-detect.js', mobileDetectAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/hmac-sha256.js', hmacAdded);
+//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/paymentservices.js', paymentServicesAdded);
+//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/mobile-detect.js', mobileDetectAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/hmac-sha256.js', hmacAdded);
 
 
 //////////////////////////
@@ -16,7 +16,7 @@ loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/hma
 //////////////////////////
 function googleScriptAdded()
 {
-    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/googleSignIn.js", googleSignInAdded);
+    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/googleSignIn.js", googleSignInAdded);
 }
 
 function googleSignInAdded()
@@ -57,7 +57,7 @@ function mobileDetectAdded()
 
 function hmacAdded()
 {
-    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/enc-base64-min.js', encAdded);
+    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/enc-base64-min.js', encAdded);
 }
 
 function encAdded()
@@ -75,11 +75,11 @@ var signupModalString =
     '<div class="forms-wrap w-container">' +
     '<div class="account-checkout">' +
     '<button class="span" onClick="continueWithFacebook();">' +
-    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/images/facebook.png" alt=""/>' +
+    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/images/facebook.png" alt=""/>' +
     '<i>Sign Up with Facebook</i>' +
     '</button>' +
     '<button id="custom_google_btn" class="span2">' +
-    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/images/google-logo.png" alt=""/>' +
+    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/images/google-logo.png" alt=""/>' +
     '<i>Sign Up with Google</i>' +
     '</button>' +
     '<button class="security-span" onClick="securityPopup();">' +
@@ -125,10 +125,10 @@ var securityQuestionModalString =
 var spinnerString =
     '<div id="waitForAuthorization" class="pay-with-mobile-spinner">' +
         '<div id="mobilepay" class="processor"></div>' +
-        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
+        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
     '</div>';
 
-document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/css/merchant-button-special.css'));
+document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/css/merchant-button-special.css'));
 document.body.append(addDiv(spinnerString));
 document.body.append(addDiv(signupModalString));
 document.body.append(addDiv(securityQuestionModalString));
@@ -141,7 +141,7 @@ loadJSFile("https://apis.google.com/js/api:client.js", googleScriptAdded);
 ///////////////////////////////////
 // Facebook Sign In Requirements
 //////////////////////////////////
-loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.2/js/facebookSignIn.js", facebookSignInAdded);
+loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@master/v2.0.3/js/facebookSignIn.js", facebookSignInAdded);
 
 //////////////////////////////////////
 // Helper functions
