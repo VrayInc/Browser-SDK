@@ -110,7 +110,7 @@ var CARDHOLDER =
         call: function(result) 
         {
             if(!CARDHOLDER.shippingHistoryCallBack.callback) {
-                console.log("Invalid callback function!");
+                console.log("Invalid shipping history callback function.");
             }
             else {
                 CARDHOLDER.shippingHistoryCallBack.callback(result);
@@ -608,6 +608,14 @@ var PAYMENT =
                         break;
 
                     case MESSAGE.id.StartPaymentInfoRetrieveIndication:
+                        
+                        var mobileDetect = new MobileDetect(window.navigator.userAgent);
+                        TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
+                        if(TRANSACTION.deviceType == 1)
+                        {
+                            PAYMENT.requestContinue(); 
+                        }
+                    
                         PAYMENT.launchPaymentMethod(paymentRespond);
                         break;
 
@@ -1025,7 +1033,6 @@ var PAYMENT =
 
     launchPaymentMethod: function(payment)
     {
-        
         // Check for mobile device type?
         var mobileDetect = new MobileDetect(window.navigator.userAgent);
         TRANSACTION.deviceType = (mobileDetect.mobile() ? 1 : 0);
@@ -1126,7 +1133,7 @@ var PAYMENT =
 
     requestContinue: function()
     {
-	var paymentRequestContinue = {
+        var paymentRequestContinue = {
             "msgId"              : MESSAGE.id.PaymentRequestContinueIndication,
             "tid"                : TRANSACTION.id,
             "merchantIdentifier" : MERCHANT.id,
@@ -1162,7 +1169,7 @@ var PAYMENT =
                     xhrFields   : { withCredentials: true },
                     success     : function(result) {   
 					
-			var paymentResponse = JSON.parse(result);
+	        var paymentResponse = JSON.parse(result);
                         
                         if(!paymentResponse) {
                             UTILS.errorDetected("ERROR - Payment Response.");  
@@ -1187,7 +1194,7 @@ var PAYMENT =
                         if (paymentResponse.status === STATUS.code.SUCCESS)
                         {
                             var ccToken = paymentResponse.token;
-                            if(!ccToken) {
+                            if((ccToken != null)  && (ccToken != "fake-token") ){
                                 UTILS.errorDetected("ERROR - No CC Token in Payment Response.");  
                                 PAYMENT.completed();
                                 return;
@@ -2029,7 +2036,8 @@ var SIGNUP =
                                 "vid": CARDHOLDER.id,
                                 "phoneNumber" : CARDHOLDER.phone,
                                 "merchantIdentifier": MERCHANT.id,
-                                "merchantName": MERCHANT.name
+                                "merchantName": MERCHANT.name,
+                                "payCallBack": CALLBACK.callback
                             };
                             
                             var securityCodeDisplayText = JSON.stringify(securityCodeDisplayParameters).toString();
@@ -2732,38 +2740,41 @@ var CALLBACK =
     
     call: function(reason, error, data) 
     {
-        if(!CALLBACK.callback) 
+        if(CALLBACK.callback) 
         {
-            console.log("Invalid callback function!");
-   
-            /* Default handling */
-            if(reason === REASON.AuthorizationStatus) 
-            {
-                if (data) {
-                    console.log("Payment failed w/ error:" + data);
-                   
-                }
-                else {
-                    console.log("Payment done successfully.");
-                 
-                }
-            }
-            else if (reason === REASON.ConfirmationCode) 
-            {
-
-                console.log("Thank You!  \n" + 
-                             "You will receive a text message to authorize payment on your mobile phone.\n" + 
-                             "Please confirm the security code on the phone matches this one: " + 
-                             data + "\n");
-            }
-            else if(reason === REASON.Error) {
-
-                console.log("Transaction ID " + tid + " received error call back = " + error);
-            }         
-        }
-        else 
-        {
+            console.log("INFO - Pay request callback() got called.");
+            console.log("INFO - CALLBACK.callback(reason, error, data)");
+            console.log("reason = " + reason.toString());
+            console.log("error = " + error.toString());
+            console.log("data =  " + data.toString());
+                
             CALLBACK.callback(reason, error, data);
+        }
+        else
+        {
+            console.log("ERROR - Pay request callback() is not available.");
+            
+            // Try to retrieve it from persistence local storage      
+            var payRequestCallBack = localStorage.getItem("payCallBack");
+           
+            // Set to default Callback handler if not available
+            if (payRequestCallBack.payCallBack)  {
+                
+                console.log("ERROR - Retrieved payment request callback().");
+                
+                CALLBACK.callback = payRequestCallBack.payCallBack;
+                CALLBACK.callback(reason, error, data);
+            }
+            else 
+            {
+                // Handle default callback() function
+                console.log("ERROR - Failed to retrieve pay request callback().");
+                
+                console.log("ERROR - CALLBACK.callback(reason, error, data)");
+                console.log("reason = " + reason.toString());
+                console.log("error = " + error.toString());
+                console.log("data =  " + data.toString());
+            }
         }
     }
 };
