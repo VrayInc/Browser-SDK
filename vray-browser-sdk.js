@@ -2,8 +2,10 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.0.6/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.0.6/js/chargeservices.js', chargeServicesAdded);
+//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.0.6/js/paymentservices.js', paymentServicesAdded);
+//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.0.6/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.0.6/js/digest.js', digestAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.0.6/js/hmac-sha256.js', hmacAdded);
 
@@ -43,13 +45,6 @@ function chargeServicesAdded()
 function digestAdded()
 {
 
-}
-
-var mobileDetect = null;
-
-function mobileDetectAdded()
-{
-    mobileDetect = new MobileDetect(window.navigator.userAgent);
 }
 
 function hmacAdded()
@@ -407,7 +402,7 @@ function launchPayment()
     var merchant = MERCHANT.name;
     var amount = TRANSACTION.amount;
     
-    var storeFrontURL = "localhost";  // legacy store
+    var storeFrontURL = "https://magentostore.ngrok.io";  // legacy store
     switch (MERCHANT.id) 
     {
         case 'asiaroom.vraymerchant.com':  
@@ -420,6 +415,7 @@ function launchPayment()
             storeFrontURL = "https://live.vraymerchant.com/payment.html";
             break;
         case 'magentostore.vraymerchant.com':
+            //storeFrontURL = "https://magentostore.ngrok.io/VRAY-Test-magento/payment.html";
             storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
             break;
         case 'master.vraymerchant.com':
@@ -469,8 +465,7 @@ function launchPayment()
         }
     }); //ajax()
     
-    window.location = url + TRANSACTION.MAC;
-    //window.open(url + TRANSACTION.MAC);
+    window.location.href = url + TRANSACTION.MAC;
 }
 
 ////////////////////////////
@@ -579,9 +574,11 @@ var VRAY =
                
         var payRequestCallBack = 
         {
-            "payCallBack" : CALLBACK.callback
+            "payCallBack" : callback
         };
-        localStorage.setItem("payCallBack", payRequestCallBack);
+        
+        var payRequestCallBackText= JSON.stringify(payRequestCallBack).toString();
+        localStorage.setItem("payCallBack", payRequestCallBackText);
         
         // Modify any payment setup at run time.
         TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
