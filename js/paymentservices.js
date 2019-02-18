@@ -668,7 +668,7 @@ var PAYMENT =
             }     
 
             // Charging payment via token
-            doChargePayment(TRANSACTION.id, ccToken, TRANSACTION.amount, MERCHANT.name, CARDHOLDER.id);
+            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
         }
         else if ((paymentResponse.status === STATUS.code.VIDFailure) || 
                  (paymentResponse.status === STATUS.code.PhoneVerificationTrigger))
@@ -1207,7 +1207,7 @@ var PAYMENT =
                             console.log("Merchant Name = " + MERCHANT.name);
                             console.log("VID = " + CARDHOLDER.id);
                             
-                            doChargePayment(TRANSACTION.id, ccToken, TRANSACTION.amount, MERCHANT.name, CARDHOLDER.id);
+                            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
                         }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
@@ -2376,7 +2376,7 @@ var SIGNUP =
                             console.log("Merchant Name = " + MERCHANT.name);
                             console.log("VID = " + CARDHOLDER.id);
                             
-                            doChargePayment(TRANSACTION.id, ccToken, TRANSACTION.amount, MERCHANT.name, CARDHOLDER.id);
+                            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
                         }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
