@@ -2,11 +2,12 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.0/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.0/js/chargeservices.js', chargeServicesAdded);
+//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.0/js/paymentservices.js', paymentServicesAdded);
+//loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.0/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.0/js/digest.js', digestAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.0/js/hmac-sha256.js', hmacAdded);
-
 
 //////////////////////////
 //Callbacks after JS Files
@@ -553,32 +554,8 @@ var VRAY =
             return;
         }
 		
-        TRANSACTION.init();
-        
-        // Save the pay request for other session 
-         var payRequestParameters = 
-         {
-                "tid": TRANSACTION.id,
-                "securityCode": TRANSACTION.securityCode,
-                "vid": CARDHOLDER.id,
-                "phoneNumber" : CARDHOLDER.phone,
-                "merchantIdentifier": MERCHANT.id,
-                "merchantName": MERCHANT.name,
-                "total": TRANSACTION.amount
-        };
-                            
-        var payRequestParametersText = JSON.stringify(payRequestParameters).toString();
-        localStorage.setItem("payRequestParameters", payRequestParametersText);
-               
-        var payRequestCallBack = 
-        {
-            "payCallBack" : callback
-        };
-        
-        var payRequestCallBackText= JSON.stringify(payRequestCallBack).toString();
-        localStorage.setItem("payCallBack", payRequestCallBackText);
-        
         // Modify any payment setup at run time.
+        TRANSACTION.init();
         TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
         TRANSACTION.loginStatus = VRAY.getLoginStatus();
         
