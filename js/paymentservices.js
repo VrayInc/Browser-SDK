@@ -610,7 +610,7 @@ var PAYMENT =
                     case MESSAGE.id.StartPaymentInfoRetrieveIndication:
                         
                         TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
-                        if(TRANSACTION.deviceType == 1)
+                        if(TRANSACTION.deviceType === 1)
                         {
                             PAYMENT.requestContinue(); 
                         }
@@ -634,11 +634,7 @@ var PAYMENT =
     authorizationResponse: function(paymentResponse)
     {
         // Validate message
-        if ((paymentResponse === undefined) || (paymentResponse === null) ||
-            (paymentResponse.tid === undefined) || (paymentResponse.tid === null) ||
-            (paymentResponse.token === undefined) || (paymentResponse.token === null) ||
-            (paymentResponse.status === undefined) || (paymentResponse.status === null) ||
-            (paymentResponse.msgId !== 2)) {
+        if (!paymentResponse){
         
             UTILS.errorDetected("ERROR - Unexpected payment response parameters:\n\n" +
                                 JSON.stringify(paymentResponse).toString());
@@ -650,25 +646,18 @@ var PAYMENT =
         if (tid !== Number(TRANSACTION.id))
         {
             UTILS.errorDetected("ERROR - Invalid transaction ID: " + paymentResponse.tid);
-            PAYMENT.completed();
-            return;
         }
         
+        var ccToken = paymentResponse.token;
         if (paymentResponse.status === STATUS.code.SUCCESS)
         {
-            var ccToken = paymentResponse.token;
-
             if(!ccToken) {
                 UTILS.errorDetected("ERROR - No CC Token in Payment Response.");  
-                PAYMENT.completed();
-                return;
+                ccToken = "fake-token";
             }
             else {
                 console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
             }     
-
-            // Charging payment via token
-            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
         }
         else if ((paymentResponse.status === STATUS.code.VIDFailure) || 
                  (paymentResponse.status === STATUS.code.PhoneVerificationTrigger))
@@ -697,6 +686,8 @@ var PAYMENT =
                             UTILS.statusText(paymentResponse.status));
         }
        
+         // Charging payment via token
+        doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
         PAYMENT.completed();
         return;
     },
@@ -1167,7 +1158,7 @@ var PAYMENT =
                     xhrFields   : { withCredentials: true },
                     success     : function(result) {   
 					
-	        var paymentResponse = JSON.parse(result);
+                        var paymentResponse = JSON.parse(result);
                         
                         if(!paymentResponse) {
                             UTILS.errorDetected("ERROR - Payment Response.");  
@@ -1192,14 +1183,14 @@ var PAYMENT =
                         if (paymentResponse.status === STATUS.code.SUCCESS)
                         {
                             var ccToken = paymentResponse.token;
-                            if((ccToken != null)  && (ccToken != "fake-token") ){
+                            if(!ccToken )
+                            {
                                 UTILS.errorDetected("ERROR - No CC Token in Payment Response.");  
                                 PAYMENT.completed();
                                 return;
                             }
-                            else {
-                                console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
-                            }     
+                           
+                            console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
 
                             // Charging payment via token
                             console.log("TID = " + TRANSACTION.id);
@@ -2366,9 +2357,9 @@ var SIGNUP =
                                 PAYMENT.completed();
                                 return;
                             }
-                            else {
-                                console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
-                            }     
+                           
+                            console.log("Payment authorization accepted.\n\n" + "Credit Card Token = " + ccToken);
+                              
 
                             // Charging payment via token
                             console.log("TID = " + TRANSACTION.id);
@@ -2739,11 +2730,11 @@ var CALLBACK =
     callback: null,
     
     call: function(reason, error, data) 
-    {
+    {      
+        console.log("INFO - Pay request callback() got called.");
+        
         if(CALLBACK.callback) 
         {
-            console.log("INFO - Pay request callback() got called.");
-            
             console.log("INFO - CALLBACK.callback(reason, error, data)");
             console.log("reason = " + reason);
             console.log("error = " + error);
@@ -2754,29 +2745,10 @@ var CALLBACK =
         else
         {
             console.log("ERROR - Pay request callback() is not available.");
-            
-            // Try to retrieve it from persistence local storage      
-            var payRequestCB = localStorage.getItem("payCallBack");
-            var payRequestCallBack = JSON.parse(payRequestCB);
-            
-            // Set to default Callback handler if not available
-            if (payRequestCallBack.payCallBack)  {
-                
-                console.log("ERROR - Retrieved payment request callback().");
-                
-                CALLBACK.callback = payRequestCallBack.payCallBack;
-                if(CALLBACK.callback)
-                    CALLBACK.callback(reason, error, data);
-            }
-            else 
-            {
-                // Handle default callback() function
-                console.log("ERROR - Failed to retrieve pay request callback().");
-                console.log("ERROR - CALLBACK.callback(reason, error, data)");
-                console.log("reason = " + reason);
-                console.log("error = " + error);
-                console.log("data =  " + data);
-            }
+            console.log("ERROR - CALLBACK.callback(reason, error, data)");
+            console.log("reason = " + reason);
+            console.log("error = " + error);
+            console.log("data =  " + data);
         }
     }
 };

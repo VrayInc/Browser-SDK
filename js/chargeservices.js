@@ -17,9 +17,12 @@ function doChargePayment(tid, vid, merchant, token, amount) {
         chargeAmount = amount;
         
         //POST to ChargePaymentServlet.java
-        //var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe&token=" + chargeToken + 
-        var url = "ChargePayment?action=chargestripe&tid=" + tid +  "&vid=" + vid + "&merchant=" + merchant + 
-                "&token=" + chargeToken + "&amount=" + chargeAmount;
+        var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" + 
+                "&tid=" + tid +  
+                "&vid=" + vid + 
+                "&merchant=" + merchant + 
+                "&token=" + chargeToken + 
+                "&amount=" + chargeAmount;
                   
         chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, true);
@@ -54,7 +57,8 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
     if((tid !== undefined) && (tid !== null)) 
     {
         //POST to ChargePaymentServlet.java
-        var url = "ChargePayment?action=refundstripe" + 
+        //var url = "ChargePayment?action=refundstripe" + 
+        var url = "https://magentostore.vraymerchant.com/ChargePayment?action=refundstripe" +
                  "&mId=" + merchantId + 
                  "&name=" + merchantName +
                  "&tid=" + tid + 
