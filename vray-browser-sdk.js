@@ -7,7 +7,6 @@ loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/chargeserv
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/digest.js', digestAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/hmac-sha256.js', hmacAdded);
 
-
 //////////////////////////
 //Callbacks after JS Files
 //////////////////////////
@@ -413,6 +412,7 @@ function launchPayment()
             storeFrontURL = "https://live.vraymerchant.com/payment.html";
             break;
         case 'magentostore.vraymerchant.com':
+            //storeFrontURL = "http://localhost:8084/VRAY-Test-magento/payment.html";
             //storeFrontURL = "https://magentostore.ngrok.io/VRAY-Test-magento/payment.html";
             storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
             break;
@@ -538,50 +538,43 @@ var VRAY =
         );
     },
     
-    pay: function(callback)
+    pay: function(callback, paymentResponseURL)
     {
-        // Payment authorization call back code
-        CALLBACK.callback = callback;
+        //
+        // Payment authorization call back function & charge result URL
+        //
+        if(!callback) 
+        {
+            window.alert("ERROR - Payment authorization callback  function() is required.");
+            return;
+        }
         
+        CALLBACK.callback = callback;
+        CALLBACK.paymentResponseURL = paymentResponseURL;
+        
+        //
+        // Payment required paramters 
+        //
         if(!VRAY.merchantId || !VRAY.merchantName || 
            !VRAY.cardHolderName || !VRAY.myVId || 
            !VRAY.phoneNumber || !VRAY.totalAmount ||
            !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
            !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1))) 
         {
-            CALLBACK.call("ERROR - Missing required payment information!", VRAY.myVId);
+            CALLBACK.call(REASON.AuthorizationStatus, "ERROR - Missing required payment request information!", null);
             return;
         }
-		
+        
+        //
+        // Modify any payment setup at run time parameters.
+        //
         TRANSACTION.init();
-        
-        // Save the pay request for other session 
-         var payRequestParameters = 
-         {
-                "tid": TRANSACTION.id,
-                "securityCode": TRANSACTION.securityCode,
-                "vid": CARDHOLDER.id,
-                "phoneNumber" : CARDHOLDER.phone,
-                "merchantIdentifier": MERCHANT.id,
-                "merchantName": MERCHANT.name,
-                "total": TRANSACTION.amount
-        };
-                            
-        var payRequestParametersText = JSON.stringify(payRequestParameters).toString();
-        localStorage.setItem("payRequestParameters", payRequestParametersText);
-               
-        var payRequestCallBack = 
-        {
-            "payCallBack" : callback
-        };
-        
-        var payRequestCallBackText= JSON.stringify(payRequestCallBack).toString();
-        localStorage.setItem("payCallBack", payRequestCallBackText);
-        
-        // Modify any payment setup at run time.
         TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
         TRANSACTION.loginStatus = VRAY.getLoginStatus();
         
+        //
+        // Create payment 
+        //
         var amount = VRAY.totalAmount;
         var purchaseItems = VRAY.purchaseItem;
         var purchaseOrder = PAYMENT.create(amount, purchaseItems);
@@ -594,10 +587,12 @@ var VRAY =
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
-            success     : function(hmac) {
+            success     : function(hmac) 
+            {
                 PAYMENT.authorizationRequest(hmac);
             },
-            error: function(){
+            error: function()
+            {
                 UTILS.errorDetected("Couldn't calculate HMAC!");  
                 PAYMENT.completed();   
             }
@@ -611,7 +606,6 @@ var VRAY =
             {
                 if (data) {
                     console.log("Payment failed w/ error:" + data);
-                   
                 }
                 else {
                     console.log("Payment done successfully.");
