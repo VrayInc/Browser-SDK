@@ -5,14 +5,14 @@
  */
 var IE;
 
-function doChargePayment(tid, vid, merchant, token, amount) {
-    
+function doChargePayment(tid, vid, merchant, token, amount) 
+{
     var chargeToken;
     var chargeAmount;
     var chargeRequest;
     
-    if((token !== undefined) && (token !== null) && (token !== "fake-token")) {
-        
+    if((token !== undefined) && (token !== null) && (token !== "fake-token"))
+    {
         chargeToken = token;
         chargeAmount = amount;
         
@@ -32,7 +32,9 @@ function doChargePayment(tid, vid, merchant, token, amount) {
         if(UTILS.debug.enabled()) {
             window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
         }
+        
         UIUtils.hideSpinner();
+        
         CALLBACK.call(REASON.AuthorizationStatus, null, tid);
     }
     else 
@@ -49,6 +51,7 @@ function doChargePayment(tid, vid, merchant, token, amount) {
         }
     }
 }
+
 
 function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason) 
 {

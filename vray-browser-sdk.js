@@ -2,17 +2,17 @@
 // Necessary JS Files
 /////////////////////////
 loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
 //////////////////////////
 function googleScriptAdded()
 {
-    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/googleSignIn.js", googleSignInAdded);
+    loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/js/googleSignIn.js", googleSignInAdded);
 }
 
 function googleSignInAdded()
@@ -46,7 +46,7 @@ function digestAdded()
 
 function hmacAdded()
 {
-    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/enc-base64-min.js', encAdded);
+    loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/js/enc-base64-min.js', encAdded);
 }
 
 function encAdded()
@@ -64,11 +64,11 @@ var signupModalString =
     '<div class="forms-wrap w-container">' +
     '<div class="account-checkout">' +
     '<button class="span" onClick="continueWithFacebook();">' +
-    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/images/facebook.png" alt=""/>' +
+    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/images/facebook.png" alt=""/>' +
     '<i>Sign Up with Facebook</i>' +
     '</button>' +
     '<button id="custom_google_btn" class="span2">' +
-    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/images/google-logo.png" alt=""/>' +
+    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/images/google-logo.png" alt=""/>' +
     '<i>Sign Up with Google</i>' +
     '</button>' +
     '<button class="security-span" onClick="securityPopup();">' +
@@ -114,10 +114,10 @@ var securityQuestionModalString =
 var spinnerString =
     '<div id="waitForAuthorization" class="pay-with-mobile-spinner">' +
         '<div id="mobilepay" class="processor"></div>' +
-        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
+        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
     '</div>';
 
-document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/css/merchant-button-special.css'));
+document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/css/merchant-button-special.css'));
 document.body.append(addDiv(spinnerString));
 document.body.append(addDiv(signupModalString));
 document.body.append(addDiv(securityQuestionModalString));
@@ -130,7 +130,7 @@ loadJSFile("https://apis.google.com/js/api:client.js", googleScriptAdded);
 ///////////////////////////////////
 // Facebook Sign In Requirements
 //////////////////////////////////
-loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.1/js/facebookSignIn.js", facebookSignInAdded);
+loadJSFile("https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.2/js/facebookSignIn.js", facebookSignInAdded);
 
 //////////////////////////////////////
 // Helper functions
@@ -357,6 +357,8 @@ function getPaymentURL(tid, merchantID, merchantName, total)
             storeFrontURL = "https://live.vraymerchant.com/payment.html";
             break;
         case 'magentostore.vraymerchant.com':
+            //storeFrontURL = "https://magentostore.ngrok.io/VRAY-Test-magento/payment.html";
+            //storeFrontURL = "http://localhost:8084/VRAY-Test-magento/payment.html";
             storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
             break;
         case 'master.vraymerchant.com':
@@ -412,6 +414,7 @@ function launchPayment()
             storeFrontURL = "https://live.vraymerchant.com/payment.html";
             break;
         case 'magentostore.vraymerchant.com':
+            //storeFrontURL = "http://localhost:8084/VRAY-Test-magento/payment.html";
             //storeFrontURL = "https://magentostore.ngrok.io/VRAY-Test-magento/payment.html";
             storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
             break;
@@ -537,26 +540,43 @@ var VRAY =
         );
     },
     
-    pay: function(callback)
+    pay: function(callback, paymentResponseURL)
     {
-        // Payment authorization call back code
-        CALLBACK.callback = callback;
+        //
+        // Payment authorization call back function & charge result URL
+        //
+        if(!callback) 
+        {
+            window.alert("ERROR - Payment authorization callback  function() is required.");
+            return;
+        }
         
+        CALLBACK.callback = callback;
+        CALLBACK.paymentResponseURL = paymentResponseURL;
+        
+        //
+        // Payment required paramters 
+        //
         if(!VRAY.merchantId || !VRAY.merchantName || 
            !VRAY.cardHolderName || !VRAY.myVId || 
            !VRAY.phoneNumber || !VRAY.totalAmount ||
            !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
            !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1))) 
         {
-            CALLBACK.call("ERROR - Missing required payment information!", VRAY.myVId);
+            CALLBACK.call(REASON.AuthorizationStatus, "ERROR - Missing required payment request information!", null);
             return;
         }
-		
-        // Modify any payment setup at run time.
+        
+        //
+        // Modify any payment setup at run time parameters.
+        //
         TRANSACTION.init();
         TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
         TRANSACTION.loginStatus = VRAY.getLoginStatus();
         
+        //
+        // Create payment 
+        //
         var amount = VRAY.totalAmount;
         var purchaseItems = VRAY.purchaseItem;
         var purchaseOrder = PAYMENT.create(amount, purchaseItems);
@@ -569,10 +589,12 @@ var VRAY =
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
-            success     : function(hmac) {
+            success     : function(hmac) 
+            {
                 PAYMENT.authorizationRequest(hmac);
             },
-            error: function(){
+            error: function()
+            {
                 UTILS.errorDetected("Couldn't calculate HMAC!");  
                 PAYMENT.completed();   
             }
@@ -586,7 +608,6 @@ var VRAY =
             {
                 if (data) {
                     console.log("Payment failed w/ error:" + data);
-                   
                 }
                 else {
                     console.log("Payment done successfully.");
