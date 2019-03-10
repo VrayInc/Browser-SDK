@@ -47,18 +47,25 @@
        0: AuthorizationStatus
        1: ConfirmationCode
        2: Error
-     + data: 
+     + data (String): 
        reason = 0, this parameter contains the status of payment authorization:
-          1: Approved
-          2: Declined
+          null - Approved
+          non-null - Declined reason statement
+          
        reason = 1, this parameter contains the string of:
           6-digit confirmation code
-       reason = 2: this parameter contains the error status:
-          0: Cancel
-          1: InvalidPhoneNumber
-          2: PhoneNumberVerificationFailure
-          3: Timeout
+          
+       reason = 2: this parameter contains the following error statement:
+          "Cancel"
+          "InvalidPhoneNumber"
+          "PhoneNumberVerificationFailure"
+          "Timeout"
      + tid - the transaction ID.
+   * paymentResponseURL - redirect URL location with callback parameters 
+                          (paymentResponseURL?reason=<xxx>&data=<yyy>&tid=<zzz>)
+     + reason
+     + data
+     + tid
     
  ### Constrains ###
  * Valid merchantId, name, emailAddress, phoneNumber and totalAmount (greater than 0) are needed for pay() to work.
@@ -82,34 +89,36 @@ VRAY.setupPayment( // Step 2
     "151.00"
 );
 
-VRAY.pay(myCallback); // Step 3
+// Step 3
+VRAY.pay(resultCallback, "https://magentostore.vraymerchant.com/test.html"); 
 
 //Define your callback
-function myCallback(reason, data, tid) 
- {
-   if(reason === REASON.AuthorizationStatus) 
-   {
-       if (data) {
-           console.log("Payment failed w/ error:" + data);
-           window.alert("Transaction ID " + tid + " failed.  Error: " + error);
-       }
-       else {
-           console.log("Payment done successfully.");
-           window.alert("Transaction ID " + tid + " completed successful.");
-       }
-   }
-   else if (reason === REASON.ConfirmationCode) 
-   {
+function resultCallback(reason, data, tid) 
+{
+    if(reason === REASON.AuthorizationStatus) 
+    {
+        if (data) {
+            console.log("Payment failed w/ error:" + data.toString());
+            window.alert("Transaction ID " + tid + " failed with error: " + data.toString());
+        }
+        else {
+            console.log("Payment done successfully.");
+            window.alert("Transaction ID " + tid + " completed successful.");
+        }
+    }
+    else if (reason === REASON.ConfirmationCode) 
+    {
+            window.alert("Thank You!  \n" + 
+                     "You will receive a text message to authorize payment on your mobile phone.\n" + 
+                     "Please confirm the security code on the phone matches this one: " + 
+                     data.toString() + "\n");
+    }
+    else if(reason === REASON.Error) {
 
-           window.alert("Thank You!  \n" + 
-                    "You will receive a text message to authorize payment on your mobile phone.\n" + 
-                    "Please confirm the security code on the phone matches this one: " + 
-                    data + "\n");
-
-           SIGNUP.securityCodeDisplayResponse();
-   }
-   else if(reason === REASON.Error) {
-
-       window.alert("Transaction ID " + tid + " received error call back = " + error);
-   }
- }
+        window.alert("Transaction ID " + tid + " received error.");
+    }
+    else
+    {
+         window.alert("Transaction ID " + tid + " received error with uknown reason.");
+    }
+}
