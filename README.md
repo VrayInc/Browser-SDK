@@ -49,8 +49,8 @@
        2: Error
      + data (String): 
        reason = 0, this parameter contains the status of payment authorization:
-          null - Approved
-          non-null - Declined reason statement
+          Null - Approved
+          Non-Null - Declined reason statement (text string)
           
        reason = 1, this parameter contains the string of:
           6-digit confirmation code
