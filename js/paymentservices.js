@@ -556,6 +556,20 @@ var PAYMENT =
         // Start T1 Timer
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
 
+        if(TRANSACTION.deviceType === 1)
+        {
+            // Set charge info with clear the CC token
+            UTILS.setChargeInfoStored(TRANSACTION.id, 
+                                    CARDHOLDER.id, 
+                                    MERCHANT.id,
+                                    "", // empty token 
+                                    TRANSACTION.amount, 
+                                    CALLBACK.paymentResponseURL); 
+        }
+        
+        // Store the paymentResponseURL
+        UTILS.setPaymentResponseURL(CALLBACK.paymentResponseURL);
+        
         $.ajax(
         {
             type: "POST",
@@ -671,18 +685,15 @@ var PAYMENT =
         }
         else if (paymentResponse.status === STATUS.code.Cancel) 
         {
-            window.alert("User cancelled the payment.");
+            UTILS.errorDetected("Cancel");
+            return;
         }
         else 
         {
-            UTILS.errorDetected("Payment authorization request failed with status = " + 
-                            paymentResponse.status.toString() + " - " +
-                            UTILS.statusText(paymentResponse.status));
+            UTILS.errorDetected("Payment authorization request failed.");
+            return;
         }
        
-        //FIXME - Debug
-        window.alert("Received payment confirmation/response.");
-        
         // Charging payment via token
         doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
         
@@ -692,17 +703,14 @@ var PAYMENT =
     
     chargeInfoRecovery: function(tid, token) 
     {
-        //FIXME - Debug
-        window.alert("chargeInfoRecovery() got called.");
-        
-         // Retrieve charge info from local storage
+        // Retrieve charge info from local storage
         var chargeInfo = UTILS.getChargeInfoStored();
         if(chargeInfo)
         {
             if((chargeInfo.tid === tid) && (chargeInfo.token === "")) 
             {
                  // Charging payment via token
-                 window.alert("Do chargeInfoRecovery(): \n" + 
+                 console.log("Do chargeInfoRecovery(): \n" + 
                                 "tid = " + tid + "\n" +
                                 "vid = " + chargeInfo.vid + "\n" +
                                 "mid = " + chargeInfo.mid + "\n" + 
@@ -721,8 +729,7 @@ var PAYMENT =
         } 
         else 
         {
-            //FIXME - Debug
-            window.alert("chargeInfoRecovery() failed.");
+            console.log("chargeInfoRecovery() not available.");
         }
         
         return;
@@ -931,7 +938,7 @@ var PAYMENT =
     },
 
     createAndSubmitToken: function(token, code, status)
-    {
+    {   
         if(token === null) 
         {
             UTILS.errorDetected("ERROR - Invalid Payment Token.\n");
@@ -961,14 +968,16 @@ var PAYMENT =
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
-            success     : function(hmac) {
+            success     : function(hmac) 
+            {
                 paymentInfo.messageAuthenticationCode = UTILS.ab2hexText(hmac);
                 paymentInfoText = JSON.stringify(paymentInfo).toString();
                 
-                if(UTILS.debug.enabled()) {
+                if(UTILS.debug.enabled()) 
+                {
                     console.log("Submit token: = " + paymentInfoText + "\n");
                 }
-
+                
                 $.ajax({
                     type        : "POST",
                     url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserTokenIndication",
@@ -979,16 +988,12 @@ var PAYMENT =
                     async       : true,
                     xhrFields   : { withCredentials: true },
                     success     : function() 
-                    {
-                        //FIXME - Debug
-                        window.alert("BrowserTokenIndication() returns success");
-                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 1000);
+                    {           
+                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 2000);
                     },
                     error: function()
-                    {
-                        //FIXME - Debug
-                        window.alert("BrowserTokenIndication() returns error");
-                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 1000);
+                    {          
+                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 2000);
                     }
                 });
             },
@@ -1082,7 +1087,7 @@ var PAYMENT =
             return;
         }
         
-        // Clear the CC token
+        // Set charge info with clear the CC token
         UTILS.setChargeInfoStored(TRANSACTION.id, 
                                   CARDHOLDER.id, 
                                   MERCHANT.id,
@@ -1210,13 +1215,10 @@ var PAYMENT =
                     xhrFields   : { withCredentials: true },
                     success     : function() 
                     {	
-                        //FIXME - Debug
-                        window.alert("requestContinue() returns success.");
                         launchPayment();
                     },
                     error: function()
                     {
-                        window.alert("requestContinue() returns error.");
                         launchPayment();
                     }
                 });
@@ -1374,7 +1376,7 @@ var PAYMENT =
                     PAYMENT.provision(paymentInfoRespond);
 
                     var token = document.getElementById('newtoken').innerHTML;
-                    PAYMENT.createAndSubmitToken(token, 1, Status.code.Cancel);
+                    PAYMENT.createAndSubmitToken(token, 2, STATUS.code.Cancel);
                 }
                 else
                 {
@@ -1443,7 +1445,7 @@ var PAYMENT =
                     PAYMENT.provision(paymentInfoRespond);
 
                     var token = document.getElementById('newtoken').innerHTML;
-                    PAYMENT.createAndSubmitToken(token, 1, STATUS.code.TokenFailure);
+                    PAYMENT.createAndSubmitToken(token, 3, STATUS.code.TokenFailure);
                 }
                 else
                 {
@@ -2620,10 +2622,18 @@ var UTILS =
     
     getChargeInfoStored: function() 
     {
-         // Retrieve charge info from local storage
+        // Retrieve charge info from local storage
         var chargeInfoStored = localStorage.getItem("chargeInfo");
         var chargeInfo = JSON.parse(chargeInfoStored);
         return chargeInfo;
+    },
+    
+    getPaymentResponseURL: function()
+    {
+        // Retrieve payment response URL from local storage
+        var paymentResponseURLStored = localStorage.getItem("paymentResponseURL");
+        var url = JSON.parse(paymentResponseURLStored);
+        return url;
     },
     
     setChargeInfoStored: function(tid, vid, mid, token, amount, paymentURL) 
@@ -2642,6 +2652,22 @@ var UTILS =
         localStorage.setItem("chargeInfo", chargeParametersText);
     },
     
+    setPaymentResponseURL: function(paymentURL) 
+    {
+        var paymentResponseURL = 
+        {
+            "paymentResponseURL" : paymentURL
+        };
+        
+        var paymentResponseURLText = JSON.stringify(paymentResponseURL).toString();
+        localStorage.setItem("paymentResponseURL", paymentResponseURLText);
+    },
+    
+    removePaymentRepsonseURL: function()
+    {
+        localStorage.removeItem("paymentResponseURL");
+    },
+    
     removeChargeInfoStored: function()
     {
         localStorage.removeItem("chargeInfo");
@@ -2655,12 +2681,10 @@ var UTILS =
     
     errorDetected: function(error) 
     {
-        if(UTILS.debug.enabled()) {
-            CALLBACK.call(REASON.Error, error, TRANSACTION.id);
-        }
-        else {
-            CALLBACK.call(REASON.Error, "Payment failed.", TRANSACTION.id);
-        }
+        console.log("ERROR - TID: " + TRANSACTION.id);
+        console.log("ERROR - " + error);
+        
+        CALLBACK.call(REASON.Error, error, TRANSACTION.id);
     },
     
     isMobile: function() 
@@ -2787,11 +2811,11 @@ var CALLBACK =
     paymentResponseURL : null, 
     
     call: function(reason, data, tid) 
-    {      
+    {     
         console.log("INFO - Pay request callback() got called.");
-        console.log("reason = " + reason);
-        console.log("data = " + data);
-        console.log("tid =  " + tid);
+        console.log("   reason = " + reason);
+        console.log("   data = " + data);
+        console.log("   tid =  " + tid);
         
         if(CALLBACK.callback) 
         {
@@ -2815,30 +2839,27 @@ var CALLBACK =
         }
         else
         {
-            console.log("ERROR - Payment response redirect URL is not available.\n"  +
-                              "Attempting to retrieve URL from local storage." );
-            
-            var chargeInfo = UTILS.getChargeInfoStored();
-            
-            if(chargeInfo) 
+            console.log("INFO - Retrieving payment response URL from local storage.");
+
+            // Retrieve payment response URL from local storage
+            var paymentURL = UTILS.getPaymentResponseURL();
+            if(paymentURL)
             {
-                console.log("INFO - Retrieved payment response redirected URL " + CALLBACK.paymentResponseURL);
-                
-                    var paymentResponseURL = chargeInfo.paymentResponseURL;
-                    if(paymentResponseURL)    
-                    {
-                        window.location.href = paymentResponseURL + 
-                                                "?reason=" + reason +
-                                                "&data=" + data + 
-                                                "&tid=" + tid;
-                    }
+                console.log("INFO - Retrieved payment response redirected URL " + paymentURL);
+
+                window.location.href = paymentURL.paymentResponseURL + 
+                                        "?reason=" + reason +
+                                        "&data=" + data + 
+                                        "&tid=" + tid;
             }
             else
             {
-                 console.log("ERROR - Unable to retrieve URL from local strorage.");
+                console.log("ERROR - Payment Response URL local storage is not available.");
             }
         }
         
+        // remove all local storage elements
         UTILS.removeChargeInfoStored();
+        UTILS.removePaymentRepsonseURL();
     }
 };

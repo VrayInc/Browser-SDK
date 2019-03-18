@@ -16,6 +16,8 @@ function doChargePayment(tid, vid, merchant, token, amount)
         chargeToken = token;
         chargeAmount = amount;
         
+        console.log("INFO - doChargePayment() with valid token: " + token);
+    
         //POST to ChargePaymentServlet.java
         var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" + 
                 "&tid=" + tid +  
@@ -39,16 +41,20 @@ function doChargePayment(tid, vid, merchant, token, amount)
     }
     else 
     {
-        UIUtils.hideSpinner();
+        console.log("doChargePayment() with valid token: " + token);
          
-        if(token == "fake-token") 
+        if(token === "fake-token") 
         {
-            CALLBACK.call(REASON.AuthorizationStatus, "User cancelled payment request.", tid);
+            CALLBACK.call(REASON.Error, "Cancel", tid);
         }
         else 
         {
-            CALLBACK.call(REASON.AuthorizationStatus, "Payment failed", tid);
+            CALLBACK.call(REASON.Error, "Payment failed", tid);
         }
+        
+        UIUtils.hideSpinner();
+        
+        PAYMENT.completed();
     }
 }
 
@@ -94,12 +100,14 @@ function sendChargePayment(tid, token, amount, merchant, charge) {
         chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.send(charge);
     } 
-    else {
-        if(UTILS.debug.enabled()) {
-            CALLBACK.call(REASON.AuthorizationStatus, "Invalid token = " + token.toString(), tid);
+    else 
+    {
+        if(UTILS.debug.enabled()) 
+        {
+            CALLBACK.call(REASON.Error, "Cancel", tid);
         }
         else {
-            CALLBACK.call(REASON.AuthorizationStatus, "Payment failed", tid);
+            CALLBACK.call(REASON.Error, "Unknown", tid);
         }
     }
 	
