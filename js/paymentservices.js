@@ -731,7 +731,9 @@ var PAYMENT =
         } 
         else 
         {
-            console.log("chargeInfoRecovery() not available.");
+            console.log("chargeInfoRecovery() not available v216.");
+	    PAYMENT.completed();
+            return;
         }
         
         return;
