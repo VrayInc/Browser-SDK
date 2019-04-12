@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //  Application Servers Instances (Assigned Statically or Dyanmically)
 //
+console.log("APP INIT");
 var APPSERVER = 
 {
     merchantHost:
@@ -239,7 +240,7 @@ var CARDHOLDER =
         TRANSACTION.startTime = today.getTime();
         TRANSACTION.id = Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11; // postive # 0 - 7FFF,FFFF,FFFF,FFFF
 
-	var prePayment = {
+    var prePayment = {
             "msgId"              : MESSAGE.id.PrePaymentRequest,
             "tid"                : TRANSACTION.id,
             "vid"                : vid,
@@ -370,7 +371,7 @@ var CARDHOLDER =
         CARDHOLDER.securityAnswer = securityAnswer;
 
         // Payment Authorization Request
-	var configureSecurityQReq = {
+    var configureSecurityQReq = {
             "msgId"              : MESSAGE.id.BrowserConfigureSecurityQReq,
             "vid"                : CARDHOLDER.id,
             "merchantIdentifier" : MERCHANT.id,
@@ -555,7 +556,7 @@ var PAYMENT =
 
         // Start T1 Timer
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
-
+        console.log('deviceType',TRANSACTION.deviceType);
         if(TRANSACTION.deviceType === 1)
         {
             // Set charge info with clear the CC token
@@ -569,6 +570,7 @@ var PAYMENT =
         
         // Store the paymentResponseURL
         UTILS.setPaymentResponseURL(CALLBACK.paymentResponseURL);
+        console.log("TEST");
         
         $.ajax(
         {
@@ -703,34 +705,9 @@ var PAYMENT =
     
     chargeInfoRecovery: function(tid, token) 
     {
-        // Retrieve charge info from local storage
-        var chargeInfo = UTILS.getChargeInfoStored();
-        if(chargeInfo)
-        {
-            if((chargeInfo.tid === tid) && (chargeInfo.token === "")) 
-            {
-                 // Charging payment via token
-                 console.log("Do chargeInfoRecovery(): \n" + 
-                                "tid = " + tid + "\n" +
-                                "vid = " + chargeInfo.vid + "\n" +
-                                "mid = " + chargeInfo.mid + "\n" + 
-                                "token = " + token + "\n" + 
-                                "amount = " + chargeInfo.amount + "\n");
-                 
-                 MERCHANT.id = chargeInfo.mid;
-                 CARDHOLDER.id = chargeInfo.vid;
-                 TRANSACTION.amount = chargeInfo.amount;
-                 
-                 doChargePayment(tid,  chargeInfo.vid, chargeInfo.mid, token, chargeInfo.amount);         
-                 
-                 PAYMENT.completed();
-                 return;
-            }
-        } 
-        else 
-        {
-            console.log("chargeInfoRecovery() not available.");
-        }
+        doChargePayment(tid,  CARDHOLDER.vid, MERCHANT.id, token, TRANSACTION.amount);         
+
+        PAYMENT.completed();
         
         return;
     },
@@ -970,6 +947,7 @@ var PAYMENT =
             dataType    : "text",
             success     : function(hmac) 
             {
+                console.log("create-submit-token-success",hmac);
                 paymentInfo.messageAuthenticationCode = UTILS.ab2hexText(hmac);
                 paymentInfoText = JSON.stringify(paymentInfo).toString();
                 
@@ -1171,6 +1149,7 @@ var PAYMENT =
             },
             error: function(result)
             {
+                console.log('reauthorizationRequest-error',result);
                 PAYMENT.completed();
                 UTILS.errorDetected("ERROR:  Bad Re-Authorization result: \n" + result.status.toLocaleString());
             }
@@ -1536,7 +1515,7 @@ var PAYMENT =
                         if (messageId === MESSAGE.id.PaymentResponse) {
 
                             PAYMENT.authorizationResponse(securityAnswerRsp);
-                        } // success()	
+                        } // success()  
                         else if (messageId === MESSAGE.id.CodeCommand){
 
                             PAYMENT.codeCheckChallenge(securityAnswerRsp);
@@ -2265,7 +2244,7 @@ var SIGNUP =
                             SIGNUP.phoneVerificationRequest();
                             return;
                         }
-                        else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
+                        else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {cons
 
                             if(SIGNUP.phoneVerificationCounter < 2) {
 
@@ -2532,7 +2511,7 @@ var STATUS =
     code:
     {
         //
-	SUCCESS 		: 0,
+    SUCCESS         : 0,
         //
         VIDFailure              : 1,
         CodeFailure             : 2,
