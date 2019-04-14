@@ -30,7 +30,7 @@
   * Buyer's emailAddress (string)
   * Buyer's phoneNumber (string)
   * Buyer's purchaseItem (string)
-  * Buyer's shippingAddress (array of 4 elements)
+  * Buyer's shippingAddress (array of 5 elements)
     * Buyer's streetAddress (string)
     * Buyer's city (string)
     * Buyer's state (string)
