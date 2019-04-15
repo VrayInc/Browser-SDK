@@ -30,12 +30,11 @@
   * Buyer's emailAddress (string)
   * Buyer's phoneNumber (string)
   * Buyer's purchaseItem (string)
-  * Buyer's shippingAddress (array of 5 elements)
+  * Buyer's shippingAddress (array of 4 elements)
     * Buyer's streetAddress (string)
     * Buyer's city (string)
     * Buyer's state (string)
     * Buyer's zipCode (string)
-    * Buyer's country (string)
   * Buyer's loginStatus - whether the buyer is logged in on your website (number - 0 is logged in and 1 is otherwise)  
   * Buyer's totalAmount (string)
   
@@ -83,9 +82,8 @@ VRAY.setupPayment( // Step 2
     ["9500 Gilman Drive",
     "La Jolla",
     "CA",
-    "92091",
-    "US"],
-    1
+    "92091"],
+    1,
     "151.00"
 );
 
