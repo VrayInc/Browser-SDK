@@ -28,7 +28,14 @@ function doChargePayment(tid, vid, merchant, token, amount)
                   
         chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, true);
-        chargeRequest.onreadystatechange = chargeResult;
+        //chargeRequest.onreadystatechange = chargeResult;
+        chargeRequest.onreadystatechange = function(){
+            console.log('chargeRequest',chargeRequest); 
+            if (this.readyState === 4 && this.status === 200) {
+               chargeResult(this,REASON.AuthorizationStatus, null, tid);
+            }
+            //chargeResult(REASON.AuthorizationStatus, null, tid)
+        };
         chargeRequest.send(null);
         
         if(UTILS.debug.enabled()) {
@@ -37,7 +44,7 @@ function doChargePayment(tid, vid, merchant, token, amount)
         
         UIUtils.hideSpinner();
         
-        CALLBACK.call(REASON.AuthorizationStatus, null, tid);
+        //CALLBACK.call(REASON.AuthorizationStatus, null, tid);
     }
     else 
     {
@@ -128,8 +135,26 @@ function getHTTPRequest() {
     }
 }
 
-function chargeResult() {
+function chargeResult(req,reason,data,tid) {
     //window.alert("Payment transaction completed!");
 	console.log("Payment charge completed!");
+        console.log('responseURL', CALLBACK.paymentResponseURL);
+        console.log('reason',REASON.AuthorizationStatus);
+        console.log('data',data);
+        console.log('tid',tid);
+        if(CALLBACK.paymentResponseURL){
+            console.log('paymentResponseURL Found');
+            window.location.href = CALLBACK.paymentResponseURL + 
+                                    "?reason=" + reason +
+                                    "&data=" + data + 
+                                    "&tid=" + tid;    
+        } else {
+            console.log('paymentResponseURL not Found');
+            window.location.href = "https://apps.dynamicdreamz.com/magento/vray/checkout/payment" + 
+                                    "?reason=" + REASON.AuthorizationStatus +
+                                    "&data=" + "null" + 
+                                    "&tid=" + tid;
+        }
+        
 }
 
