@@ -34,19 +34,20 @@ function doChargePayment(tid, vid, merchant, token, amount)
             console.log('readyState',this.readyState);
             console.log('REASON',REASON);
             console.log('responseURL',CALLBACK.paymentResponseURL);
-
-            if(CALLBACK.paymentResponseURL){
-                console.log('paymentResponseURL Found');
-                window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + REASON.AuthorizationStatus +
-                                    "&data=" + data ? data : null + 
-                                    "&tid=" + tid;    
-            } else {
-                console.log('paymentResponseURL not Found');
-                window.location.href = "https://apps.dynamicdreamz.com/magento/vray/checkout/payment" + 
-                                    "?reason=" + REASON.AuthorizationStatus +
-                                    "&data=" + data ? data : null + 
-                                    "&tid=" + tid;
+            if(this.readyState == 4){
+                if(CALLBACK.paymentResponseURL){
+                    console.log('paymentResponseURL Found');
+                    window.location.href = CALLBACK.paymentResponseURL + 
+                                        "?reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid;    
+                } else {
+                    console.log('paymentResponseURL not Found');
+                    window.location.href = "https://apps.dynamicdreamz.com/magento/vray/checkout/payment" + 
+                                        "?reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid;
+                }
             }
             //chargeResult(REASON.AuthorizationStatus, null, tid)
         };
