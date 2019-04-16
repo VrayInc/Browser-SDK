@@ -5,12 +5,11 @@
  */
 var IE;
 
-function doChargePayment(tid, vid, merchant, token, amount, paymentResponseURL) 
+function doChargePayment(tid, vid, merchant, token, amount) 
 {
     var chargeToken;
     var chargeAmount;
     var chargeRequest;
-    console.log('paymentResponseURL',paymentResponseURL);
     
     if((token !== undefined) && (token !== null) && (token !== "fake-token"))
     {
@@ -18,7 +17,6 @@ function doChargePayment(tid, vid, merchant, token, amount, paymentResponseURL)
         chargeAmount = amount;
         
         console.log("INFO - doChargePayment() with valid token: " + token);
-        console.log("Payment",PAYMENT);
     
         //POST to ChargePaymentServlet.java
         var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" + 

@@ -523,12 +523,8 @@ var PAYMENT =
 {
     signupCalled: false,
 
-    authorizationRequest: function(hmac, paymentResponseURL)
+    authorizationRequest: function(hmac)
     {
-        console.log('callback',CALLBACK.paymentResponseURL);
-        console.log('paymentResponseURL',paymentResponseURL);
-
-        //PAYMENT.customPaymentResponseURL = paymentResponseURL;
         UIUtils.showSpinner();
 
         // Payment Authorization Request
@@ -547,7 +543,8 @@ var PAYMENT =
             "merchantIdentifier": MERCHANT.id,
             "merchantName"      : MERCHANT.name,
             "lineItems"         : TRANSACTION.lineItems,
-            "messageAuthenticationCode": UTILS.ab2hexText(hmac)            
+            "messageAuthenticationCode": UTILS.ab2hexText(hmac),
+            "paymentResponseURL": CALLBACK.paymentResponseURL,
         };
        
         var  paymentReqParamText =  JSON.stringify(paymentReqParam).toString();
@@ -612,7 +609,7 @@ var PAYMENT =
                 switch (messageId)
                 {
                     case MESSAGE.id.PaymentResponse:
-                        PAYMENT.authorizationResponse(paymentRespond,paymentResponseURL);
+                        PAYMENT.authorizationResponse(paymentRespond);
                         break;
 
                     case MESSAGE.id.CodeCommand:
@@ -644,7 +641,7 @@ var PAYMENT =
         });
     },
 
-    authorizationResponse: function(paymentResponse, paymentResponseURL)
+    authorizationResponse: function(paymentResponse)
     {
         // Validate message
         if (!paymentResponse)
@@ -701,7 +698,7 @@ var PAYMENT =
         }
        
         // Charging payment via token
-        doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount, paymentResponseURL);
+        doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
         
         PAYMENT.completed();
         return;
@@ -709,7 +706,7 @@ var PAYMENT =
     
     chargeInfoRecovery: function(tid, token) 
     {
-        doChargePayment(tid,  CARDHOLDER.vid, MERCHANT.id, token, TRANSACTION.amount, CALLBACK.paymentResponseURL);         
+        doChargePayment(tid,  CARDHOLDER.vid, MERCHANT.id, token, TRANSACTION.amount);         
 
         PAYMENT.completed();
         
@@ -2377,7 +2374,7 @@ var SIGNUP =
                             console.log("Merchant Name = " + MERCHANT.name);
                             console.log("VID = " + CARDHOLDER.id);
                             
-                            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount, CALLBACK.paymentResponseURL);
+                            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
                         }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
