@@ -17,6 +17,7 @@ function doChargePayment(tid, vid, merchant, token, amount)
         chargeAmount = amount;
         
         console.log("INFO - doChargePayment() with valid token: " + token);
+        console.log("Payment",PAYMENT);
     
         //POST to ChargePaymentServlet.java
         var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" + 

@@ -522,9 +522,11 @@ var MESSAGE =
 var PAYMENT = 
 {
     signupCalled: false,
+    customPaymentResponseURL: ""
 
-    authorizationRequest: function(hmac)
+    authorizationRequest: function(hmac, paymentResponseURL)
     {
+        PAYMENT.customPaymentResponseURL = paymentResponseURL;
         UIUtils.showSpinner();
 
         // Payment Authorization Request

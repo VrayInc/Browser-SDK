@@ -591,7 +591,7 @@ var VRAY =
             dataType    : "text",
             success     : function(hmac) 
             {
-                PAYMENT.authorizationRequest(hmac);
+                PAYMENT.authorizationRequest(hmac, paymentResponseURL);
             },
             error: function()
             {
