@@ -522,7 +522,7 @@ var MESSAGE =
 var PAYMENT = 
 {
     signupCalled: false,
-    customPaymentResponseURL: ""
+    customPaymentResponseURL: "",
 
     authorizationRequest: function(hmac, paymentResponseURL)
     {
