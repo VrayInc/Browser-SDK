@@ -30,8 +30,8 @@ function doChargePayment(tid, vid, merchant, token, amount)
         chargeRequest.open("POST", url, true);
         //chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.onreadystatechange = function(){
-            console.log('chargeRequest',chargeRequest); 
-            console.log('readyState',this.readyState);
+            //console.log('chargeRequest',chargeRequest); 
+            //console.log('readyState',this.readyState);
             console.log('REASON',REASON);
             console.log('responseURL',CALLBACK.paymentResponseURL);
             if(this.readyState == 4){
@@ -43,10 +43,10 @@ function doChargePayment(tid, vid, merchant, token, amount)
                                         "&tid=" + tid;    
                 } else {
                     console.log('paymentResponseURL not Found');
-                    window.location.href = "https://apps.dynamicdreamz.com/magento/vray/checkout/payment" + 
-                                        "?reason=" + REASON.AuthorizationStatus +
-                                        "&data=" + null + 
-                                        "&tid=" + tid;
+                    // window.location.href = "https://apps.dynamicdreamz.com/magento/vray/checkout/payment" + 
+                    //                     "?reason=" + REASON.AuthorizationStatus +
+                    //                     "&data=" + null + 
+                    //                     "&tid=" + tid;
                 }
             }
             //chargeResult(REASON.AuthorizationStatus, null, tid)
@@ -153,10 +153,10 @@ function getHTTPRequest() {
 function chargeResult(req,reason,data,tid) {
     //window.alert("Payment transaction completed!");
 	console.log("Payment charge completed!");
-        console.log('responseURL', CALLBACK.paymentResponseURL);
-        console.log('reason',REASON.AuthorizationStatus);
-        console.log('data',data);
-        console.log('tid',tid);
+ //        console.log('responseURL', CALLBACK.paymentResponseURL);
+ //        console.log('reason',REASON.AuthorizationStatus);
+ //        console.log('data',data);
+ //        console.log('tid',tid);
         
         
 }
