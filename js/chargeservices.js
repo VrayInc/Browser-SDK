@@ -5,11 +5,12 @@
  */
 var IE;
 
-function doChargePayment(tid, vid, merchant, token, amount) 
+function doChargePayment(tid, vid, merchant, token, amount, paymentResponseURL) 
 {
     var chargeToken;
     var chargeAmount;
     var chargeRequest;
+    console.log('paymentResponseURL',paymentResponseURL);
     
     if((token !== undefined) && (token !== null) && (token !== "fake-token"))
     {
