@@ -33,11 +33,11 @@ function doChargePayment(tid, vid, merchant, token, amount)
             //console.log('chargeRequest',chargeRequest); 
             //console.log('readyState',this.readyState);
             console.log('REASON',REASON);
-            console.log('responseURL',CALLBACK.paymentResponseURL);
+            console.log('responseURL',TRANSACTION.paymentResponseURL);
             if(this.readyState == 4){
-                if(CALLBACK.paymentResponseURL){
+                if(TRANSACTION.paymentResponseURL){
                     console.log('paymentResponseURL Found');
-                    window.location.href = CALLBACK.paymentResponseURL + 
+                    window.location.href = TRANSACTION.paymentResponseURL + 
                                         "?reason=" + REASON.AuthorizationStatus +
                                         "&data=" + null + 
                                         "&tid=" + tid;    

@@ -523,7 +523,7 @@ var PAYMENT =
 {
     signupCalled: false,
 
-    authorizationRequest: function(hmac)
+    authorizationRequest: function(hmac, paymentResponseURL)
     {
         UIUtils.showSpinner();
 
@@ -543,8 +543,8 @@ var PAYMENT =
             "merchantIdentifier": MERCHANT.id,
             "merchantName"      : MERCHANT.name,
             "lineItems"         : TRANSACTION.lineItems,
+            "paymentResponseURL": paymentResponseURL,
             "messageAuthenticationCode": UTILS.ab2hexText(hmac),
-            "paymentResponseURL": CALLBACK.paymentResponseURL,
         };
        
         var  paymentReqParamText =  JSON.stringify(paymentReqParam).toString();
@@ -1096,6 +1096,7 @@ var PAYMENT =
         TRANSACTION.tokenType = paymentInfo.paymentMethodTokenizationType;
         TRANSACTION.publicKey = paymentInfo.publicKey;
         TRANSACTION.deviceType = paymentInfo.deviceType;
+        TRANSACTION.paymentResponseURL = paymentInfo.paymentResponseURL;
     },
 
     reauthorizationRequest: function()
@@ -2589,6 +2590,7 @@ var TRANSACTION =
             TRANSACTION.paymentRequest = null;
             TRANSACTION.currencyCode = "usd";
             TRANSACTION.countryCode = "US";
+            TRANSACTION.paymentResponseURL = null;
         }
 };
 
