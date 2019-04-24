@@ -544,7 +544,7 @@ var PAYMENT =
             "merchantName"      : MERCHANT.name,
             "lineItems"         : TRANSACTION.lineItems,
             "paymentResponseURL": paymentResponseURL,
-            "messageAuthenticationCode": UTILS.ab2hexText(hmac),
+            "messageAuthenticationCode": UTILS.ab2hexText(hmac)
         };
        
         var  paymentReqParamText =  JSON.stringify(paymentReqParam).toString();
@@ -814,7 +814,7 @@ var PAYMENT =
         TRANSACTION.t1Timer = null;
     },
 
-    create: function(amount, items)
+    create: function(amount, items, paymentResponseURL)
     {
         // Sanity Check
         if ((amount === null) || (amount === undefined)) {
@@ -848,6 +848,7 @@ var PAYMENT =
             "merchantIdentifier": MERCHANT.id,
             "merchantName": MERCHANT.name,
             "lineItems": TRANSACTION.lineItems,
+            "paymentResponseURL": paymentResponseURL,
             "messageAuthenticationCode": ""
             };
         }
@@ -868,6 +869,7 @@ var PAYMENT =
             "merchantIdentifier": MERCHANT.id,
             "merchantName": MERCHANT.name,
             "lineItems": TRANSACTION.lineItems,
+            "paymentResponseURL": paymentResponseURL,
             "messageAuthenticationCode": ""
             };
         }
