@@ -1,11 +1,11 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.25/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.25/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.25/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.25/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.25/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.26/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.26/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.26/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.26/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.26/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files

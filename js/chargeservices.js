@@ -43,10 +43,14 @@ function doChargePayment(tid, vid, merchant, token, amount)
                                         "&tid=" + tid;    
                 } else {
                     console.log('paymentResponseURL not Found');
-                    window.location.href = TRANSACTION.paymentResponseURL + 
+                    if(TRANSACTION.paymentResponseURL){
+                        window.location.href = TRANSACTION.paymentResponseURL + 
                                         "?reason=" + REASON.AuthorizationStatus +
                                         "&data=" + null + 
                                         "&tid=" + tid;
+                    } else {
+                        CALLBACK.call(REASON.AuthorizationStatus, null, tid);
+                    }
                 }
             }
             //chargeResult(REASON.AuthorizationStatus, null, tid)
