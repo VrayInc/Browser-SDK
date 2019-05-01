@@ -2801,44 +2801,32 @@ var CALLBACK =
         console.log("   data = " + data);
         console.log("   tid =  " + tid);
         
-        if(CALLBACK.callback) 
-        {
+        if(CALLBACK.callback) {
             console.log("INFO - CALLBACK.callback(reason, data, tid)");
                 
             CALLBACK.callback(reason, data, tid);
-        }
-        else
-        {
+        } else {
             console.log("ERROR - Pay request callback() is not available.");
-        }
-        
-        if(CALLBACK.paymentResponseURL)
-        {
-            console.log("INFO - Payment response redirected URL " + CALLBACK.paymentResponseURL);
-            
-            window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + reason +
-                                    "&data=" + data + 
-                                    "&tid=" + tid;
-        }
-        else
-        {
-            console.log("INFO - Retrieving payment response URL from local storage.");
+            if(CALLBACK.paymentResponseURL){
+                console.log("INFO - Payment response redirected URL " + CALLBACK.paymentResponseURL);
+                window.location.href = CALLBACK.paymentResponseURL + 
+                "?reason=" + reason +
+                "&data=" + data + 
+                "&tid=" + tid;
+            } else {
+                console.log("INFO - Retrieving payment response URL from local storage.");
+                // Retrieve payment response URL from local storage
+                var paymentURL = UTILS.getPaymentResponseURL();
+                if(paymentURL){
+                    console.log("INFO - Retrieved payment response redirected URL " + paymentURL);
 
-            // Retrieve payment response URL from local storage
-            var paymentURL = UTILS.getPaymentResponseURL();
-            if(paymentURL)
-            {
-                console.log("INFO - Retrieved payment response redirected URL " + paymentURL);
-
-                window.location.href = paymentURL.paymentResponseURL + 
-                                        "?reason=" + reason +
-                                        "&data=" + data + 
-                                        "&tid=" + tid;
-            }
-            else
-            {
-                console.log("ERROR - Payment Response URL local storage is not available.");
+                    window.location.href = paymentURL.paymentResponseURL + 
+                    "?reason=" + reason +
+                    "&data=" + data + 
+                    "&tid=" + tid;
+                } else {
+                    console.log("ERROR - Payment Response URL local storage is not available.");
+                }
             }
         }
         
