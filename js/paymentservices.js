@@ -926,17 +926,34 @@ var PAYMENT =
             return;
         }
 
-        var paymentInfo = 
+        
+        if (status == 0)
         {
-            "msgId"  : MESSAGE.id.BrowserTokenIndication,
-            "tid"   : TRANSACTION.id,
-            "merchantIdentifier" : MERCHANT.id,
-            "merchantName"       : MERCHANT.name,
-            "token"  : token,
-            "status"   : status,
-            "authorizationCode"  : code,
-            "messageAuthenticationCode" : ""
-        };
+            var paymentInfo =
+            {
+                "msgId" : MESSAGE.id.BrowserTokenIndication,
+                "tid" : TRANSACTION.id,
+                "merchantIdentifier" : MERCHANT.id,
+                "merchantName" : MERCHANT.name,
+                "token" : token,
+                "status" : status,
+                "authorizationCode" : code,
+                "messageAuthenticationCode" . : ""
+            };
+        }
+        else
+        {
+            var paymentInfo =
+            {
+                "msgId" : MESSAGE.id.BrowserTokenIndication,
+                "tid" : TRANSACTION.id,
+                "merchantIdentifier" : MERCHANT.id,
+                "merchantName" : MERCHANT.name,
+                "status" : status,
+                "authorizationCode" : code,
+                "messageAuthenticationCode" . : ""
+            };
+        }
 
         var paymentInfoText = JSON.stringify(paymentInfo).toString();
         paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
