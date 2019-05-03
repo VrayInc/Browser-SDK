@@ -730,6 +730,8 @@ var PAYMENT =
         else 
         {
             console.log("chargeInfoRecovery() not available.");
+            PAYMENT.completed();
+            return;
         }
         
         return;
@@ -989,11 +991,11 @@ var PAYMENT =
                     xhrFields   : { withCredentials: true },
                     success     : function() 
                     {           
-                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 2000);
+                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 4000);
                     },
                     error: function()
                     {          
-                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 2000);
+                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 4000);
                     }
                 });
             },
