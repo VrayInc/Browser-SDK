@@ -938,7 +938,7 @@ var PAYMENT =
                 "token" : token,
                 "status" : status,
                 "authorizationCode" : code,
-                "messageAuthenticationCode" . : ""
+                "messageAuthenticationCode": ""
             };
         }
         else
@@ -951,7 +951,7 @@ var PAYMENT =
                 "merchantName" : MERCHANT.name,
                 "status" : status,
                 "authorizationCode" : code,
-                "messageAuthenticationCode" . : ""
+                "messageAuthenticationCode" : ""
             };
         }
 
