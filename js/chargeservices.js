@@ -71,11 +71,44 @@ function doChargePayment(tid, vid, merchant, token, amount)
          
         if(token === "fake-token") 
         {
-            CALLBACK.call(REASON.Error, "Cancel", tid);
+            //CALLBACK.call(REASON.Error, "Cancel", tid);
+            if(CALLBACK.paymentResponseURL){
+                console.log('paymentResponseURL Found');
+                window.location.href = CALLBACK.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                    "&data=Cancel&tid=" + tid;    
+            } else {
+                console.log('paymentResponseURL not Found');
+                if(TRANSACTION.paymentResponseURL){
+                    window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                     "&data=Cancel&tid=" + tid;    
+                } else {
+                    CALLBACK.call(REASON.Error, "Cancel", tid);
+                }
+            }
         }
         else 
         {
-            CALLBACK.call(REASON.Error, "Payment failed", tid);
+            if(CALLBACK.paymentResponseURL){
+                console.log('paymentResponseURL Found');
+                window.location.href = CALLBACK.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;    
+            } else {
+                console.log('paymentResponseURL not Found');
+                if(TRANSACTION.paymentResponseURL){
+                    window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;
+                } else {
+                    console.log('callback function called not Found');
+                    CALLBACK.call(REASON.Error, "Payment failed", tid);
+                }
+            }
+            //CALLBACK.call(REASON.Error, "Payment failed", tid);
         }
         
         UIUtils.hideSpinner();
