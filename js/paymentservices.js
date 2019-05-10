@@ -691,6 +691,12 @@ var PAYMENT =
             UTILS.errorDetected("Cancel");
             return;
         }
+        else if (paymentResponse.status === STATUS.code.UserTimeout)
+        {
+            UTLIS.errorDetected(“Timeout”);
+            PAYMENT.completed();
+            return;
+        }
         else 
         {
             UTILS.errorDetected("Payment authorization request failed.");
