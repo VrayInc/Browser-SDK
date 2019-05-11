@@ -693,7 +693,7 @@ var PAYMENT =
         }
         else if (paymentResponse.status === STATUS.code.UserTimeout)
         {
-            UTLIS.errorDetected(“Timeout”);
+            UTLIS.errorDetected("Timeout");
             PAYMENT.completed();
             return;
         }
