@@ -37,17 +37,35 @@ function doChargePayment(tid, vid, merchant, token, amount)
             if(this.readyState == 4){
                 if(CALLBACK.paymentResponseURL){
                     console.log('paymentResponseURL Found');
-                    window.location.href = CALLBACK.paymentResponseURL + 
+                    var a = CALLBACK.paymentResponseURL;
+                    if(a.indexOf("?") > -1) {
+                         window.location.href = CALLBACK.paymentResponseURL + 
+                                        "&reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid; 
+                    }else{
+                         window.location.href = CALLBACK.paymentResponseURL + 
                                         "?reason=" + REASON.AuthorizationStatus +
                                         "&data=" + null + 
-                                        "&tid=" + tid;    
+                                        "&tid=" + tid; 
+                    }
+                      
                 } else {
                     console.log('paymentResponseURL not Found');
                     if(TRANSACTION.paymentResponseURL){
-                        window.location.href = TRANSACTION.paymentResponseURL + 
+                        var a = TRANSACTION.paymentResponseURL;
+                        if(a.indexOf("?") > -1) {
+                             window.location.href = TRANSACTION.paymentResponseURL + 
+                                        "&reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid;
+                        }else{
+                           window.location.href = TRANSACTION.paymentResponseURL + 
                                         "?reason=" + REASON.AuthorizationStatus +
                                         "&data=" + null + 
                                         "&tid=" + tid;
+                        }
+                        
                     } else {
                         CALLBACK.call(REASON.AuthorizationStatus, null, tid);
                     }
@@ -74,15 +92,31 @@ function doChargePayment(tid, vid, merchant, token, amount)
             //CALLBACK.call(REASON.Error, "Cancel", tid);
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
-                window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
+                
+                var a = CALLBACK.paymentResponseURL;
+                if(a.indexOf("?") > -1) {
+                     window.location.href = CALLBACK.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
                                     "&data=Cancel&tid=" + tid;    
+                }else{
+                     window.location.href = CALLBACK.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                    "&data=Cancel&tid=" + tid;     
+                }
             } else {
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
-                    window.location.href = TRANSACTION.paymentResponseURL + 
+                   
+                    var a = TRANSACTION.paymentResponseURL;
+                    if(a.indexOf("?") > -1) {
+                         window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
+                                     "&data=Cancel&tid=" + tid;  
+                    }else{
+                        window.location.href = TRANSACTION.paymentResponseURL + 
                                     "?reason=" + REASON.Error +
-                                     "&data=Cancel&tid=" + tid;    
+                                     "&data=Cancel&tid=" + tid;  
+                    }  
                 } else {
                     CALLBACK.call(REASON.Error, "Cancel", tid);
                 }
@@ -92,17 +126,35 @@ function doChargePayment(tid, vid, merchant, token, amount)
         {
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
-                window.location.href = CALLBACK.paymentResponseURL + 
+               
+                var a = CALLBACK.paymentResponseURL;
+                if(a.indexOf("?") > -1) {
+                      window.location.href = CALLBACK.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;
+                }else{
+                     window.location.href = CALLBACK.paymentResponseURL + 
                                     "?reason=" + REASON.Error +
                                     "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;    
+                                    "&tid=" + tid;   
+                }    
             } else {
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
-                    window.location.href = TRANSACTION.paymentResponseURL + 
+                   
+                    var a = TRANSACTION.paymentResponseURL;
+                    if(a.indexOf("?") > -1) {
+                         window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;
+                    }else{
+                         window.location.href = TRANSACTION.paymentResponseURL + 
                                     "?reason=" + REASON.Error +
                                     "&data=" + "Payment failed" + 
                                     "&tid=" + tid;
+                    }  
                 } else {
                     console.log('callback function called not Found');
                     CALLBACK.call(REASON.Error, "Payment failed", tid);
