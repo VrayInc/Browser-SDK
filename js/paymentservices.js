@@ -558,20 +558,20 @@ var PAYMENT =
         // Start T1 Timer
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
         console.log('deviceType',TRANSACTION.deviceType);
-        if(TRANSACTION.deviceType === 1)
-        {
-            // Set charge info with clear the CC token
-            UTILS.setChargeInfoStored(TRANSACTION.id, 
-                                    CARDHOLDER.id, 
-                                    MERCHANT.id,
-                                    "", // empty token 
-                                    TRANSACTION.amount, 
-                                    CALLBACK.paymentResponseURL); 
-        }
+        // if(TRANSACTION.deviceType === 1)
+        // {
+        //     // Set charge info with clear the CC token
+        //     UTILS.setChargeInfoStored(TRANSACTION.id, 
+        //                             CARDHOLDER.id, 
+        //                             MERCHANT.id,
+        //                             "", // empty token 
+        //                             TRANSACTION.amount, 
+        //                             CALLBACK.paymentResponseURL); 
+        // }
         
         // Store the paymentResponseURL
-        UTILS.setPaymentResponseURL(CALLBACK.paymentResponseURL);
-        console.log("TEST");
+        // UTILS.setPaymentResponseURL(CALLBACK.paymentResponseURL);
+        // console.log("TEST");
         
         $.ajax(
         {
@@ -1092,12 +1092,12 @@ var PAYMENT =
         }
         
         // Set charge info with clear the CC token
-        UTILS.setChargeInfoStored(TRANSACTION.id, 
-                                  CARDHOLDER.id, 
-                                  MERCHANT.id,
-                                  "", // empty token 
-                                  TRANSACTION.amount, 
-                                  CALLBACK.paymentResponseURL);
+        // UTILS.setChargeInfoStored(TRANSACTION.id, 
+        //                           CARDHOLDER.id, 
+        //                           MERCHANT.id,
+        //                           "", // empty token 
+        //                           TRANSACTION.amount, 
+        //                           CALLBACK.paymentResponseURL);
        
         PAYMENT.requestContinue();
         
@@ -2058,7 +2058,7 @@ var SIGNUP =
                             };
                             
                             var securityCodeDisplayText = JSON.stringify(securityCodeDisplayParameters).toString();
-                            localStorage.setItem("securityCodeDisplay", securityCodeDisplayText);
+                            // localStorage.setItem("securityCodeDisplay", securityCodeDisplayText);
                             //window.location = "thankyou.html"; // internal file
 
                             SIGNUP.securityCodeDisplayResponse();
@@ -2836,25 +2836,26 @@ var CALLBACK =
                 "?reason=" + reason +
                 "&data=" + data + 
                 "&tid=" + tid;
-            } else {
-                console.log("INFO - Retrieving payment response URL from local storage.");
-                // Retrieve payment response URL from local storage
-                var paymentURL = UTILS.getPaymentResponseURL();
-                if(paymentURL){
-                    console.log("INFO - Retrieved payment response redirected URL " + paymentURL);
+            } 
+            // else {
+            //     console.log("INFO - Retrieving payment response URL from local storage.");
+            //     // Retrieve payment response URL from local storage
+            //     var paymentURL = UTILS.getPaymentResponseURL();
+            //     if(paymentURL){
+            //         console.log("INFO - Retrieved payment response redirected URL " + paymentURL);
 
-                    window.location.href = paymentURL.paymentResponseURL + 
-                    "?reason=" + reason +
-                    "&data=" + data + 
-                    "&tid=" + tid;
-                } else {
-                    console.log("ERROR - Payment Response URL local storage is not available.");
-                }
-            }
+            //         window.location.href = paymentURL.paymentResponseURL + 
+            //         "?reason=" + reason +
+            //         "&data=" + data + 
+            //         "&tid=" + tid;
+            //     } else {
+            //         console.log("ERROR - Payment Response URL local storage is not available.");
+            //     }
+            // }
         }
         
         // remove all local storage elements
-        UTILS.removeChargeInfoStored();
-        UTILS.removePaymentRepsonseURL();
+        // UTILS.removeChargeInfoStored();
+        // UTILS.removePaymentRepsonseURL();
     }
 };
