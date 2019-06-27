@@ -676,6 +676,7 @@ var PAYMENT =
             // SIGNUP.phoneVerificationRequest(); 
             // UC-5.0 p.28 - 121
             SIGNUP.optimalPhoneVerificationRequest();
+            return;
         }
         else if ((paymentResponse.status === STATUS.code.InvalidPhoneNumber) ||
                  (paymentResponse.status === STATUS.code.InvalidPhoneNumber2))
