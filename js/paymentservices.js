@@ -395,7 +395,7 @@ var MERCHANT =
     name: 'VRAY',
     capability: 1,
 
-    configure: function(id, name)
+    configure: function(id, name, serverType)
     {
         MERCHANT.id = id;
         MERCHANT.name = name;
@@ -409,22 +409,38 @@ var MERCHANT =
                                                
         var hostServerURL = DEVELOPMENT_SERVER;
         
-        switch (id) 
+        // switch (id) 
+        // {
+        //     case "magentostore.vraymerchant.com" :
+        //     case "shopifystore.vraymerchant.com" :
+        //     case "test.vraymerchant.com" :
+        //         hostServerURL = DEVELOPMENT_SERVER;
+        //         break;
+        //     case "mulletsocks.vraymerchant.com" :
+        //         hostServerURL = PRODUCTION_SERVER;
+        //         break;
+        //     case "vraytest.vraymerchant.com" :
+        //         hostServerURL = STAGING_SERVER;
+        //         break; 
+        //     default:
+        //         hostServerURL = DEVELOPMENT_SERVER;
+        //         break;
+        // }
+        switch (serverType)
         {
-            case "magentostore.vraymerchant.com" :
-            case "shopifystore.vraymerchant.com" :
-            case "test.vraymerchant.com" :
-                hostServerURL = DEVELOPMENT_SERVER;
+            case vServerType.Dev:
+                 hostServerURL = DEVELOPMENT_SERVER;
+                  break;
+            case vServerType.Staging:
+                hostServerURL = STAGING_SERVER;
                 break;
-            case "mulletsocks.vraymerchant.com" :
+            case vServerType.Production:
                 hostServerURL = PRODUCTION_SERVER;
                 break;
-            case "vraytest.vraymerchant.com" :
-                hostServerURL = STAGING_SERVER;
-                break; 
             default:
-                hostServerURL = DEVELOPMENT_SERVER;
-                break;
+                 hostServerURL = DEVELOPMENT_SERVER;
+                 break;
+
         }
         
         APPSERVER.vrayHost.setDomainURL(hostServerURL);

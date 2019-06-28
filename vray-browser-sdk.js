@@ -1,11 +1,11 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.8/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.8/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.8/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.8/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.8/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.9/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.9/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.9/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.9/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.9/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -489,6 +489,7 @@ function calculateHMAC(message)
         }
     });
 }
+var vServerType = Object.freeze( {"Dev":0, "Staging":1, "Production":2} );
 
 ////////////////////////////
 // Functions for User
@@ -508,14 +509,25 @@ var VRAY =
     shippingAddress     : [null], // address: street, city, zip, country
     shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping 
     
-    init: function(merchantId, merchantName)
+    init: function(merchantId, merchantName, serverType)
     {
         // Merchant Configuration
         VRAY.merchantId = merchantId;
         VRAY.merchantName = merchantName;
-        
+         // Define App Server and Merchant Id & name
+
+        if (!serverType)
+		{
+
+		    MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, vServerType.Production);
+		}
+		else{
+
+		    MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, serverType);
+
+		}
         // Define App Server and Merchant Id & name
-        MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
+        // MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
     },
     
     setupPayment: function(cardHolderName, eMail, phoneNumber, purchaseItem, shippingAddress, loginStatus, totalAmount)
