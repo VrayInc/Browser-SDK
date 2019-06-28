@@ -516,7 +516,7 @@ var VRAY =
         VRAY.merchantName = merchantName;
          // Define App Server and Merchant Id & name
 
-        if (serverType === undefined) { 
+        if (serverType === undefined)
 		{
 
 		    MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, vServerType.Production);
