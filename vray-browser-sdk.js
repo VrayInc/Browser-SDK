@@ -1,11 +1,11 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.10/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.10/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.10/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.10/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.12/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.12/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.12/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.12/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.12/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -489,6 +489,7 @@ function calculateHMAC(message)
         }
     });
 }
+var vServerType = Object.freeze( {"Dev":0, "Staging":1, "Production":2} );
 
 ////////////////////////////
 // Functions for User
@@ -508,14 +509,25 @@ var VRAY =
     shippingAddress     : [null], // address: street, city, zip, country
     shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping 
     
-    init: function(merchantId, merchantName)
+    init: function(merchantId, merchantName, serverType)
     {
         // Merchant Configuration
         VRAY.merchantId = merchantId;
         VRAY.merchantName = merchantName;
-        
+         // Define App Server and Merchant Id & name
+
+        if (serverType === undefined)
+		{
+
+		    MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, vServerType.Production);
+		}
+		else{
+
+		    MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, serverType);
+
+		}
         // Define App Server and Merchant Id & name
-        MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
+        // MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
     },
     
     setupPayment: function(cardHolderName, eMail, phoneNumber, purchaseItem, shippingAddress, loginStatus, totalAmount)
@@ -579,7 +591,7 @@ var VRAY =
         //
         var amount = VRAY.totalAmount;
         var purchaseItems = VRAY.purchaseItem;
-        var purchaseOrder = PAYMENT.create(amount, purchaseItems);
+        var purchaseOrder = PAYMENT.create(amount, purchaseItems, paymentResponseURL);
         purchaseOrder = UTILS.prepForHMAC(purchaseOrder);
         
         $.ajax({
@@ -591,7 +603,7 @@ var VRAY =
             dataType    : "text",
             success     : function(hmac) 
             {
-                PAYMENT.authorizationRequest(hmac);
+                PAYMENT.authorizationRequest(hmac, paymentResponseURL);
             },
             error: function()
             {

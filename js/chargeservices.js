@@ -28,7 +28,51 @@ function doChargePayment(tid, vid, merchant, token, amount)
                   
         chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, true);
-        chargeRequest.onreadystatechange = chargeResult;
+        //chargeRequest.onreadystatechange = chargeResult;
+        chargeRequest.onreadystatechange = function(){
+            //console.log('chargeRequest',chargeRequest); 
+            //console.log('readyState',this.readyState);
+            console.log('REASON',REASON);
+            console.log('responseURL',TRANSACTION.paymentResponseURL);
+            if(this.readyState == 4){
+                if(CALLBACK.paymentResponseURL){
+                    console.log('paymentResponseURL Found');
+                    var a = CALLBACK.paymentResponseURL;
+                    if(a.indexOf("?") > -1) {
+                         window.location.href = CALLBACK.paymentResponseURL + 
+                                        "&reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid; 
+                    }else{
+                         window.location.href = CALLBACK.paymentResponseURL + 
+                                        "?reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid; 
+                    }
+                      
+                } else {
+                    console.log('paymentResponseURL not Found');
+                    if(TRANSACTION.paymentResponseURL){
+                        var a = TRANSACTION.paymentResponseURL;
+                        if(a.indexOf("?") > -1) {
+                             window.location.href = TRANSACTION.paymentResponseURL + 
+                                        "&reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid;
+                        }else{
+                           window.location.href = TRANSACTION.paymentResponseURL + 
+                                        "?reason=" + REASON.AuthorizationStatus +
+                                        "&data=" + null + 
+                                        "&tid=" + tid;
+                        }
+                        
+                    } else {
+                        CALLBACK.call(REASON.AuthorizationStatus, null, tid);
+                    }
+                }
+            }
+            //chargeResult(REASON.AuthorizationStatus, null, tid)
+        };
         chargeRequest.send(null);
         
         if(UTILS.debug.enabled()) {
@@ -37,7 +81,7 @@ function doChargePayment(tid, vid, merchant, token, amount)
         
         UIUtils.hideSpinner();
         
-        CALLBACK.call(REASON.AuthorizationStatus, null, tid);
+        //CALLBACK.call(REASON.AuthorizationStatus, null, tid);
     }
     else 
     {
@@ -45,11 +89,78 @@ function doChargePayment(tid, vid, merchant, token, amount)
          
         if(token === "fake-token") 
         {
-            CALLBACK.call(REASON.Error, "Cancel", tid);
+            //CALLBACK.call(REASON.Error, "Cancel", tid);
+            if(CALLBACK.paymentResponseURL){
+                console.log('paymentResponseURL Found');
+                
+                var a = CALLBACK.paymentResponseURL;
+                if(a.indexOf("?") > -1) {
+                     window.location.href = CALLBACK.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
+                                    "&data=Cancel&tid=" + tid;    
+                }else{
+                     window.location.href = CALLBACK.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                    "&data=Cancel&tid=" + tid;     
+                }
+            } else {
+                console.log('paymentResponseURL not Found');
+                if(TRANSACTION.paymentResponseURL){
+                   
+                    var a = TRANSACTION.paymentResponseURL;
+                    if(a.indexOf("?") > -1) {
+                         window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
+                                     "&data=Cancel&tid=" + tid;  
+                    }else{
+                        window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                     "&data=Cancel&tid=" + tid;  
+                    }  
+                } else {
+                    CALLBACK.call(REASON.Error, "Cancel", tid);
+                }
+            }
         }
         else 
         {
-            CALLBACK.call(REASON.Error, "Payment failed", tid);
+            if(CALLBACK.paymentResponseURL){
+                console.log('paymentResponseURL Found');
+               
+                var a = CALLBACK.paymentResponseURL;
+                if(a.indexOf("?") > -1) {
+                      window.location.href = CALLBACK.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;
+                }else{
+                     window.location.href = CALLBACK.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;   
+                }    
+            } else {
+                console.log('paymentResponseURL not Found');
+                if(TRANSACTION.paymentResponseURL){
+                   
+                    var a = TRANSACTION.paymentResponseURL;
+                    if(a.indexOf("?") > -1) {
+                         window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "&reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;
+                    }else{
+                         window.location.href = TRANSACTION.paymentResponseURL + 
+                                    "?reason=" + REASON.Error +
+                                    "&data=" + "Payment failed" + 
+                                    "&tid=" + tid;
+                    }  
+                } else {
+                    console.log('callback function called not Found');
+                    CALLBACK.call(REASON.Error, "Payment failed", tid);
+                }
+            }
+            //CALLBACK.call(REASON.Error, "Payment failed", tid);
         }
         
         UIUtils.hideSpinner();
@@ -128,8 +239,14 @@ function getHTTPRequest() {
     }
 }
 
-function chargeResult() {
+function chargeResult(req,reason,data,tid) {
     //window.alert("Payment transaction completed!");
 	console.log("Payment charge completed!");
+ //        console.log('responseURL', CALLBACK.paymentResponseURL);
+ //        console.log('reason',REASON.AuthorizationStatus);
+ //        console.log('data',data);
+ //        console.log('tid',tid);
+        
+        
 }
 
