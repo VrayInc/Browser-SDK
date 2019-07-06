@@ -395,7 +395,7 @@ var MERCHANT =
     name: 'VRAY',
     capability: 1,
 
-    configure: function(id, name)
+    configure: function(id, name, serverType)
     {
         MERCHANT.id = id;
         MERCHANT.name = name;
@@ -409,22 +409,38 @@ var MERCHANT =
                                                
         var hostServerURL = DEVELOPMENT_SERVER;
         
-        switch (id) 
+        // switch (id) 
+        // {
+        //     case "magentostore.vraymerchant.com" :
+        //     case "shopifystore.vraymerchant.com" :
+        //     case "test.vraymerchant.com" :
+        //         hostServerURL = DEVELOPMENT_SERVER;
+        //         break;
+        //     case "mulletsocks.vraymerchant.com" :
+        //         hostServerURL = PRODUCTION_SERVER;
+        //         break;
+        //     case "vraytest.vraymerchant.com" :
+        //         hostServerURL = STAGING_SERVER;
+        //         break; 
+        //     default:
+        //         hostServerURL = DEVELOPMENT_SERVER;
+        //         break;
+        // }
+        switch (serverType)
         {
-            case "magentostore.vraymerchant.com" :
-            case "shopifystore.vraymerchant.com" :
-            case "test.vraymerchant.com" :
-                hostServerURL = DEVELOPMENT_SERVER;
+            case vServerType.Dev:
+                 hostServerURL = DEVELOPMENT_SERVER;
+                  break;
+            case vServerType.Staging:
+                hostServerURL = STAGING_SERVER;
                 break;
-            case "mulletsocks.vraymerchant.com" :
+            case vServerType.Production:
                 hostServerURL = PRODUCTION_SERVER;
                 break;
-            case "vraytest.vraymerchant.com" :
-                hostServerURL = STAGING_SERVER;
-                break; 
             default:
-                hostServerURL = DEVELOPMENT_SERVER;
-                break;
+                 hostServerURL = DEVELOPMENT_SERVER;
+                 break;
+
         }
         
         APPSERVER.vrayHost.setDomainURL(hostServerURL);
@@ -523,7 +539,7 @@ var PAYMENT =
 {
     signupCalled: false,
 
-    authorizationRequest: function(hmac)
+    authorizationRequest: function(hmac, paymentResponseURL)
     {
         UIUtils.showSpinner();
 
@@ -543,7 +559,8 @@ var PAYMENT =
             "merchantIdentifier": MERCHANT.id,
             "merchantName"      : MERCHANT.name,
             "lineItems"         : TRANSACTION.lineItems,
-            "messageAuthenticationCode": UTILS.ab2hexText(hmac)            
+            "paymentResponseURL": paymentResponseURL,
+            "messageAuthenticationCode": UTILS.ab2hexText(hmac)
         };
        
         var  paymentReqParamText =  JSON.stringify(paymentReqParam).toString();
@@ -557,20 +574,20 @@ var PAYMENT =
         // Start T1 Timer
         window.setTimeout(TRANSACTION.t1Timer, TRANSACTION.t1Timeout);
         console.log('deviceType',TRANSACTION.deviceType);
-        if(TRANSACTION.deviceType === 1)
-        {
-            // Set charge info with clear the CC token
-            UTILS.setChargeInfoStored(TRANSACTION.id, 
-                                    CARDHOLDER.id, 
-                                    MERCHANT.id,
-                                    "", // empty token 
-                                    TRANSACTION.amount, 
-                                    CALLBACK.paymentResponseURL); 
-        }
+        // if(TRANSACTION.deviceType === 1)
+        // {
+        //     // Set charge info with clear the CC token
+        //     UTILS.setChargeInfoStored(TRANSACTION.id, 
+        //                             CARDHOLDER.id, 
+        //                             MERCHANT.id,
+        //                             "", // empty token 
+        //                             TRANSACTION.amount, 
+        //                             CALLBACK.paymentResponseURL); 
+        // }
         
         // Store the paymentResponseURL
-        UTILS.setPaymentResponseURL(CALLBACK.paymentResponseURL);
-        console.log("TEST");
+        // UTILS.setPaymentResponseURL(CALLBACK.paymentResponseURL);
+        // console.log("TEST");
         
         $.ajax(
         {
@@ -675,6 +692,7 @@ var PAYMENT =
             // SIGNUP.phoneVerificationRequest(); 
             // UC-5.0 p.28 - 121
             SIGNUP.optimalPhoneVerificationRequest();
+            return;
         }
         else if ((paymentResponse.status === STATUS.code.InvalidPhoneNumber) ||
                  (paymentResponse.status === STATUS.code.InvalidPhoneNumber2))
@@ -688,6 +706,12 @@ var PAYMENT =
         else if (paymentResponse.status === STATUS.code.Cancel) 
         {
             UTILS.errorDetected("Cancel");
+            return;
+        }
+        else if (paymentResponse.status === STATUS.code.UserTimeout)
+        {
+            UTILS.errorDetected("Timeout");
+            PAYMENT.completed();
             return;
         }
         else 
@@ -813,7 +837,7 @@ var PAYMENT =
         TRANSACTION.t1Timer = null;
     },
 
-    create: function(amount, items)
+    create: function(amount, items, paymentResponseURL)
     {
         // Sanity Check
         if ((amount === null) || (amount === undefined)) {
@@ -847,6 +871,7 @@ var PAYMENT =
             "merchantIdentifier": MERCHANT.id,
             "merchantName": MERCHANT.name,
             "lineItems": TRANSACTION.lineItems,
+            "paymentResponseURL": paymentResponseURL,
             "messageAuthenticationCode": ""
             };
         }
@@ -867,6 +892,7 @@ var PAYMENT =
             "merchantIdentifier": MERCHANT.id,
             "merchantName": MERCHANT.name,
             "lineItems": TRANSACTION.lineItems,
+            "paymentResponseURL": paymentResponseURL,
             "messageAuthenticationCode": ""
             };
         }
@@ -923,17 +949,34 @@ var PAYMENT =
             return;
         }
 
-        var paymentInfo = 
+        
+        if (status == 0)
         {
-            "msgId"  : MESSAGE.id.BrowserTokenIndication,
-            "tid"   : TRANSACTION.id,
-            "merchantIdentifier" : MERCHANT.id,
-            "merchantName"       : MERCHANT.name,
-            "token"  : token,
-            "status"   : status,
-            "authorizationCode"  : code,
-            "messageAuthenticationCode" : ""
-        };
+            var paymentInfo =
+            {
+                "msgId" : MESSAGE.id.BrowserTokenIndication,
+                "tid" : TRANSACTION.id,
+                "merchantIdentifier" : MERCHANT.id,
+                "merchantName" : MERCHANT.name,
+                "token" : token,
+                "status" : status,
+                "authorizationCode" : code,
+                "messageAuthenticationCode": ""
+            };
+        }
+        else
+        {
+            var paymentInfo =
+            {
+                "msgId" : MESSAGE.id.BrowserTokenIndication,
+                "tid" : TRANSACTION.id,
+                "merchantIdentifier" : MERCHANT.id,
+                "merchantName" : MERCHANT.name,
+                "status" : status,
+                "authorizationCode" : code,
+                "messageAuthenticationCode" : ""
+            };
+        }
 
         var paymentInfoText = JSON.stringify(paymentInfo).toString();
         paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
@@ -1066,12 +1109,12 @@ var PAYMENT =
         }
         
         // Set charge info with clear the CC token
-        UTILS.setChargeInfoStored(TRANSACTION.id, 
-                                  CARDHOLDER.id, 
-                                  MERCHANT.id,
-                                  "", // empty token 
-                                  TRANSACTION.amount, 
-                                  CALLBACK.paymentResponseURL);
+        // UTILS.setChargeInfoStored(TRANSACTION.id, 
+        //                           CARDHOLDER.id, 
+        //                           MERCHANT.id,
+        //                           "", // empty token 
+        //                           TRANSACTION.amount, 
+        //                           CALLBACK.paymentResponseURL);
        
         PAYMENT.requestContinue();
         
@@ -1095,6 +1138,7 @@ var PAYMENT =
         TRANSACTION.tokenType = paymentInfo.paymentMethodTokenizationType;
         TRANSACTION.publicKey = paymentInfo.publicKey;
         TRANSACTION.deviceType = paymentInfo.deviceType;
+        TRANSACTION.paymentResponseURL = paymentInfo.paymentResponseURL;
     },
 
     reauthorizationRequest: function()
@@ -2031,7 +2075,7 @@ var SIGNUP =
                             };
                             
                             var securityCodeDisplayText = JSON.stringify(securityCodeDisplayParameters).toString();
-                            localStorage.setItem("securityCodeDisplay", securityCodeDisplayText);
+                            // localStorage.setItem("securityCodeDisplay", securityCodeDisplayText);
                             //window.location = "thankyou.html"; // internal file
 
                             SIGNUP.securityCodeDisplayResponse();
@@ -2588,6 +2632,7 @@ var TRANSACTION =
             TRANSACTION.paymentRequest = null;
             TRANSACTION.currencyCode = "usd";
             TRANSACTION.countryCode = "US";
+            TRANSACTION.paymentResponseURL = null;
         }
 };
 
@@ -2796,49 +2841,38 @@ var CALLBACK =
         console.log("   data = " + data);
         console.log("   tid =  " + tid);
         
-        if(CALLBACK.callback) 
-        {
+        if(CALLBACK.callback) {
             console.log("INFO - CALLBACK.callback(reason, data, tid)");
                 
             CALLBACK.callback(reason, data, tid);
-        }
-        else
-        {
+        } else {
             console.log("ERROR - Pay request callback() is not available.");
-        }
-        
-        if(CALLBACK.paymentResponseURL)
-        {
-            console.log("INFO - Payment response redirected URL " + CALLBACK.paymentResponseURL);
-            
-            window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + reason +
-                                    "&data=" + data + 
-                                    "&tid=" + tid;
-        }
-        else
-        {
-            console.log("INFO - Retrieving payment response URL from local storage.");
+            if(CALLBACK.paymentResponseURL){
+                console.log("INFO - Payment response redirected URL " + CALLBACK.paymentResponseURL);
+                window.location.href = CALLBACK.paymentResponseURL + 
+                "?reason=" + reason +
+                "&data=" + data + 
+                "&tid=" + tid;
+            } 
+            // else {
+            //     console.log("INFO - Retrieving payment response URL from local storage.");
+            //     // Retrieve payment response URL from local storage
+            //     var paymentURL = UTILS.getPaymentResponseURL();
+            //     if(paymentURL){
+            //         console.log("INFO - Retrieved payment response redirected URL " + paymentURL);
 
-            // Retrieve payment response URL from local storage
-            var paymentURL = UTILS.getPaymentResponseURL();
-            if(paymentURL)
-            {
-                console.log("INFO - Retrieved payment response redirected URL " + paymentURL);
-
-                window.location.href = paymentURL.paymentResponseURL + 
-                                        "?reason=" + reason +
-                                        "&data=" + data + 
-                                        "&tid=" + tid;
-            }
-            else
-            {
-                console.log("ERROR - Payment Response URL local storage is not available.");
-            }
+            //         window.location.href = paymentURL.paymentResponseURL + 
+            //         "?reason=" + reason +
+            //         "&data=" + data + 
+            //         "&tid=" + tid;
+            //     } else {
+            //         console.log("ERROR - Payment Response URL local storage is not available.");
+            //     }
+            // }
         }
         
         // remove all local storage elements
-        UTILS.removeChargeInfoStored();
-        UTILS.removePaymentRepsonseURL();
+        // UTILS.removeChargeInfoStored();
+        // UTILS.removePaymentRepsonseURL();
     }
 };
