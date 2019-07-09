@@ -721,7 +721,7 @@ var PAYMENT =
         }
        
         // Charging payment via token
-        doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
+        doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, ccToken, TRANSACTION.amount);
         
         PAYMENT.completed();
         return;
@@ -729,7 +729,7 @@ var PAYMENT =
     
     chargeInfoRecovery: function(tid, token) 
     {
-        doChargePayment(tid,  CARDHOLDER.vid, MERCHANT.id, token, TRANSACTION.amount);         
+        doChargePayment(tid,  CARDHOLDER.vid, MERCHANT.id, MERCHANT.name, token, TRANSACTION.amount);         
 
         PAYMENT.completed();
         
@@ -2417,7 +2417,7 @@ var SIGNUP =
                             console.log("Merchant Name = " + MERCHANT.name);
                             console.log("VID = " + CARDHOLDER.id);
                             
-                            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
+                            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, ccToken, TRANSACTION.amount);
                         }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
