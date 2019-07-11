@@ -2078,7 +2078,7 @@ var SIGNUP =
                             // localStorage.setItem("securityCodeDisplay", securityCodeDisplayText);
                             //window.location = "thankyou.html"; // internal file
 
-                            SIGNUP.securityCodeDisplayResponse();
+                            // SIGNUP.securityCodeDisplayResponse();
                         }
                     },
                     error: function()
