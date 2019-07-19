@@ -1115,7 +1115,16 @@ var PAYMENT =
         //                           "", // empty token 
         //                           TRANSACTION.amount, 
         //                           CALLBACK.paymentResponseURL);
-       
+        var deviceType = payment.deviceType;
+        var newUserFlag = payment.newUserFlag;
+        if  ( (deviceType === 1) && (newUserFlag === 0) )
+        {
+            PAYMENT.requestContinue ();
+        }
+        else
+        {
+            launchPayment ();
+        }
         PAYMENT.requestContinue();
         
         return;
@@ -2078,7 +2087,7 @@ var SIGNUP =
                             // localStorage.setItem("securityCodeDisplay", securityCodeDisplayText);
                             //window.location = "thankyou.html"; // internal file
 
-                            // SIGNUP.securityCodeDisplayResponse();
+                            SIGNUP.securityCodeDisplayResponse();
                         }
                     },
                     error: function()
@@ -2418,6 +2427,16 @@ var SIGNUP =
                             console.log("VID = " + CARDHOLDER.id);
                             
                             doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, ccToken, TRANSACTION.amount);
+                        }
+                        else if  (paymentResponse.status === STATUS.code.Cancel)
+                        {
+                           UTILS.errorDetected("Cancel");
+                           PAYMENT.completed();
+                        }
+                        else if (paymentResponse.status === STATUS.code.PhoneNumberVerificationFailure)
+                        {
+                           UTILS.errorDetected("PhoneNumberVerificationFailure");
+                           PAYMENT.completed();
                         }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  

@@ -1,11 +1,11 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.13/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.13/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.13/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.13/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.13/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.14/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.14/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.14/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.14/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.14/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -401,7 +401,8 @@ function launchPayment()
     var merchant = MERCHANT.name;
     var amount = TRANSACTION.amount;
     
-    var storeFrontURL = "https://magentostore.ngrok.io";  // legacy store
+    // var storeFrontURL = "https://magentostore.ngrok.io";  // legacy store
+    var storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
     switch (MERCHANT.id) 
     {
         case 'asiaroom.vraymerchant.com':  
