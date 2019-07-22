@@ -1125,7 +1125,7 @@ var PAYMENT =
         {
             launchPayment ();
         }
-        PAYMENT.requestContinue();
+        // PAYMENT.requestContinue();
         
         return;
     },
