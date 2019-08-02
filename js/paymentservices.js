@@ -2438,6 +2438,11 @@ var SIGNUP =
                            UTILS.errorDetected("PhoneNumberVerificationFailure");
                            PAYMENT.completed();
                         }
+                        else if (paymentResponse.status === STATUS.code.UserTimeout)
+                        {
+                            UTILS.errorDetected("Timeout");
+                            PAYMENT.completed();
+                        }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
                             PAYMENT.completed();
