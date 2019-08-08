@@ -1318,8 +1318,9 @@ var PAYMENT =
             success     : function(result) {
                     
                 if((result === null) || (result === undefined) || (result === "")) {
-                    
-                    UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
+                    displayTransactionExpirePage();
+                    //UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
+                    UTILS.errorDetected("ERROR – This transaction has expired! \n");
                     PAYMENT.completed();
                     return;
                 }
@@ -2510,7 +2511,12 @@ var SIGNUP =
                     success: function(result)
                     {
                         var phoneVerificationResp = JSON.parse(result);
+                        if( (!result) || (!phoneVerificationResp) )
+                        {
+                            displayTransactionExpirePage();
+                            return;
 
+                        }
                         if ((phoneVerificationResp === null) || (phoneVerificationResp === undefined) ||
                             (phoneVerificationResp.msgId !== MESSAGE.id.OptimalBrowserPhoneVerificationResp))
                         {
