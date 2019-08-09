@@ -2906,3 +2906,10 @@ var CALLBACK =
         // UTILS.removePaymentRepsonseURL();
     }
 };
+
+//////////////////////////////////////////////////////////
+// Display Transaction Expired Page
+/////////////////////////////////////////////////////////
+function displayTransactionExpirePage(){
+    return '';
+}
