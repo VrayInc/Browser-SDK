@@ -108,13 +108,15 @@ var CARDHOLDER =
     {
         callback: null,
 
-        call: function(result) 
+        // call: function(result) 
+        call: function(callBackReason, data)
         {
             if(!CARDHOLDER.shippingHistoryCallBack.callback) {
                 console.log("Invalid shipping history callback function.");
             }
             else {
-                CARDHOLDER.shippingHistoryCallBack.callback(result);
+                // CARDHOLDER.shippingHistoryCallBack.callback(result);
+                CARDHOLDER.shippingHistoryCallBack.callback(callBackReason, data);
             }
         }
     },
@@ -349,8 +351,20 @@ var CARDHOLDER =
             }); // prepaymetPromise
 
             prepaymentPromise.then (
-                function (result) {
-                    CARDHOLDER.shippingHistoryCallBack.call(result);
+                // function (result) {
+                //     CARDHOLDER.shippingHistoryCallBack.call(result);
+                // },
+                function (prePaymentResp) {
+                    if ( (prePaymentResp.status === STATUS.code.SUCCESS) || (prePaymentResp.status === STATUS.code.VIDFailure) )
+                    {
+                        // parameters of shippingHistoryCallBack: callBackReason = 0 (ShippingInfos); data = array of shipping addresses or null
+                        CARDHOLDER.shippingHistoryCallBack.call(0, CARDHOLDER.shippingHistory);
+                    }
+                    else if (prePaymentResp.status === STATUS.code.InvalidPhoneNumber)
+                    {
+                        // parameters of shippingHistoryCallBack: callBackReason = 1 (Error); data = 0 (InvalidMobileNumber)
+                        CARDHOLDER.shippingHistoryCallBack.call(1,0);
+                    }
                 },
                 function (error) {
                     UTILS.errorDetected("Couldn't get shipping history" + error.toLocaleString()); 
@@ -1318,7 +1332,7 @@ var PAYMENT =
             success     : function(result) {
                     
                 if((result === null) || (result === undefined) || (result === "")) {
-                    displayTransactionExpirePage();
+                    // displayTransactionExpirePage();
                     //UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
                     UTILS.errorDetected("ERROR – This transaction has expired! \n");
                     PAYMENT.completed();
@@ -2511,12 +2525,12 @@ var SIGNUP =
                     success: function(result)
                     {
                         var phoneVerificationResp = JSON.parse(result);
-                        if( (!result) || (!phoneVerificationResp) )
-                        {
-                            displayTransactionExpirePage();
-                            return;
+                        // if( (!result) || (!phoneVerificationResp) )
+                        // {
+                        //     displayTransactionExpirePage();
+                        //     return;
 
-                        }
+                        // }
                         if ((phoneVerificationResp === null) || (phoneVerificationResp === undefined) ||
                             (phoneVerificationResp.msgId !== MESSAGE.id.OptimalBrowserPhoneVerificationResp))
                         {
@@ -2910,6 +2924,6 @@ var CALLBACK =
 //////////////////////////////////////////////////////////
 // Display Transaction Expired Page
 /////////////////////////////////////////////////////////
-function displayTransactionExpirePage(){
-    return '';
-}
+// function displayTransactionExpirePage(){
+//     return '';
+// }
