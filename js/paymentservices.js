@@ -341,7 +341,8 @@ var CARDHOLDER =
                         UTILS.errorDetected("ERROR - Unexpected pre-payment response: " + prePaymentResp.toString());  
                     }    
 
-                    resolve2(prePaymentResp.shippingInfos);
+                    // resolve2(prePaymentResp.shippingInfos);
+                    resolve2(prePaymentResp);
                 },
                 error: function()
                 {
