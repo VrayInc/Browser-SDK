@@ -1310,66 +1310,66 @@ var PAYMENT =
             return;
         }
 
-        var getPaymentInfo = {
-            "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
-            "tid": tid
-        };
+        // var getPaymentInfo = {
+        //     "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
+        //     "tid": tid
+        // };
        
-        var  getPaymentInfoText =  JSON.stringify(getPaymentInfo).toString();
+        // var  getPaymentInfoText =  JSON.stringify(getPaymentInfo).toString();
         
-        if(UTILS.debug.enabled()) {
-            console.log("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
-        }
+        // if(UTILS.debug.enabled()) {
+        //     console.log("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
+        // }
         
-        $.ajax({
-            type        : "POST",
-            url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserPaymentInfo",
-            contentType : "application/json",
-            data        : getPaymentInfoText,
-            timeout     : TRANSACTION.t1Timeout, 
-            dataType    : "text",
-            async       : true,
-            xhrFields   : { withCredentials: true },
-            success     : function(result) {
+        // $.ajax({
+        //     type        : "POST",
+        //     url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserPaymentInfo",
+        //     contentType : "application/json",
+        //     data        : getPaymentInfoText,
+        //     timeout     : TRANSACTION.t1Timeout, 
+        //     dataType    : "text",
+        //     async       : true,
+        //     xhrFields   : { withCredentials: true },
+        //     success     : function(result) {
                     
-                if((result === null) || (result === undefined) || (result === "")) {
-                    // displayTransactionExpirePage();
-                    //UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
-                    UTILS.errorDetected("ERROR – This transaction has expired! \n");
-                    PAYMENT.completed();
-                    return;
-                }
+        //         if((result === null) || (result === undefined) || (result === "")) {
+        //             // displayTransactionExpirePage();
+        //             //UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
+        //             UTILS.errorDetected("ERROR – This transaction has expired! \n");
+        //             PAYMENT.completed();
+        //             return;
+        //         }
 
-                var paymentInfoRespond = JSON.parse(result);
-                if (paymentInfoRespond === null) {
+        //         var paymentInfoRespond = JSON.parse(result);
+        //         if (paymentInfoRespond === null) {
                          
-                    UTILS.errorDetected("ERROR - Invalid browser payment info respond.\n");
-                    PAYMENT.completed();
-                    return;
-                }
+        //             UTILS.errorDetected("ERROR - Invalid browser payment info respond.\n");
+        //             PAYMENT.completed();
+        //             return;
+        //         }
 
-                var messageId = paymentInfoRespond.msgId;
-                if (messageId === MESSAGE.id.BrowserPaymentIndication)
-                { 
-                    PAYMENT.provision(paymentInfoRespond);
+        //         var messageId = paymentInfoRespond.msgId;
+        //         if (messageId === MESSAGE.id.BrowserPaymentIndication)
+        //         { 
+        //             PAYMENT.provision(paymentInfoRespond);
 
                     // Extra token from payment.html
                     var token = document.getElementById('newtoken').innerHTML;
                     PAYMENT.createAndSubmitToken(token, 1, 0);
-                }
-                else
-                {
-                    PAYMENT.completed();
-                    UTILS.errorDetected("ERROR - Receive unexpected message ID = " + messageId.toString());
-                }
-            },
-            error: function(result)
-            {
+        //         }
+        //         else
+        //         {
+        //             PAYMENT.completed();
+        //             UTILS.errorDetected("ERROR - Receive unexpected message ID = " + messageId.toString());
+        //         }
+        //     },
+        //     error: function(result)
+        //     {
 
-                PAYMENT.completed();
-                UTILS.errorDetecteds("ERROR - Payment Info Response result = \n" + result.toString());
-            }
-        });
+        //         PAYMENT.completed();
+        //         UTILS.errorDetecteds("ERROR - Payment Info Response result = \n" + result.toString());
+        //     }
+        // });
     },
 
     retrieveFakeToken: function(tid)

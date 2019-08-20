@@ -1,11 +1,11 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.20/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.20/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.20/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.20/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.20/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.21/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.21/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.21/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.21/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.2.21/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -403,70 +403,72 @@ function launchPayment()
     
     // var storeFrontURL = "https://magentostore.ngrok.io";  // legacy store
     var storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
-    switch (MERCHANT.id) 
-    {
-        case 'asiaroom.vraymerchant.com':  
-            storeFrontURL = "https://asiaroom.vraymerchant.com/payment.html";
-            break;
-        case 'gcs.vraymerchant.com':
-            storeFrontURL = "https://gcs.vraymerchant.com/payment.html";
-            break;
-        case 'live.vraymerchant.com':
-            storeFrontURL = "https://live.vraymerchant.com/payment.html";
-            break;
-        case 'magentostore.vraymerchant.com':
-            //storeFrontURL = "http://localhost:8084/VRAY-Test-magento/payment.html";
-            //storeFrontURL = "https://magentostore.ngrok.io/VRAY-Test-magento/payment.html";
-            storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
-            break;
-        case 'master.vraymerchant.com':
-            storeFrontURL = "https://master.vraymerchant.com/payment.html";
-            break;
-        case 'shopifystore.vraymerchant.com':
-            storeFrontURL = "https://shopifystore.vraymerchant.com/payment.html";
-            break;
-        case 'test.vraymerchant.com':
-            storeFrontURL = "https://test.vraymerchant.com/payment.html";
-            break;
-        case 'vraylive.vraymerchant.com':
-            storeFrontURL = "https://vraylive.vraymerchant.com/payment.html";
-            break;
-        case 'vraylocalhost.ngrok.io':
-            storeFrontURL = "https://vraylocalhost.ngrok.io/VRAYTest/payment.html";
-            break;
-        case 'vraytest.vraymerchant.com':
-            storeFrontURL = "https://vraytest.vraymerchant.com/payment.html";
-            break;
-        case 'merchant.com.vray.vpay':
-        case 'www.vraymerchant.com':
-        default:
-            storeFrontURL = "https://magentostore.vraymerchant.com/payment.html"; 
-    }
-    var url = storeFrontURL + "?tid=" + tid + "&name=" + merchant + "&amt=" + amount + "&mac=" + "";
+    // switch (MERCHANT.id) 
+    // {
+    //     case 'asiaroom.vraymerchant.com':  
+    //         storeFrontURL = "https://asiaroom.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'gcs.vraymerchant.com':
+    //         storeFrontURL = "https://gcs.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'live.vraymerchant.com':
+    //         storeFrontURL = "https://live.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'magentostore.vraymerchant.com':
+    //         //storeFrontURL = "http://localhost:8084/VRAY-Test-magento/payment.html";
+    //         //storeFrontURL = "https://magentostore.ngrok.io/VRAY-Test-magento/payment.html";
+    //         storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'master.vraymerchant.com':
+    //         storeFrontURL = "https://master.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'shopifystore.vraymerchant.com':
+    //         storeFrontURL = "https://shopifystore.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'test.vraymerchant.com':
+    //         storeFrontURL = "https://test.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'vraylive.vraymerchant.com':
+    //         storeFrontURL = "https://vraylive.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'vraylocalhost.ngrok.io':
+    //         storeFrontURL = "https://vraylocalhost.ngrok.io/VRAYTest/payment.html";
+    //         break;
+    //     case 'vraytest.vraymerchant.com':
+    //         storeFrontURL = "https://vraytest.vraymerchant.com/payment.html";
+    //         break;
+    //     case 'merchant.com.vray.vpay':
+    //     case 'www.vraymerchant.com':
+    //     default:
+    //         storeFrontURL = "https://magentostore.vraymerchant.com/payment.html"; 
+    // }
+    // var url = storeFrontURL + "?tid=" + tid + "&name=" + merchant + "&amt=" + amount + "&mac=" + "";
     
-    var mObj = {
-        "val" : url,
-        "pay" : "yes",
-        "merchantId" : MERCHANT.id   
-    };
-    var message = JSON.stringify(mObj);
-    $.ajax({
-        type        : "POST",
-        url         : "https://hmac.vraymerchant.com",
-        data        : message,
-        timeout     : 10000, 
-        async       : false,
-        dataType    : "text",
-        success     : function(hmacBase64) {
-            TRANSACTION.MAC = hmacBase64;
-            console.log("URL + HMAC Base 64: " + url + hmacBase64);  
-        },
-        error: function(){
-            console.log("Couldn't calculate HMAC!");  
-        }
-    }); //ajax()
+    // var mObj = {
+    //     "val" : url,
+    //     "pay" : "yes",
+    //     "merchantId" : MERCHANT.id   
+    // };
+    // var message = JSON.stringify(mObj);
+    // $.ajax({
+    //     type        : "POST",
+    //     url         : "https://hmac.vraymerchant.com",
+    //     data        : message,
+    //     timeout     : 10000, 
+    //     async       : false,
+    //     dataType    : "text",
+    //     success     : function(hmacBase64) {
+    //         TRANSACTION.MAC = hmacBase64;
+    //         console.log("URL + HMAC Base 64: " + url + hmacBase64);  
+    //     },
+    //     error: function(){
+    //         console.log("Couldn't calculate HMAC!");  
+    //     }
+    // }); //ajax()
     
-    window.location.href = url + TRANSACTION.MAC;
+    // window.location.href = url + TRANSACTION.MAC;
+    var url = storeFrontURL + "?tid=" + tid;
+    window.location.href = url;
 }
 
 ////////////////////////////
