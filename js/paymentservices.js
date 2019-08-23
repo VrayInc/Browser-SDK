@@ -108,13 +108,13 @@ var CARDHOLDER =
     {
         callback: null,
 
-        call: function(result) 
+        call: function(callBackReason, data)
         {
             if(!CARDHOLDER.shippingHistoryCallBack.callback) {
                 console.log("Invalid shipping history callback function.");
             }
             else {
-                CARDHOLDER.shippingHistoryCallBack.callback(result);
+                CARDHOLDER.shippingHistoryCallBack.callback(callBackReason, data);
             }
         }
     },
@@ -339,7 +339,7 @@ var CARDHOLDER =
                         UTILS.errorDetected("ERROR - Unexpected pre-payment response: " + prePaymentResp.toString());  
                     }    
 
-                    resolve2(prePaymentResp.shippingInfos);
+                    resolve2(prePaymentResp);
                 },
                 error: function()
                 {
@@ -349,8 +349,21 @@ var CARDHOLDER =
             }); // prepaymetPromise
 
             prepaymentPromise.then (
-                function (result) {
-                    CARDHOLDER.shippingHistoryCallBack.call(result);
+                // function (result) {
+                //     CARDHOLDER.shippingHistoryCallBack.call(result);
+                // },
+                function (prePaymentResp) {
+                    if ( (prePaymentResp.status === STATUS.code.SUCCESS) || (prePaymentResp.status === STATUS.code.VIDFailure) )
+                    {
+                        // parameters of shippingHistoryCallBack: callBackReason = 0 (ShippingInfos); data = array of shipping addresses or null
+                        CARDHOLDER.shippingHistoryCallBack.call(0, CARDHOLDER.shippingHistory);
+                    }
+                    else if (prePaymentResp.status === STATUS.code.InvalidPhoneNumber)
+                    {
+                        // parameters of shippingHistoryCallBack: callBackReason = 1 (Error); data = 0 (InvalidMobileNumber)
+                        CARDHOLDER.shippingHistoryCallBack.call(1,0);
+                    }
+
                 },
                 function (error) {
                     UTILS.errorDetected("Couldn't get shipping history" + error.toLocaleString()); 
@@ -1116,8 +1129,17 @@ var PAYMENT =
         //                           TRANSACTION.amount, 
         //                           CALLBACK.paymentResponseURL);
        
-        PAYMENT.requestContinue();
-        
+        // PAYMENT.requestContinue();
+        var deviceType = payment.deviceType;
+        var newUserFlag = payment.newUserFlag;
+        if  ( (deviceType === 1) && (newUserFlag === 0) )
+        {
+            PAYMENT.requestContinue ();
+        }
+        else
+        {
+            launchPayment ();
+        }   
         return;
     },
 
@@ -1286,65 +1308,65 @@ var PAYMENT =
             return;
         }
 
-        var getPaymentInfo = {
-            "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
-            "tid": tid
-        };
+        // var getPaymentInfo = {
+        //     "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
+        //     "tid": tid
+        // };
        
-        var  getPaymentInfoText =  JSON.stringify(getPaymentInfo).toString();
+        // var  getPaymentInfoText =  JSON.stringify(getPaymentInfo).toString();
         
-        if(UTILS.debug.enabled()) {
-            console.log("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
-        }
+        // if(UTILS.debug.enabled()) {
+        //     console.log("Retrieving payment information for transaction = " + tid.toString() + "\n\n");
+        // }
         
-        $.ajax({
-            type        : "POST",
-            url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserPaymentInfo",
-            contentType : "application/json",
-            data        : getPaymentInfoText,
-            timeout     : TRANSACTION.t1Timeout, 
-            dataType    : "text",
-            async       : true,
-            xhrFields   : { withCredentials: true },
-            success     : function(result) {
+        // $.ajax({
+        //     type        : "POST",
+        //     url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserPaymentInfo",
+        //     contentType : "application/json",
+        //     data        : getPaymentInfoText,
+        //     timeout     : TRANSACTION.t1Timeout, 
+        //     dataType    : "text",
+        //     async       : true,
+        //     xhrFields   : { withCredentials: true },
+        //     success     : function(result) {
                     
-                if((result === null) || (result === undefined) || (result === "")) {
+        //         if((result === null) || (result === undefined) || (result === "")) {
                     
-                    UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
-                    PAYMENT.completed();
-                    return;
-                }
+        //             UTILS.errorDetected("ERROR - Invalid browser payment info.\n");
+        //             PAYMENT.completed();
+        //             return;
+        //         }
 
-                var paymentInfoRespond = JSON.parse(result);
-                if (paymentInfoRespond === null) {
+        //         var paymentInfoRespond = JSON.parse(result);
+        //         if (paymentInfoRespond === null) {
                          
-                    UTILS.errorDetected("ERROR - Invalid browser payment info respond.\n");
-                    PAYMENT.completed();
-                    return;
-                }
+        //             UTILS.errorDetected("ERROR - Invalid browser payment info respond.\n");
+        //             PAYMENT.completed();
+        //             return;
+        //         }
 
-                var messageId = paymentInfoRespond.msgId;
-                if (messageId === MESSAGE.id.BrowserPaymentIndication)
-                { 
-                    PAYMENT.provision(paymentInfoRespond);
+        //         var messageId = paymentInfoRespond.msgId;
+        //         if (messageId === MESSAGE.id.BrowserPaymentIndication)
+        //         { 
+        //             PAYMENT.provision(paymentInfoRespond);
 
                     // Extra token from payment.html
                     var token = document.getElementById('newtoken').innerHTML;
                     PAYMENT.createAndSubmitToken(token, 1, 0);
-                }
-                else
-                {
-                    PAYMENT.completed();
-                    UTILS.errorDetected("ERROR - Receive unexpected message ID = " + messageId.toString());
-                }
-            },
-            error: function(result)
-            {
+        //         }
+        //         else
+        //         {
+        //             PAYMENT.completed();
+        //             UTILS.errorDetected("ERROR - Receive unexpected message ID = " + messageId.toString());
+        //         }
+        //     },
+        //     error: function(result)
+        //     {
 
-                PAYMENT.completed();
-                UTILS.errorDetecteds("ERROR - Payment Info Response result = \n" + result.toString());
-            }
-        });
+        //         PAYMENT.completed();
+        //         UTILS.errorDetecteds("ERROR - Payment Info Response result = \n" + result.toString());
+        //     }
+        // });
     },
 
     retrieveFakeToken: function(tid)
@@ -2418,6 +2440,22 @@ var SIGNUP =
                             console.log("VID = " + CARDHOLDER.id);
                             
                             doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, ccToken, TRANSACTION.amount);
+                        }
+                        else if  (paymentResponse.status === STATUS.code.Cancel)
+                        {
+                           UTILS.errorDetected(“Cancel”);
+                           PAYMENT.completed();
+                        }
+                        else if   
+                        (paymentResponse.status === STATUS.code.PhoneNumberVerificationFailure)
+                        {
+                           UTILS.errorDetected(“PhoneNumberVerificationFailure”);
+                           PAYMENT.completed();
+                        }
+                        else if (paymentResponse.status === STATUS.code.UserTimeout)
+                        {
+                           UTILS.errorDetected("Timeout");
+                           PAYMENT.completed();
                         }
                         else {
                             UTILS.errorDetected("ERROR - Payment Response Unsuccessful.");  
