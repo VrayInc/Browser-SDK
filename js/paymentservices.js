@@ -2443,13 +2443,13 @@ var SIGNUP =
                         }
                         else if  (paymentResponse.status === STATUS.code.Cancel)
                         {
-                           UTILS.errorDetected(“Cancel”);
+                           UTILS.errorDetected("Cancel");
                            PAYMENT.completed();
                         }
                         else if   
                         (paymentResponse.status === STATUS.code.PhoneNumberVerificationFailure)
                         {
-                           UTILS.errorDetected(“PhoneNumberVerificationFailure”);
+                           UTILS.errorDetected("PhoneNumberVerificationFailure");
                            PAYMENT.completed();
                         }
                         else if (paymentResponse.status === STATUS.code.UserTimeout)
