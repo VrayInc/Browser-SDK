@@ -1025,11 +1025,11 @@ var PAYMENT =
                     xhrFields   : { withCredentials: true },
                     success     : function() 
                     {           
-                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 2000);
+                        PAYMENT.chargeInfoRecovery(TRANSACTION.id, token);
                     },
                     error: function()
                     {          
-                        window.setTimeout(PAYMENT.chargeInfoRecovery(TRANSACTION.id, token), 2000);
+                        window.location.href = "https://magentostore.vraymerchant.com/payment.html?tid=" + TRANSACTION.id;
                     }
                 });
             },
@@ -1380,7 +1380,7 @@ var PAYMENT =
             return;
         }
 
-        var getPaymentInfo = {
+/*        var getPaymentInfo = {
             "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
             "tid": tid
         };
@@ -1421,11 +1421,11 @@ var PAYMENT =
                 if (messageId === MESSAGE.id.BrowserPaymentIndication)
                 { // Payment Authorization Response
 
-                    PAYMENT.provision(paymentInfoRespond);
+                    PAYMENT.provision(paymentInfoRespond);*/
 
                     var token = document.getElementById('newtoken').innerHTML;
                     PAYMENT.createAndSubmitToken(token, 2, STATUS.code.Cancel);
-                }
+               /* }
                 else
                 {
                     PAYMENT.completed();
@@ -1438,7 +1438,7 @@ var PAYMENT =
                 PAYMENT.completed();
                 UTILS.errorDetecteds("ERROR - Payment Info Response result = \n" + result.toString());
             }
-        });
+        });*/
     },
     
     retrieveFailureToken: function(tid)
@@ -1449,7 +1449,7 @@ var PAYMENT =
             return;
         }
 
-        var getPaymentInfo = {
+        /*var getPaymentInfo = {
             "msgId": MESSAGE.id.BroswerRetrievePaymentInfo,
             "tid": tid
         };
@@ -1490,11 +1490,11 @@ var PAYMENT =
                 if (messageId === MESSAGE.id.BrowserPaymentIndication)
                 { // Payment Authorization Response
 
-                    PAYMENT.provision(paymentInfoRespond);
+                    PAYMENT.provision(paymentInfoRespond);*/
 
                     var token = document.getElementById('newtoken').innerHTML;
                     PAYMENT.createAndSubmitToken(token, 3, STATUS.code.TokenFailure);
-                }
+                /*}
                 else
                 {
                     PAYMENT.completed();
@@ -1507,7 +1507,7 @@ var PAYMENT =
                 PAYMENT.completed();
                 UTILS.errorDetecteds("ERROR - Payment Info Response result = \n" + result.toString());
             }
-        });
+        });*/
     },
     
     secretQuestionChallenge: function(secret)
