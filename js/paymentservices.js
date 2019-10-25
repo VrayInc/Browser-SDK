@@ -742,7 +742,7 @@ var PAYMENT =
     
     chargeInfoRecovery: function(tid, token) 
     {
-        doChargePayment(tid,  CARDHOLDER.vid, MERCHANT.id, MERCHANT.name, token, TRANSACTION.amount);         
+        doChargePayment(tid,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, token, TRANSACTION.amount);         
 
         PAYMENT.completed();
         
