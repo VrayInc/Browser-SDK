@@ -5,156 +5,166 @@
  */
 var IE;
 
-function doChargePayment(tid, vid, merchant, token, amount) 
+function doMerchantCallback (tid, vid, merchant, token, amount)
 {
-    var chargeToken;
-    var chargeAmount;
-    var chargeRequest;
-    
+    // var chargeToken;
+    // var chargeAmount;
+    // var chargeRequest;
+
+    var data;
+    if (token == "good-token")
+    {
+        data = null;
+    }
+    else
+    {
+        data = token;
+    }
+
     if((token !== undefined) && (token !== null) && (token !== "fake-token"))
     {
-        chargeToken = token;
-        chargeAmount = amount;
-        
-        console.log("INFO - doChargePayment() with valid token: " + token);
-    
-        //POST to ChargePaymentServlet.java
-        var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" + 
-                "&tid=" + tid +  
-                "&vid=" + vid + 
-                "&merchant=" + merchant + 
-                "&token=" + chargeToken + 
-                "&amount=" + chargeAmount;
-                  
-        chargeRequest = getHTTPRequest();
-        chargeRequest.open("POST", url, true);
-        //chargeRequest.onreadystatechange = chargeResult;
-        chargeRequest.onreadystatechange = function(){
-            //console.log('chargeRequest',chargeRequest); 
-            //console.log('readyState',this.readyState);
-            console.log('REASON',REASON);
-            console.log('responseURL',TRANSACTION.paymentResponseURL);
-            if(this.readyState == 4){
-                if(CALLBACK.paymentResponseURL){
-                    console.log('paymentResponseURL Found');
-                    var a = CALLBACK.paymentResponseURL;
-                    if(a.indexOf("?") > -1) {
-                         window.location.href = CALLBACK.paymentResponseURL + 
-                                        "&reason=" + REASON.AuthorizationStatus +
-                                        "&data=" + null + 
-                                        "&tid=" + tid; 
-                    }else{
-                         window.location.href = CALLBACK.paymentResponseURL + 
-                                        "?reason=" + REASON.AuthorizationStatus +
-                                        "&data=" + null + 
-                                        "&tid=" + tid; 
-                    }
-                      
-                } else {
-                    console.log('paymentResponseURL not Found');
-                    if(TRANSACTION.paymentResponseURL){
-                        var a = TRANSACTION.paymentResponseURL;
-                        if(a.indexOf("?") > -1) {
-                             window.location.href = TRANSACTION.paymentResponseURL + 
-                                        "&reason=" + REASON.AuthorizationStatus +
-                                        "&data=" + null + 
-                                        "&tid=" + tid;
-                        }else{
-                           window.location.href = TRANSACTION.paymentResponseURL + 
-                                        "?reason=" + REASON.AuthorizationStatus +
-                                        "&data=" + null + 
-                                        "&tid=" + tid;
-                        }
-                        
-                    } else {
-                        CALLBACK.call(REASON.AuthorizationStatus, null, tid);
-                    }
-                }
+        // chargeToken = token;
+        // chargeAmount = amount;
+        //
+        // console.log("INFO - doChargePayment() with valid token: " + token);
+        //
+        // //POST to ChargePaymentServlet.java
+        // var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" +
+        //         "&tid=" + tid +
+        //         "&vid=" + vid +
+        //         "&merchant=" + merchant +
+        //         "&token=" + chargeToken +
+        //         "&amount=" + chargeAmount;
+        //
+        // chargeRequest = getHTTPRequest();
+        // chargeRequest.open("POST", url, true);
+        // //chargeRequest.onreadystatechange = chargeResult;
+        // chargeRequest.onreadystatechange = function(){
+        //     //console.log('chargeRequest',chargeRequest);
+        //     //console.log('readyState',this.readyState);
+        //     console.log('REASON',REASON);
+        //     console.log('responseURL',TRANSACTION.paymentResponseURL);
+        //     if(this.readyState == 4){
+        if(CALLBACK.paymentResponseURL){
+            console.log('paymentResponseURL Found');
+            var a = CALLBACK.paymentResponseURL;
+            if(a.indexOf("?") > -1) {
+                window.location.href = CALLBACK.paymentResponseURL +
+                    "&reason=" + REASON.AuthorizationStatus +
+                    "&data=" + data +
+                    "&tid=" + tid;
+            }else{
+                window.location.href = CALLBACK.paymentResponseURL +
+                    "?reason=" + REASON.AuthorizationStatus +
+                    "&data=" + data +
+                    "&tid=" + tid;
             }
-            //chargeResult(REASON.AuthorizationStatus, null, tid)
-        };
-        chargeRequest.send(null);
-        
-        if(UTILS.debug.enabled()) {
-            window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
+
+        } else {
+            console.log('paymentResponseURL not Found');
+            if(TRANSACTION.paymentResponseURL){
+                var a = TRANSACTION.paymentResponseURL;
+                if(a.indexOf("?") > -1) {
+                    window.location.href = TRANSACTION.paymentResponseURL +
+                        "&reason=" + REASON.AuthorizationStatus +
+                        "&data=" + data +
+                        "&tid=" + tid;
+                }else{
+                    window.location.href = TRANSACTION.paymentResponseURL +
+                        "?reason=" + REASON.AuthorizationStatus +
+                        "&data=" + data +
+                        "&tid=" + tid;
+                }
+
+            } else {
+                CALLBACK.call(REASON.AuthorizationStatus, data, tid);
+            }
         }
-        
+        //     }
+        //     //chargeResult(REASON.AuthorizationStatus, null, tid)
+        // };
+        // chargeRequest.send(null);
+        //
+        // if(UTILS.debug.enabled()) {
+        //     window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
+        // }
+
         UIUtils.hideSpinner();
-        
+
         //CALLBACK.call(REASON.AuthorizationStatus, null, tid);
     }
-    else 
+    else
     {
         console.log("doChargePayment() with valid token: " + token);
-         
-        if(token === "fake-token") 
+
+        if(token === "fake-token")
         {
             //CALLBACK.call(REASON.Error, "Cancel", tid);
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
-                
+
                 var a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
-                     window.location.href = CALLBACK.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                    "&data=Cancel&tid=" + tid;    
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "&reason=" + REASON.Error +
+                        "&data=Cancel&tid=" + tid;
                 }else{
-                     window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                    "&data=Cancel&tid=" + tid;     
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "?reason=" + REASON.Error +
+                        "&data=Cancel&tid=" + tid;
                 }
             } else {
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
-                   
+
                     var a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
-                         window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                     "&data=Cancel&tid=" + tid;  
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "&reason=" + REASON.Error +
+                            "&data=Cancel&tid=" + tid;
                     }else{
-                        window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                     "&data=Cancel&tid=" + tid;  
-                    }  
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "?reason=" + REASON.Error +
+                            "&data=Cancel&tid=" + tid;
+                    }
                 } else {
                     CALLBACK.call(REASON.Error, "Cancel", tid);
                 }
             }
         }
-        else 
+        else
         {
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
-               
+
                 var a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
-                      window.location.href = CALLBACK.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "&reason=" + REASON.Error +
+                        "&data=" + "Payment failed" +
+                        "&tid=" + tid;
                 }else{
-                     window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;   
-                }    
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "?reason=" + REASON.Error +
+                        "&data=" + "Payment failed" +
+                        "&tid=" + tid;
+                }
             } else {
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
-                   
+
                     var a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
-                         window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "&reason=" + REASON.Error +
+                            "&data=" + "Payment failed" +
+                            "&tid=" + tid;
                     }else{
-                         window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;
-                    }  
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "?reason=" + REASON.Error +
+                            "&data=" + "Payment failed" +
+                            "&tid=" + tid;
+                    }
                 } else {
                     console.log('callback function called not Found');
                     CALLBACK.call(REASON.Error, "Payment failed", tid);
@@ -162,36 +172,132 @@ function doChargePayment(tid, vid, merchant, token, amount)
             }
             //CALLBACK.call(REASON.Error, "Payment failed", tid);
         }
-        
+
         UIUtils.hideSpinner();
-        
+
         PAYMENT.completed();
     }
 }
 
+function doChargeOnly(tid, vid, merchant, token, amount){
+    var chargeToken;
+    var chargeAmount;
+    var chargeRequest;
+    var  result, authCode, messageId, error, authResponse, data1;
+    var chargeStatus = {authCode: 0, data: "invalid"};
+    if ((token !== undefined) && (token !== null) && (token !== "fake-token"))
+    {
+        chargeToken = token;
+        chargeAmount = amount;
+        console.log("INFO - doChargePayment() with valid token: " + token);
+        //POST to ChargePaymentServlet.java
+        var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" +
+            "&tid=" + tid +
+            "&vid=" + vid +
+            "&merchant=" + merchant +
+            "&token=" + chargeToken +
+            "&amount=" + chargeAmount;
+        chargeRequest = getHTTPRequest();
+        chargeRequest.open("POST", url, true);
+        chargeRequest.responseType = "json";
+        //chargeRequest.onreadystatechange = chargeResult;
+        chargeRequest.onreadystatechange = function()
+        {
+            // console.log('REASON',REASON);
+            // console.log('responseURL',TRANSACTION.paymentResponseURL);
+            if ( (this.readyState == 4) && (this.status == 200) )
+            {
+                this.onload = function()
+                {
+                    result = this.response;
+                };
+                authResponse = JSON.parse(result);
+                if (authResponse === null)
+                {
+                    UTILS.errorDetected("ERROR:  Invalid authorization response.\n");
+                    return (chargeStatus);
+                }
+                messageId = authResponse.msgId;
+                if (messageId === MESSAGE.id.AuthorizationResponse)
+                {
+                    authCode = authResponse.authorizationCode;
+                    if (authResponse.errorMsg != undefined)
+                    {
+                        error = authResponse.errorMsg;
+                    }
+                    if (authCode === 1)
+                    {
+                        data1 = null;
+                    }
+                    else if (authCode === 2)
+                    {
+                        data1 = error;
+                    }
+                    chargeStatus.authCode = authCode;
+                    chargeStatus.data = data1;
+                    return (chargeStatus);
+                }
+                else
+                {
+                    PAYMENT.completed();
+                    UTILS.errorDetected("ERROR - Unknown/Unexpected Message ID     = " + messageId.toString());
+                    return (chargeStatus);
+                }
+            }
+            else if ( (this.readyState == 4) && (this.status == 400) )
+            {
+                this.onload = function()
+                {
+                    result = this.response;
+                };
+                authResponse = JSON.parse(result);
+                if (authResponse != undefined)
+                {
+                    if (authResponse != null)
+                    {
+                        console.log("GIFM: " + authResponse.type + " – " + authResponse.message);
+                        return (chargeStatus);
+                    }
+                    else
+                    {
+                        UTILS.errorDetected("ERROR:  Invalid authorization response.\n");
+                        return (chargeStatus);
+                    }
+                }
+                else
+                {
+                    UTILS.errorDetected("ERROR:  Invalid authorization response.\n");
+                    return (chargeStatus);
+                }
+            }
+        }
+    }
+    return (chargeStatus);
+}
 
-function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason) 
+
+function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason)
 {
     var refundRequest;
-    
-    if((tid !== undefined) && (tid !== null)) 
+
+    if((tid !== undefined) && (tid !== null))
     {
         //POST to ChargePaymentServlet.java
         //var url = "ChargePayment?action=refundstripe" + 
         var url = "https://magentostore.vraymerchant.com/ChargePayment?action=refundstripe" +
-                 "&mId=" + merchantId + 
-                 "&name=" + merchantName +
-                 "&tid=" + tid + 
-                 "&amount=" + amount + 
-                 "&currency=" + currency + 
-                 "&reason=" + reason;
-          
+            "&mId=" + merchantId +
+            "&name=" + merchantName +
+            "&tid=" + tid +
+            "&amount=" + amount +
+            "&currency=" + currency +
+            "&reason=" + reason;
+
         refundRequest = getHTTPRequest();
         refundRequest.open("POST", url, true);
         refundRequest.onreadystatechange = refundRequest;
         refundRequest.send(null);
-        
-        if(UTILS.debug.enabled()) 
+
+        if(UTILS.debug.enabled())
         {
             window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
         }
@@ -200,20 +306,20 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
 
 
 function sendChargePayment(tid, token, amount, merchant, charge) {
-    
+
     if((token !== undefined) && (token !== null)) {
-        
+
         //POST to ChargePaymentServlet.java
-        var url = "ChargePayment?action=submittoken&token=" + token + 
-                  "&amount=" + amount + "&merchant=" + merchant;
+        var url = "ChargePayment?action=submittoken&token=" + token +
+            "&amount=" + amount + "&merchant=" + merchant;
         var chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, true);
         chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.send(charge);
-    } 
-    else 
+    }
+    else
     {
-        if(UTILS.debug.enabled()) 
+        if(UTILS.debug.enabled())
         {
             CALLBACK.call(REASON.Error, "Cancel", tid);
         }
@@ -221,18 +327,18 @@ function sendChargePayment(tid, token, amount, merchant, charge) {
             CALLBACK.call(REASON.Error, "Unknown", tid);
         }
     }
-	
+
     console.log("Sending payment to charging server: " + url.toLocaleString);
 }
 
 function getHTTPRequest() {
-    
+
     if (window.XMLHttpRequest) {
         if (navigator.userAgent.indexOf('MSIE') !== -1) {
             IE = true;
         }
         return new XMLHttpRequest();
-        
+
     } else if (window.ActiveXObject) {
         IE = true;
         return new ActiveXObject("Microsoft.XMLHTTP");
@@ -241,12 +347,12 @@ function getHTTPRequest() {
 
 function chargeResult(req,reason,data,tid) {
     //window.alert("Payment transaction completed!");
-	console.log("Payment charge completed!");
- //        console.log('responseURL', CALLBACK.paymentResponseURL);
- //        console.log('reason',REASON.AuthorizationStatus);
- //        console.log('data',data);
- //        console.log('tid',tid);
-        
-        
+    console.log("Payment charge completed!");
+    //        console.log('responseURL', CALLBACK.paymentResponseURL);
+    //        console.log('reason',REASON.AuthorizationStatus);
+    //        console.log('data',data);
+    //        console.log('tid',tid);
+
+
 }
 
