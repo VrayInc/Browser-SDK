@@ -5,7 +5,7 @@
  */
 var IE;
 
-function doChargePayment(tid, vid, merchantId, merchantName, token, amount) 
+function doChargePayment(tid, vid, merchant, token, amount) 
 {
     var chargeToken;
     var chargeAmount;
@@ -19,29 +19,15 @@ function doChargePayment(tid, vid, merchantId, merchantName, token, amount)
         console.log("INFO - doChargePayment() with valid token: " + token);
     
         //POST to ChargePaymentServlet.java
-        // var url = "https://gateway.vraymerchant.com/charge" + 
-        //         "&tid=" + tid +  
-        //         "&vid=" + vid + 
-        //         "&merchant=" + merchant + 
-        //         "&token=" + chargeToken + 
-        //         "&amount=" + chargeAmount;
-                  
-        // chargeRequest = getHTTPRequest();
-        // chargeRequest.open("POST", url, true);
-        var url="https://gateway.vraymerchant.com/charge";
-        chargeRequestBody ={
-            "tid": tid,
-            "vid": vid,
-            "merchantId":merchantId,
-            "merchantName":merchantName,
-            "amount":chargeAmount,
-            "token":chargeToken
-        }
-        console.log(chargeRequestBody);
+        var url = "https://magentostore.vraymerchant.com/ChargePayment?action=chargestripe" + 
+                "&tid=" + tid +  
+                "&vid=" + vid + 
+                "&merchant=" + merchant + 
+                "&token=" + chargeToken + 
+                "&amount=" + chargeAmount;
                   
         chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, true);
-        chargeRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         //chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.onreadystatechange = function(){
             //console.log('chargeRequest',chargeRequest); 
@@ -87,8 +73,7 @@ function doChargePayment(tid, vid, merchantId, merchantName, token, amount)
             }
             //chargeResult(REASON.AuthorizationStatus, null, tid)
         };
-        // chargeRequest.send(null);
-        chargeRequest.send(JSON.stringify(chargeRequestBody));
+        chargeRequest.send(null);
         
         if(UTILS.debug.enabled()) {
             window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
@@ -193,34 +178,19 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
     {
         //POST to ChargePaymentServlet.java
         //var url = "ChargePayment?action=refundstripe" + 
-        // var url = "https://magentostore.vraymerchant.com/ChargePayment?action=refundstripe" +
-        //          "&mId=" + merchantId + 
-        //          "&name=" + merchantName +
-        //          "&tid=" + tid + 
-        //          "&amount=" + amount + 
-        //          "&currency=" + currency + 
-        //          "&reason=" + reason;
+        var url = "https://magentostore.vraymerchant.com/ChargePayment?action=refundstripe" +
+                 "&mId=" + merchantId + 
+                 "&name=" + merchantName +
+                 "&tid=" + tid + 
+                 "&amount=" + amount + 
+                 "&currency=" + currency + 
+                 "&reason=" + reason;
           
-        // refundRequest = getHTTPRequest();
-        // refundRequest.open("POST", url, true);
-
-         var url="https://gateway.vraymerchant.com/refund";
-        refundRequestBody ={
-            "tid": tid,
-            "merchantId":merchantId,
-            "merchantName":merchantName,
-            "amount":amount,
-            "currency":currency,
-            "reason":reason
-        }
-        
         refundRequest = getHTTPRequest();
         refundRequest.open("POST", url, true);
-        refundRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
         refundRequest.onreadystatechange = refundRequest;
-        // refundRequest.send(null);
-        refundRequest.send(JSON.stringify(refundRequestBody));        
+        refundRequest.send(null);
+        
         if(UTILS.debug.enabled()) 
         {
             window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
