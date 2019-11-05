@@ -199,7 +199,7 @@ function doChargeOnly(tid, vid, merchant, token, amount){
             "&amount=" + chargeAmount;
         chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, false);
-        chargeRequest.responseType = "json";
+        //chargeRequest.responseType = "json";
         //chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.onreadystatechange = function()
         {
