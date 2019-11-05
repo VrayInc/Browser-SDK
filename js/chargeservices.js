@@ -198,7 +198,7 @@ function doChargeOnly(tid, vid, merchant, token, amount){
             "&token=" + chargeToken +
             "&amount=" + chargeAmount;
         chargeRequest = getHTTPRequest();
-        chargeRequest.open("POST", url, true);
+        chargeRequest.open("POST", url, false);
         chargeRequest.responseType = "json";
         //chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.onreadystatechange = function()
@@ -271,6 +271,7 @@ function doChargeOnly(tid, vid, merchant, token, amount){
                 }
             }
         }
+        chargeRequest.send(null);
     }
     return (chargeStatus);
 }
