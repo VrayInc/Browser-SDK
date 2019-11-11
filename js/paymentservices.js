@@ -734,7 +734,7 @@ var PAYMENT =
         }
        
         // Charging payment via token
-        doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, ccToken, TRANSACTION.amount);
+         doMerchantCallback(TRANSACTION.id, CARDHOLDER.id, MERCHANT.id, MERCHANT.name, ccToken, TRANSACTION.amount);
         
         PAYMENT.completed();
         return;
@@ -742,8 +742,8 @@ var PAYMENT =
     
     chargeInfoRecovery: function(tid, token) 
     {
-        doChargePayment(tid,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, token, TRANSACTION.amount);         
-
+        //doChargePayment(tid,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, token, TRANSACTION.amount);         
+         doMerchantCallback(tid, CARDHOLDER.id, MERCHANT.id, MERCHANT.name, token, TRANSACTION.amount);
         PAYMENT.completed();
         
         return;
@@ -1023,7 +1023,11 @@ var PAYMENT =
                     xhrFields   : { withCredentials: true },
                     success     : function() 
                     {           
-                        PAYMENT.chargeInfoRecovery(TRANSACTION.id, token);
+                       // PAYMENT.chargeInfoRecovery(TRANSACTION.id, token);
+                        if (TRANSACTION.deviceType == 1)
+                        {
+                            PAYMENT.chargeInfoRecovery (TRANSACTION.id, token);
+                        }
                     },
                     error: function()
                     {          
@@ -1352,7 +1356,15 @@ var PAYMENT =
 
                     // Extra token from payment.html
                     var token = document.getElementById('newtoken').innerHTML;
-                    PAYMENT.createAndSubmitToken(token, 1, 0);
+                    //PAYMENT.createAndSubmitToken(token, 1, 0);
+                    if(token == "good-token")
+                    {
+                        PAYMENT.createAndSubmitToken(token, 1, 0); // authorizationCode = Approved
+                    }
+                    else
+                    {
+                        PAYMENT.createAndSubmitToken(token, 2, 0); // authorizationCode = Declined
+                    }
         //         }
         //         else
         //         {
@@ -2439,7 +2451,7 @@ var SIGNUP =
                             console.log("Merchant Name = " + MERCHANT.name);
                             console.log("VID = " + CARDHOLDER.id);
                             
-                            doChargePayment(TRANSACTION.id,  CARDHOLDER.id, MERCHANT.id, MERCHANT.name, ccToken, TRANSACTION.amount);
+                            doMerchantCallback(TRANSACTION.id, CARDHOLDER.id, MERCHANT.id, MERCHANT.name, ccToken, TRANSACTION.amount);
                         }
                         else if  (paymentResponse.status === STATUS.code.Cancel)
                         {
