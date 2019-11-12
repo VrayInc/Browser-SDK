@@ -8,7 +8,7 @@ var IE;
 function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount) 
 {
     // var chargeToken;
-    var chargeAmount;
+    // var chargeAmount;
     // var chargeRequest;
     var data;
 
@@ -109,7 +109,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
     }
     else 
     {
-        console.log("doChargePayment() with valid token: " + token);
+        // console.log("doChargePayment() with valid token: " + token);
          
         if(token === "fake-token") 
         {
@@ -230,10 +230,10 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
         refundRequest.onreadystatechange = refundRequest;
         // refundRequest.send(null);
         refundRequest.send(JSON.stringify(refundRequestBody));        
-        if(UTILS.debug.enabled()) 
-        {
-            window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
-        }
+        // if(UTILS.debug.enabled()) 
+        // {
+        //     window.alert("Payment of $" + chargeAmount.toString() + ", has been completed.\n");
+        // }
     }
 }
 

@@ -719,6 +719,7 @@ var PAYMENT =
         else if (paymentResponse.status === STATUS.code.Cancel) 
         {
             UTILS.errorDetected("Cancel");
+            PAYMENT.completed();
             return;
         }
         else if (paymentResponse.status === STATUS.code.UserTimeout)
