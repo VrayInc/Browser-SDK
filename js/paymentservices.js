@@ -66,6 +66,7 @@ var APPSERVER =
     {
         domainName: 'VRAYHost',
         domainURL: 'https://vraystagingportal.azurewebsites.net',
+        serverType: 0, // default to Development Server
 
         getDomainName: function()
         {
@@ -77,6 +78,11 @@ var APPSERVER =
             return APPSERVER.vrayHost.domainURL;
         },
 
+        getServerType: function ()
+        {
+            return APPSERVER.vrayHost.serverType;
+        },
+
         setDomainName: function(name)
         {
             APPSERVER.vrayHost.domainName = name;
@@ -85,6 +91,11 @@ var APPSERVER =
         setDomainURL: function(url)
         {
             APPSERVER.vrayHost.domainURL = url;
+        },
+        setServerType: function (type) {
+
+            APPSERVER.vrayHost.serverType = type;
+
         }
     }
 };
@@ -457,6 +468,7 @@ var MERCHANT =
         }
         
         APPSERVER.vrayHost.setDomainURL(hostServerURL);
+        APPSERVER.vrayHost.setServerType(serverType);
     },
 
     getID: function()
@@ -865,7 +877,7 @@ var PAYMENT =
         TRANSACTION.startTime = today.getTime();
         TRANSACTION.amount = amount;
         TRANSACTION.lineItems = items;
-        TRANSACTION.id = Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11; // postive # 0 - 7FFF,FFFF,FFFF,FFFF
+        TRANSACTION.id = (Math.floor((Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11) / 10) * 10) + APPSERVER.vrayHost.getServerType;   // positive # 0 - 7FFF,FFFF,FFFF,FFF9)
 
         var paymentReqParam;
         
