@@ -877,7 +877,7 @@ var PAYMENT =
         TRANSACTION.startTime = today.getTime();
         TRANSACTION.amount = amount;
         TRANSACTION.lineItems = items;
-        TRANSACTION.id = (Math.floor((Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11) / 10) * 10) + APPSERVER.vrayHost.getServerType;   // positive # 0 - 7FFF,FFFF,FFFF,FFF9)
+        TRANSACTION.id = (Math.floor((Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11) / 10) * 10) + APPSERVER.vrayHost.getServerType();   // positive # 0 - 7FFF,FFFF,FFFF,FFF9)
 
         var paymentReqParam;
         
