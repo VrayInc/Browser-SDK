@@ -1152,6 +1152,7 @@ var PAYMENT =
         //                           CALLBACK.paymentResponseURL);
        
         // PAYMENT.requestContinue();
+        MERCHANT.id = payment.merchantIdentifier;
         var deviceType = payment.deviceType;
         var newUserFlag = payment.newUserFlag;
         if  ( (deviceType === 1) && (newUserFlag === 0) )

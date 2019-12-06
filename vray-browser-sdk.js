@@ -464,8 +464,22 @@ function launchPayment()
     //         console.log("Couldn't calculate HMAC!");  
     //     }
     // }); //ajax()
-    var storeFrontURL = "https://pay.vraymerchant.com/payment.html";
-    var url = storeFrontURL + "?tid=" + tid;
+    //var storeFrontURL = "https://pay.vraymerchant.com/payment.html";
+    //var url = storeFrontURL + "?tid=" + tid;
+    var gatewayCode = MERCHANT.id.substring(4, 8);
+    var serverType = tid.charAt(tid.length - 1);
+    var baseURL = ".vraymerchant.com/payment.html";
+    var paymentURL = '';
+
+    if (serverType == "0") {
+        paymentURL = "https://devpay" + gatewayCode + baseURL;
+    }
+
+    else {
+        paymentURL = "https://pay" + gatewayCode + baseURL;
+    }
+
+    var url = paymentURL + "?tid=" + tid;
     window.location.href = url;
     // window.location.href = url + TRANSACTION.MAC;
 }
