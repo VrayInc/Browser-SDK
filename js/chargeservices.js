@@ -213,7 +213,7 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
         // refundRequest = getHTTPRequest();
         // refundRequest.open("POST", url, true);
 
-         var url="https://gateway.vraymerchant.com/refund";
+        var url = APPSERVER.vrayHost.getGatewayURL() + "/refund";
         refundRequestBody ={
             "tid": tid,
             "merchantId":merchantId,
