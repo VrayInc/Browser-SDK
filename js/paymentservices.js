@@ -37,7 +37,7 @@ var APPSERVER =
         },
 
         setGatewayUrl: function (url) {
-            APPSERVER.merchantHost.domainURL = url;
+            APPSERVER.merchantHost.gatewayurl = url;
         }
     },
 
