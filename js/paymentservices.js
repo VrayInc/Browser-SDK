@@ -14,7 +14,7 @@ var APPSERVER =
     {
         domainName: 'VRAYLive',
         domainURL: 'https://www.vraymerchant.com',
-        gatewayurl: '',
+        //gatewayurl: '',
 
         getDomainName: function () {
             return APPSERVER.merchantHost.domainName;
@@ -24,9 +24,9 @@ var APPSERVER =
             return APPSERVER.merchantHost.domainURL;
         },
 
-        getGatewayURL: function () {
-            return APPSERVER.merchantHost.gatewayurl;
-        },
+        //getGatewayURL: function () {
+        //    return APPSERVER.merchantHost.gatewayurl;
+        //},
 
         setName: function (name) {
             APPSERVER.merchantHost.domainName = name;
@@ -36,15 +36,15 @@ var APPSERVER =
             APPSERVER.merchantHost.domainURL = url;
         },
 
-        setGatewayUrl: function (url) {
-            APPSERVER.merchantHost.gatewayurl = url;
-        }
+        //setGatewayUrl: function (url) {
+        //    APPSERVER.merchantHost.gatewayurl = url;
+        //}
     },
 
     paymentGWHost:
     {
-        domainName: 'Stripe',
-        domainURL: 'https://stripe.com',
+        domainName: 'GIFM',
+        domainURL: 'https://gateway.vraymerchant.com',
 
         getDomainName: function()
         {

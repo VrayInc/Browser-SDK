@@ -213,15 +213,15 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
         // refundRequest = getHTTPRequest();
         // refundRequest.open("POST", url, true);
 
-        var url = APPSERVER.vrayHost.getGatewayURL() + "/refund";
-        refundRequestBody ={
+        var url = APPSERVER.paymentGWHost.getURL() + "/refund";
+        refundRequestBody = {
             "tid": tid,
-            "merchantId":merchantId,
-            "merchantName":merchantName,
-            "amount":amount,
-            "currency":currency,
-            "reason":reason
-        }
+            "merchantId": merchantId,
+            "merchantName": merchantName,
+            "amount": amount,
+            "currency": currency,
+            "reason": reason
+        };
         
         refundRequest = getHTTPRequest();
         refundRequest.open("POST", url, true);
