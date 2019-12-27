@@ -159,11 +159,11 @@ var CARDHOLDER =
 
         var emailChangeReqText = JSON.stringify(emailChangeReq).toString();
         prePaymentText = UTILS.prepForHMAC(emailChangeReqText); 
-        
+        var hmacData = HMAC.setHmacData(prePaymentText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : prePaymentText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -268,13 +268,13 @@ var CARDHOLDER =
 
         var prePaymentText = JSON.stringify(prePayment).toString();
         prePaymentText = UTILS.prepForHMAC(prePaymentText); 
-        
+        var hmacData = HMAC.setHmacData(prePaymentText);
         var hmacPromise = new Promise(function(resolve1, reject1) 
         {
             $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : prePaymentText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -952,10 +952,11 @@ var PAYMENT =
 
         var paymentInfoText = JSON.stringify(paymentInfo).toString();
         paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
+        var hmacData = HMAC.setHmacData(paymentInfoText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
-            data        : paymentInfoText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -1011,11 +1012,12 @@ var PAYMENT =
 
         var paymentInfoText = JSON.stringify(paymentInfo).toString();
         paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
+        var hmacData = HMAC.setHmacData(paymentInfoText);
         $.ajax(
         {
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
-            data        : paymentInfoText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -1256,11 +1258,12 @@ var PAYMENT =
         };
         
         var paymentRequestContinueText = JSON.stringify(paymentRequestContinue).toString();
-        paymentRequestContinueText = UTILS.prepForHMAC(paymentRequestContinueText); 
+        paymentRequestContinueText = UTILS.prepForHMAC(paymentRequestContinueText);
+        var hmacData = HMAC.setHmacData(paymentRequestContinueText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
-            data        : paymentRequestContinueText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -1839,11 +1842,12 @@ var SIGNUP =
         };
 
         var signupCompleteText = JSON.stringify(signupComplete).toString();
-        signupCompleteText = UTILS.prepForHMAC(signupCompleteText); 
+        signupCompleteText = UTILS.prepForHMAC(signupCompleteText);
+        var hmacData = HMAC.setHmacData(signupCompleteText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : signupCompleteText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -1982,11 +1986,12 @@ var SIGNUP =
         };
 
         var signinRequestText = JSON.stringify(signinRequest).toString();
-        signinRequestText = UTILS.prepForHMAC(signinRequestText); 
+        signinRequestText = UTILS.prepForHMAC(signinRequestText);
+        var hmacData = HMAC.setHmacData(signinRequestText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : signinRequestText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -2057,10 +2062,11 @@ var SIGNUP =
 
         var phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
         phoneVerificationText = UTILS.prepForHMAC(phoneVerificationText);
+        var hmacData = HMAC.setHmacData(phoneVerificationText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : phoneVerificationText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -2162,10 +2168,11 @@ var SIGNUP =
 
         var phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
         phoneVerificationText = UTILS.prepForHMAC(phoneVerificationText);
+        var hmacData = HMAC.setHmacData(phoneVerificationText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : phoneVerificationText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -2285,10 +2292,11 @@ var SIGNUP =
 
         var phoneIndicationText = JSON.stringify(phoneVerificationIndication).toString();
         phoneIndicationText = UTILS.prepForHMAC(phoneIndicationText);
+        var hmacData = HMAC.setHmacData(phoneIndicationText);
          $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com", // for hmac
-            data        : phoneIndicationText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -2399,10 +2407,11 @@ var SIGNUP =
 
         var securityCodeDisplayRespText = JSON.stringify(securityCodeDisplayResp).toString();
         securityCodeDisplayRespText = UTILS.prepForHMAC(securityCodeDisplayRespText);
+        var hmacData = HMAC.setHmacData(securityCodeDisplayRespText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : securityCodeDisplayRespText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -2523,10 +2532,11 @@ var SIGNUP =
 
         var securityCodeIndText = JSON.stringify(securityCodeInd).toString();
         securityCodeIndText = UTILS.prepForHMAC(securityCodeIndText);
+        var hmacData = HMAC.setHmacData(securityCodeIndText);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : securityCodeIndText,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -2945,3 +2955,15 @@ var CALLBACK =
         // UTILS.removePaymentRepsonseURL();
     }
 };
+
+var HMAC = {
+    setHmacData: function(data){
+        var obj = new Object();
+        obj.val = data;
+        obj.tid  = TRANSACTION.id;
+        var jsonString= JSON.stringify(obj);
+        return jsonString;
+    }
+};
+
+

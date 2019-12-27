@@ -1,11 +1,11 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.0/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.0/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.0/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.0/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.0/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.1/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.1/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.1/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.1/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.1/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -225,10 +225,11 @@ function signupWithSecurityQ()
     {
         var signupRequest = CARDHOLDER.setSecurityQA(securityQID, securityAnswer);
         signupRequest = UTILS.prepForHMAC(signupRequest);
+        var hmacData = setHmacData(signupRequest);
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : signupRequest,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -491,10 +492,11 @@ function launchPayment()
 function calculateHMAC(message)
 {
     message = UTILS.prepForHMAC(message);
+    var hmacData = setHmacData(message);
     $.ajax({
         type        : "POST",
         url         : "https://hmac.vraymerchant.com",
-        data        : message,
+        data        : hmacData,
         timeout     : 10000, 
         async       : true,
         success     : function(hmac) {
@@ -610,11 +612,12 @@ var VRAY =
         var purchaseItems = VRAY.purchaseItem;
         var purchaseOrder = PAYMENT.create(amount, purchaseItems, paymentResponseURL);
         purchaseOrder = UTILS.prepForHMAC(purchaseOrder);
+        var hmacData = setHmacData(purchaseOrder);
         
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
-            data        : purchaseOrder,
+            data        : hmacData,
             timeout     : 10000, 
             async       : true,
             dataType    : "text",
@@ -679,6 +682,14 @@ var VRAY =
     setTotalAmount: function(totalAmount)
     {
         VRAY.totalAmount = totalAmount;
+    },
+
+    setHmacData: function(data){
+        var obj = new Object();
+        obj.val = data;
+        obj.tid  = TRANSACTION.id;
+        var jsonString= JSON.stringify(obj);
+        return jsonString;
     },
 
     getCardHolderName: function()
