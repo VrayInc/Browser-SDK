@@ -2792,7 +2792,8 @@ var UTILS =
         var obj = {
             "val" : message,
             "pay" : payVal,
-            "merchantId" : MERCHANT.id       
+            "merchantId" : MERCHANT.id,
+            "tid": TRANSACTION.id
         };
         return JSON.stringify(obj); 
     },
