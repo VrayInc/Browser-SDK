@@ -254,7 +254,20 @@ var CARDHOLDER =
         var today = new Date();
         TRANSACTION.date = today.toString();
         TRANSACTION.startTime = today.getTime();
-        TRANSACTION.id = Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11; // postive # 0 - 7FFF,FFFF,FFFF,FFFF
+        TRANSACTION.id = Math.floor(Math.random() * (9007199254740991 - 10));
+        var oldTIDString = TRANSACTION.id.toString();
+        var newTIDString = oldTIDString.slice(0, -1);
+        var serverType = APPSERVER.vrayHost.getServerType();
+        if (serverTpe === 0) {
+            newTIDString = newTIDString + "0";
+        }
+        else if (serverType === 1) {
+            newTIDString = newTIDString + "1";
+        }
+        else if (serverType === 2) {
+            newTIDString = newTIDString + "2";
+        }
+        TRANSACTION.id = parseInt(newTIDString);
 
     var prePayment = {
             "msgId"              : MESSAGE.id.PrePaymentRequest,
