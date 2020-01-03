@@ -7,9 +7,6 @@ var IE;
 
 function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount) 
 {
-    // var chargeToken;
-    // var chargeAmount;
-    // var chargeRequest;
     var data;
 
     if (token == "good-token")
