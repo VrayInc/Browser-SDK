@@ -258,7 +258,7 @@ var CARDHOLDER =
         var oldTIDString = TRANSACTION.id.toString();
         var newTIDString = oldTIDString.slice(0, -1);
         var serverType = APPSERVER.vrayHost.getServerType();
-        if (serverTpe === 0) {
+        if (serverType === 0) {
             newTIDString = newTIDString + "0";
         }
         else if (serverType === 1) {
@@ -900,7 +900,7 @@ var PAYMENT =
         var oldTIDString = TRANSACTION.id.toString();
         var newTIDString = oldTIDString.slice(0, -1);
         var serverType = APPSERVER.vrayHost.getServerType();
-        if (serverTpe === 0) {
+        if (serverType === 0) {
             newTIDString = newTIDString + "0";
         }
         else if (serverType === 1) {
