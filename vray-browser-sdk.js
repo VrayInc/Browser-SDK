@@ -1,11 +1,11 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.6/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.6/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.6/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.6/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.6/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.7/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.7/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.7/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.7/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.7/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -558,7 +558,7 @@ var VRAY =
         VRAY.shippingAddr = shippingAddress;
         VRAY.totalAmount = totalAmount;
         
-        if((VRAY.loginStatus !== 0) && (VRAY.loginStatus !== 1))
+        if((VRAY.loginStatus !== 0) && (VRAY.loginStatus !== 1) && (VRAY.loginStatus !== 2))
             VRAY.loginStatus = parseInt(loginStatus);
 
         CARDHOLDER.configure(
@@ -590,7 +590,7 @@ var VRAY =
            !VRAY.cardHolderName || !VRAY.myVId || 
            !VRAY.phoneNumber || !VRAY.totalAmount ||
            !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
-           !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1))) 
+           !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1) || (VRAY.loginStatus === 2)))
         {
             CALLBACK.call(REASON.AuthorizationStatus, "ERROR - Missing required payment request information!", null);
             return;
