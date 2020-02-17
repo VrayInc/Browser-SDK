@@ -239,7 +239,7 @@ function chargeResult(req,reason,data,tid) {
 function hmacService (requestObject) {
     return new Promise(function (resolve, reject) {
         let message = JSON.stringify(requestObject);
-        requestObject = UTILS.prepForHMAC(message, false, requestObject);
+        requestObject = prepForHMAC(message, false, requestObject);
         var url = "https://hmac.vraymerchant.com";
         $.ajax({
             type: "POST",
