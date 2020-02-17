@@ -156,7 +156,7 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
         };
         
         return new Promise(function (resolve, reject) {
-            COMMONSERVICE.hmacService(requestObject).then(function (contentMac) {
+            hmacService(requestObject).then(function (contentMac) {
                 $.ajax({
                     type: "POST",
                     url: APPSERVER.paymentGWHost.getURL() + "/refund",
@@ -170,9 +170,11 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
                     dataType: "json"
                 })
                     .done(function (response) {
+                        console.log(response);
                         console.log("Refund Successful");
                     })
                     .fail(function (response) {
+                        console.log(response);
                         console.log("Refund failed");
                     });
             });
@@ -232,5 +234,28 @@ function chargeResult(req,reason,data,tid) {
  //        console.log('tid',tid);
         
         
+}
+
+function hmacService (requestObject) {
+    return new Promise(function (resolve, reject) {
+        let message = JSON.stringify(requestObject);
+        requestObject = UTILS.prepForHMAC(message, false);
+        var url = "https://hmac.vraymerchant.com";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: requestObject,
+            timeout: 10000,
+            async: true,
+            dataType: "text"
+        })
+            .done(function (resp) {
+                resolve(resp);
+            })
+            .fail(function (err) {
+                reject(err);
+            });
+    });
+
 }
 
