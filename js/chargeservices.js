@@ -239,7 +239,7 @@ function chargeResult(req,reason,data,tid) {
 function hmacService (requestObject) {
     return new Promise(function (resolve, reject) {
         let message = JSON.stringify(requestObject);
-        requestObject = UTILS.prepForHMAC(message, false);
+        requestObject = UTILS.prepForHMAC(message, false, requestObject);
         var url = "https://hmac.vraymerchant.com";
         $.ajax({
             type: "POST",
@@ -257,5 +257,16 @@ function hmacService (requestObject) {
             });
     });
 
+}
+
+function prepForHMAC(message, cond, requestObject) {
+    payVal = (cond) ? "yes" : "no";
+    var obj = {
+        "val" : message,
+        "pay" : payVal,
+        "merchantId" : requestObject.merchantId,
+        "tid": requestObject.tid
+    };
+    return JSON.stringify(obj);
 }
 
