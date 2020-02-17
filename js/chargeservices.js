@@ -155,12 +155,30 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
             "reason": reason
         };
         
-        refundRequest = getHTTPRequest();
-        refundRequest.open("POST", url, true);
-        refundRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-        refundRequest.onreadystatechange = refundRequest;
-        refundRequest.send(JSON.stringify(refundRequestBody));
+        return new Promise(function (resolve, reject) {
+            COMMONSERVICE.hmacService(requestObject).then(function (contentMac) {
+                $.ajax({
+                    type: "POST",
+                    url: APPSERVER.paymentGWHost.getURL() + "/refund",
+                    timeout: 10000,
+                    contentType: "application/json",
+                    headers: {
+                        'Content-Mac': contentMac
+                    },
+                    data: JSON.stringify(refundRequestBody),
+                    async: true,
+                    dataType: "json"
+                })
+                    .done(function (response) {
+                        console.log("Refund Successful");
+                    })
+                    .fail(function (response) {
+                        console.log("Refund failed");
+                    });
+            });
+        });
+    } else {
+        console.log("Please enter tid");
     }
 }
 

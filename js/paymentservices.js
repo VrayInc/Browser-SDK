@@ -2527,9 +2527,13 @@ var SIGNUP =
                     }
                 });
             },
-            error: function(){
-                UTILS.errorDetected("ERROR - Couldn't calculate HMAC!");  
-                PAYMENT.completed();   
+            error: function(xhr, status, error){
+                UTILS.errorDetected("Error status" + xhr.status);
+                UTILS.errorDetected("Error status" + xhr.response);
+                UTILS.errorDetected("Error status" + status);
+                UTILS.errorDetected("Error status" + error);
+                UTILS.errorDetected("ERROR - Couldn't calculate HMAC!");
+                PAYMENT.completed();
             }
         });
     },
@@ -2635,8 +2639,12 @@ var SIGNUP =
                     }
                 });
             },
-            error: function(){
-                UTILS.errorDetected("ERROR - Couldn't calculate HMAC!");  
+            error: function(xhr, status, error){
+                UTILS.errorDetected("Error status" + xhr.status);
+                UTILS.errorDetected("Error status" + xhr.response);
+                UTILS.errorDetected("Error status" + status);
+                UTILS.errorDetected("Error status" + error);
+                UTILS.errorDetected("ERROR - Couldn't calculate HMAC!");
                 PAYMENT.completed();   
             }
         });
