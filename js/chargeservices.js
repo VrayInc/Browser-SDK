@@ -156,7 +156,7 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
         };
         
         return new Promise(function (resolve, reject) {
-            hmacService(requestObject).then(function (contentMac) {
+            hmacService(refundRequestBody).then(function (contentMac) {
                 $.ajax({
                     type: "POST",
                     url: APPSERVER.paymentGWHost.getURL() + "/refund",
