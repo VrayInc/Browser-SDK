@@ -5,7 +5,7 @@
  */
 var IE;
 
-function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount) 
+function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
 {
     var data;
 
@@ -23,15 +23,15 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
             console.log('paymentResponseURL Found');
             var a = CALLBACK.paymentResponseURL;
             if(a.indexOf("?") > -1) {
-                 window.location.href = CALLBACK.paymentResponseURL +
-                                "&reason=" + REASON.AuthorizationStatus +
-                                "&data=" + data +
-                                "&tid=" + tid;
+                window.location.href = CALLBACK.paymentResponseURL +
+                    "&reason=" + REASON.AuthorizationStatus +
+                    "&data=" + data +
+                    "&tid=" + tid;
             }else{
-                 window.location.href = CALLBACK.paymentResponseURL +
-                                "?reason=" + REASON.AuthorizationStatus +
-                               "&data=" + data +
-                                "&tid=" + tid;
+                window.location.href = CALLBACK.paymentResponseURL +
+                    "?reason=" + REASON.AuthorizationStatus +
+                    "&data=" + data +
+                    "&tid=" + tid;
             }
 
         } else {
@@ -39,15 +39,15 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
             if(TRANSACTION.paymentResponseURL){
                 var a = TRANSACTION.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
-                     window.location.href = TRANSACTION.paymentResponseURL +
-                                "&reason=" + REASON.AuthorizationStatus +
-                                "&data=" + data +
-                                "&tid=" + tid;
+                    window.location.href = TRANSACTION.paymentResponseURL +
+                        "&reason=" + REASON.AuthorizationStatus +
+                        "&data=" + data +
+                        "&tid=" + tid;
                 }else{
-                   window.location.href = TRANSACTION.paymentResponseURL +
-                                "?reason=" + REASON.AuthorizationStatus +
-                               "&data=" + data +
-                                "&tid=" + tid;
+                    window.location.href = TRANSACTION.paymentResponseURL +
+                        "?reason=" + REASON.AuthorizationStatus +
+                        "&data=" + data +
+                        "&tid=" + tid;
                 }
 
             } else {
@@ -56,96 +56,97 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
         }
         UIUtils.hideSpinner();
     }
-    else 
+    else
     {
         if(token === "fake-token")
         {
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
-                
+
                 var a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
-                     window.location.href = CALLBACK.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                    "&data=Cancel&tid=" + tid;    
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "&reason=" + REASON.Error +
+                        "&data=Cancel&tid=" + tid;
                 }else{
-                     window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                    "&data=Cancel&tid=" + tid;     
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "?reason=" + REASON.Error +
+                        "&data=Cancel&tid=" + tid;
                 }
             } else {
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
-                   
+
                     var a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
-                         window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                     "&data=Cancel&tid=" + tid;  
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "&reason=" + REASON.Error +
+                            "&data=Cancel&tid=" + tid;
                     }else{
-                        window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                     "&data=Cancel&tid=" + tid;  
-                    }  
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "?reason=" + REASON.Error +
+                            "&data=Cancel&tid=" + tid;
+                    }
                 } else {
                     CALLBACK.call(REASON.Error, "Cancel", tid);
                 }
             }
         }
-        else 
+        else
         {
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
-               
+
                 var a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
-                      window.location.href = CALLBACK.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "&reason=" + REASON.Error +
+                        "&data=" + "Payment failed" +
+                        "&tid=" + tid;
                 }else{
-                     window.location.href = CALLBACK.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;   
-                }    
+                    window.location.href = CALLBACK.paymentResponseURL +
+                        "?reason=" + REASON.Error +
+                        "&data=" + "Payment failed" +
+                        "&tid=" + tid;
+                }
             } else {
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
-                   
+
                     var a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
-                         window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "&reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "&reason=" + REASON.Error +
+                            "&data=" + "Payment failed" +
+                            "&tid=" + tid;
                     }else{
-                         window.location.href = TRANSACTION.paymentResponseURL + 
-                                    "?reason=" + REASON.Error +
-                                    "&data=" + "Payment failed" + 
-                                    "&tid=" + tid;
-                    }  
+                        window.location.href = TRANSACTION.paymentResponseURL +
+                            "?reason=" + REASON.Error +
+                            "&data=" + "Payment failed" +
+                            "&tid=" + tid;
+                    }
                 } else {
                     console.log('callback function called not Found');
                     CALLBACK.call(REASON.Error, "Payment failed", tid);
                 }
             }
         }
-        
+
         UIUtils.hideSpinner();
-        
+
         PAYMENT.completed();
     }
 }
 
 
-function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason) 
+function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason)
 {
-    var refundRequest;
-    
-    if((tid !== undefined) && (tid !== null)) 
+    if((tid !== undefined) && (tid !== null))
     {
-        var url = APPSERVER.paymentGWHost.getURL() + "/refund";
+        let serverType = tid.charAt(tid.length - 1);
+        let url = getURLs(serverType);
+
+        //var url = APPSERVER.paymentGWHost.getURL() + "/refund";
         refundRequestBody = {
             "tid": tid,
             "merchantId": merchantId,
@@ -154,12 +155,12 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
             "currency": currency,
             "reason": reason
         };
-        
+
         return new Promise(function (resolve, reject) {
             hmacService(refundRequestBody).then(function (contentMac) {
                 $.ajax({
                     type: "POST",
-                    url: APPSERVER.paymentGWHost.getURL() + "/refund",
+                    url: url.gatewayURL + "refund",
                     timeout: 10000,
                     contentType: "application/json",
                     headers: {
@@ -186,20 +187,20 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
 
 
 function sendChargePayment(tid, token, amount, merchant, charge) {
-    
+
     if((token !== undefined) && (token !== null)) {
-        
+
         //POST to ChargePaymentServlet.java
-        var url = "ChargePayment?action=submittoken&token=" + token + 
-                  "&amount=" + amount + "&merchant=" + merchant;
+        var url = "ChargePayment?action=submittoken&token=" + token +
+            "&amount=" + amount + "&merchant=" + merchant;
         var chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, true);
         chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.send(charge);
-    } 
-    else 
+    }
+    else
     {
-        if(UTILS.debug.enabled()) 
+        if(UTILS.debug.enabled())
         {
             CALLBACK.call(REASON.Error, "Cancel", tid);
         }
@@ -207,18 +208,18 @@ function sendChargePayment(tid, token, amount, merchant, charge) {
             CALLBACK.call(REASON.Error, "Unknown", tid);
         }
     }
-	
+
     console.log("Sending payment to charging server: " + url.toLocaleString);
 }
 
 function getHTTPRequest() {
-    
+
     if (window.XMLHttpRequest) {
         if (navigator.userAgent.indexOf('MSIE') !== -1) {
             IE = true;
         }
         return new XMLHttpRequest();
-        
+
     } else if (window.ActiveXObject) {
         IE = true;
         return new ActiveXObject("Microsoft.XMLHTTP");
@@ -227,13 +228,13 @@ function getHTTPRequest() {
 
 function chargeResult(req,reason,data,tid) {
     //window.alert("Payment transaction completed!");
-	console.log("Payment charge completed!");
- //        console.log('responseURL', CALLBACK.paymentResponseURL);
- //        console.log('reason',REASON.AuthorizationStatus);
- //        console.log('data',data);
- //        console.log('tid',tid);
-        
-        
+    console.log("Payment charge completed!");
+    //        console.log('responseURL', CALLBACK.paymentResponseURL);
+    //        console.log('reason',REASON.AuthorizationStatus);
+    //        console.log('data',data);
+    //        console.log('tid',tid);
+
+
 }
 
 function hmacService (requestObject) {
@@ -268,5 +269,32 @@ function prepForHMAC(message, cond, requestObject) {
         "tid": requestObject.tid
     };
     return JSON.stringify(obj);
+}
+
+function getURLs(serverType) {
+    var domainURL = "";
+    var gatewayURL = "";
+    var vrayBaseURL = "";
+    var urls = {};
+
+    if (serverType == "0") {
+        domainURL = "https://vraydevportal.azurewebsites.net";
+        gatewayURL = "https://devgateway.vraymerchant.com/";
+        vrayBaseURL = "https://devpay.vraymerchant.com/";
+        urls = { domainURL: domainURL, gatewayURL: gatewayURL, vrayBaseURL: vrayBaseURL };
+    }
+    else if (serverType == "1") {
+        domainURL = "https://vraystagingportal.azurewebsites.net";
+        gatewayURL = "https://devgateway.vraymerchant.com/";
+        vrayBaseURL = "https://stagingpay.vraymerchant.com/";
+        urls = { domainURL: domainURL, gatewayURL: gatewayURL, vrayBaseURL: vrayBaseURL };
+    }
+    else if (serverType == "2") {
+        domainURL = "https://vrayproduction.azurewebsites.net";
+        gatewayURL = "https://gateway.vraymerchant.com/";
+        vrayBaseURL = "https://pay.vraymerchant.com/";
+        urls = { domainURL: domainURL, gatewayURL: gatewayURL, vrayBaseURL: vrayBaseURL };
+    }
+    return urls;
 }
 
