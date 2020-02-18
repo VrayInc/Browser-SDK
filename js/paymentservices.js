@@ -2680,7 +2680,8 @@ var STATUS =
 	PhoneNumberVerificationFailure : 22, 
 	NumberAlreadyRegistered: 23,
 	InvalidPhoneNumber2: 24,
-	BrowserCodeCheck: 25,
+    BrowserCodeCheck: 25,
+    Unsubscribe: 25,
 
         UNKNOWN : -1
    }

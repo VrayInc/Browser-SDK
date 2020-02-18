@@ -148,7 +148,7 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
 
         //var url = APPSERVER.paymentGWHost.getURL() + "/refund";
         refundRequestBody = {
-            "tid": tid,
+            "tid": parseInt(tid),
             "merchantId": merchantId,
             "merchantName": merchantName,
             "amount": amount,
@@ -161,7 +161,7 @@ function doRefundPayment(merchantId, merchantName, tid, amount, currency, reason
                 $.ajax({
                     type: "POST",
                     url: url.gatewayURL + "refund",
-                    timeout: 10000,
+                    timeout: 20000,
                     contentType: "application/json",
                     headers: {
                         'Content-Mac': contentMac
