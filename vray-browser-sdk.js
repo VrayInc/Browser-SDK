@@ -1,11 +1,13 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.15/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.15/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.15/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.15/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.15/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/chargeservices.js', chargeServicesAdded);
+// loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
+// loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -113,8 +115,8 @@ var securityQuestionModalString =
 
 var spinnerString =
     '<div id="waitForAuthorization" class="pay-with-mobile-spinner">' +
-        '<div id="mobilepay" class="processor"></div>' +
-        '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.4/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
+    '<div id="mobilepay" class="processor"></div>' +
+    '<img src="https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.4/images/spinner_green_dot.gif" width="50" height="50" class="proc-img"/>' +
     '</div>';
 
 document.head.append(addCSSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@v2.1.4/css/merchant-button-special.css'));
@@ -178,7 +180,7 @@ function loadJSFile(filepath, callback)
             if (jScript.readyState === "loaded" || jScript.readyState === "complete")
             {
                 jScript.onreadystatechange = null;
-                
+
                 if(callback) {
                     callback();
                 }
@@ -190,11 +192,11 @@ function loadJSFile(filepath, callback)
         jScript.onload = function()
         {
             if(callback) {
-                    callback();
+                callback();
             }
         };
     }
-    
+
     jScript.src = filepath;
     document.getElementsByTagName("body")[0].appendChild(jScript);
 }
@@ -229,7 +231,7 @@ function signupWithSecurityQ()
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
             data        : signupRequest,
-            timeout     : 10000, 
+            timeout     : 10000,
             async       : true,
             dataType    : "text",
             success     : function(hmac) {
@@ -243,8 +245,8 @@ function signupWithSecurityQ()
                 UIUtils.showSpinner();
             },
             error: function(){
-                UTILS.errorDetected("Couldn't calculate HMAC!");  
-                PAYMENT.completed();   
+                UTILS.errorDetected("Couldn't calculate HMAC!");
+                PAYMENT.completed();
             }
         });
     }
@@ -345,9 +347,9 @@ function pushToServer()
 function getPaymentURL(tid, merchantID, merchantName, total)
 {
     var storeFrontURL;  // legacy store
-    switch (merchantID) 
+    switch (merchantID)
     {
-        case 'asiaroom.vraymerchant.com':  
+        case 'asiaroom.vraymerchant.com':
             storeFrontURL = "https://asiaroom.vraymerchant.com/payment.html";
             break;
         case 'gcs.vraymerchant.com':
@@ -382,7 +384,7 @@ function getPaymentURL(tid, merchantID, merchantName, total)
         case 'merchant.com.vray.vpay':
         case 'www.vraymerchant.com':
         default:
-            storeFrontURL = "https://www.vraymerchant.com/payment.html"; 
+            storeFrontURL = "https://www.vraymerchant.com/payment.html";
     }
     var url = storeFrontURL + "?tid=" + tid + "&name=" + merchantName + "&amt=" + total + "&mac=" + "";
 
@@ -391,7 +393,7 @@ function getPaymentURL(tid, merchantID, merchantName, total)
     var hmac = CryptoJS.HmacSHA256(url, key);
     var hmacBase64 = CryptoJS.enc.Base64.stringify(hmac);
     TRANSACTION.MAC = hmacBase64;
-    
+
     return url + hmacBase64;
 }
 
@@ -400,11 +402,11 @@ function launchPayment()
     var tid = TRANSACTION.id;
     // var merchant = MERCHANT.name;
     // var amount = TRANSACTION.amount;
-    
+
     // var storeFrontURL = "https://magentostore.ngrok.io";  // legacy store
-    // switch (MERCHANT.id) 
+    // switch (MERCHANT.id)
     // {
-    //     case 'asiaroom.vraymerchant.com':  
+    //     case 'asiaroom.vraymerchant.com':
     //         storeFrontURL = "https://asiaroom.vraymerchant.com/payment.html";
     //         break;
     //     case 'gcs.vraymerchant.com':
@@ -439,29 +441,29 @@ function launchPayment()
     //     case 'merchant.com.vray.vpay':
     //     case 'www.vraymerchant.com':
     //     default:
-    //         storeFrontURL = "https://magentostore.vraymerchant.com/payment.html"; 
+    //         storeFrontURL = "https://magentostore.vraymerchant.com/payment.html";
     // }
     // var url = storeFrontURL + "?tid=" + tid + "&name=" + merchant + "&amt=" + amount + "&mac=" + "";
-    
+
     // var mObj = {
     //     "val" : url,
     //     "pay" : "yes",
-    //     "merchantId" : MERCHANT.id   
+    //     "merchantId" : MERCHANT.id
     // };
     // var message = JSON.stringify(mObj);
     // $.ajax({
     //     type        : "POST",
     //     url         : "https://hmac.vraymerchant.com",
     //     data        : message,
-    //     timeout     : 10000, 
+    //     timeout     : 10000,
     //     async       : false,
     //     dataType    : "text",
     //     success     : function(hmacBase64) {
     //         TRANSACTION.MAC = hmacBase64;
-    //         console.log("URL + HMAC Base 64: " + url + hmacBase64);  
+    //         console.log("URL + HMAC Base 64: " + url + hmacBase64);
     //     },
     //     error: function(){
-    //         console.log("Couldn't calculate HMAC!");  
+    //         console.log("Couldn't calculate HMAC!");
     //     }
     // }); //ajax()
     //var storeFrontURL = "https://pay.vraymerchant.com/payment.html";
@@ -495,14 +497,14 @@ function calculateHMAC(message)
         type        : "POST",
         url         : "https://hmac.vraymerchant.com",
         data        : message,
-        timeout     : 10000, 
+        timeout     : 10000,
         async       : true,
         success     : function(hmac) {
             return result;
         },
         error: function(){
-            UTILS.errorDetected("Couldn't calculate HMAC!");  
-            PAYMENT.completed();   
+            UTILS.errorDetected("Couldn't calculate HMAC!");
+            PAYMENT.completed();
         }
     });
 }
@@ -511,233 +513,233 @@ var vServerType = Object.freeze( {"Dev":0, "Staging":1, "Production":2} );
 ////////////////////////////
 // Functions for User
 ///////////////////////////
-var VRAY = 
-{
-    cardHolderName: null,
-    merchantId: null,
-    merchantName: null,
-    myVId: null,
-    phoneNumber: null,
-    purchaseItem: null,
-    shippingAddr: [],
-    deviceType: 0,
-    loginStatus: 0,
-    totalAmount: 0,
-    shippingAddress     : [null], // address: street, city, zip, country
-    shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping 
-    
-    init: function(merchantId, merchantName, serverType)
+var VRAY =
     {
-        // Merchant Configuration
-        VRAY.merchantId = merchantId;
-        VRAY.merchantName = merchantName;
-         // Define App Server and Merchant Id & name
+        cardHolderName: null,
+        merchantId: null,
+        merchantName: null,
+        myVId: null,
+        phoneNumber: null,
+        purchaseItem: null,
+        shippingAddr: [],
+        deviceType: 0,
+        loginStatus: 0,
+        totalAmount: 0,
+        shippingAddress     : [null], // address: street, city, zip, country
+        shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping
 
-        if (serverType === undefined)
-		{
-
-		    MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, vServerType.Production);
-		}
-		else{
-
-		    MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, serverType);
-
-		}
-        // Define App Server and Merchant Id & name
-        // MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
-    },
-    
-    setupPayment: function(cardHolderName, eMail, phoneNumber, purchaseItem, shippingAddress, loginStatus, totalAmount)
-    {
-        // Card Holder Information
-        VRAY.cardHolderName = cardHolderName;
-        VRAY.loginStatus = loginStatus; // Signed-In = 0 or Guest Account = 1
-        VRAY.myVId = eMail;
-        VRAY.phoneNumber = phoneNumber;
-        VRAY.purchaseItem = purchaseItem;
-        VRAY.shippingAddr = shippingAddress;
-        VRAY.totalAmount = totalAmount;
-        
-        if((VRAY.loginStatus !== 0) && (VRAY.loginStatus !== 1) && (VRAY.loginStatus !== 2))
-            VRAY.loginStatus = parseInt(loginStatus);
-
-        CARDHOLDER.configure(
-            VRAY.getMyVId(),
-            VRAY.getCardHolderName(),
-            VRAY.getPhoneNumber(),
-            VRAY.getShippingAddr()
-        );
-    },
-    
-    pay: function(callback, paymentResponseURL)
-    {
-        //
-        // Payment authorization call back function & charge result URL
-        //
-        if(!callback) 
+        init: function(merchantId, merchantName, serverType)
         {
-            window.alert("ERROR - Payment authorization callback  function() is required.");
-            return;
-        }
-        
-        CALLBACK.callback = callback;
-        CALLBACK.paymentResponseURL = paymentResponseURL;
-        
-        //
-        // Payment required paramters 
-        //
-        if(!VRAY.merchantId || !VRAY.merchantName || 
-           !VRAY.cardHolderName || !VRAY.myVId || 
-           !VRAY.phoneNumber || !VRAY.totalAmount ||
-           !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
-           !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1) || (VRAY.loginStatus === 2)))
-        {
-            CALLBACK.call(REASON.AuthorizationStatus, "ERROR - Missing required payment request information!", null);
-            return;
-        }
-        
-        //
-        // Modify any payment setup at run time parameters.
-        //
-        TRANSACTION.init();
-        TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
-        TRANSACTION.loginStatus = VRAY.getLoginStatus();
-        
-        //
-        // Create payment 
-        //
-        var amount = VRAY.totalAmount;
-        var purchaseItems = VRAY.purchaseItem;
-        var purchaseOrder = PAYMENT.create(amount, purchaseItems, paymentResponseURL);
-        purchaseOrder = UTILS.prepForHMAC(purchaseOrder);
-        
-        $.ajax({
-            type        : "POST",
-            url         : "https://hmac.vraymerchant.com",
-            data        : purchaseOrder,
-            timeout     : 10000, 
-            async       : true,
-            dataType    : "text",
-            success     : function(hmac) 
+            // Merchant Configuration
+            VRAY.merchantId = merchantId;
+            VRAY.merchantName = merchantName;
+            // Define App Server and Merchant Id & name
+
+            if (serverType === undefined)
             {
-                PAYMENT.authorizationRequest(hmac, paymentResponseURL);
-            },
-            error: function()
-            {
-                UTILS.errorDetected("Couldn't calculate HMAC!");  
-                PAYMENT.completed();   
+
+                MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, vServerType.Production);
             }
-        });
-    },
-    
-    defaultPayRequestCallback:  function(reason, error, data) 
-    {
-     
-            if(reason === REASON.AuthorizationStatus) 
+            else{
+
+                MERCHANT.configure(VRAY.merchantId, VRAY.merchantName, serverType);
+
+            }
+            // Define App Server and Merchant Id & name
+            // MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
+        },
+
+        setupPayment: function(cardHolderName, eMail, phoneNumber, purchaseItem, shippingAddress, loginStatus, totalAmount)
+        {
+            // Card Holder Information
+            VRAY.cardHolderName = cardHolderName;
+            VRAY.loginStatus = loginStatus; // Signed-In = 0 or Guest Account = 1
+            VRAY.myVId = eMail;
+            VRAY.phoneNumber = phoneNumber;
+            VRAY.purchaseItem = purchaseItem;
+            VRAY.shippingAddr = shippingAddress;
+            VRAY.totalAmount = totalAmount;
+
+            if((VRAY.loginStatus !== 0) && (VRAY.loginStatus !== 1) && (VRAY.loginStatus !== 2))
+                VRAY.loginStatus = parseInt(loginStatus);
+
+            CARDHOLDER.configure(
+                VRAY.getMyVId(),
+                VRAY.getCardHolderName(),
+                VRAY.getPhoneNumber(),
+                VRAY.getShippingAddr()
+            );
+        },
+
+        pay: function(callback, paymentResponseURL)
+        {
+            //
+            // Payment authorization call back function & charge result URL
+            //
+            if(!callback)
+            {
+                window.alert("ERROR - Payment authorization callback  function() is required.");
+                return;
+            }
+
+            CALLBACK.callback = callback;
+            CALLBACK.paymentResponseURL = paymentResponseURL;
+
+            //
+            // Payment required paramters
+            //
+            if(!VRAY.merchantId || !VRAY.merchantName ||
+                !VRAY.cardHolderName || !VRAY.myVId ||
+                !VRAY.phoneNumber || !VRAY.totalAmount ||
+                !VRAY.purchaseItem || (VRAY.totalAmount < 0) ||
+                !((VRAY.loginStatus === 0) || (VRAY.loginStatus === 1) || (VRAY.loginStatus === 2)))
+            {
+                CALLBACK.call(REASON.AuthorizationStatus, "ERROR - Missing required payment request information!", null);
+                return;
+            }
+
+            //
+            // Modify any payment setup at run time parameters.
+            //
+            TRANSACTION.init();
+            TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
+            TRANSACTION.loginStatus = VRAY.getLoginStatus();
+
+            //
+            // Create payment
+            //
+            var amount = VRAY.totalAmount;
+            var purchaseItems = VRAY.purchaseItem;
+            var purchaseOrder = PAYMENT.create(amount, purchaseItems, paymentResponseURL);
+            purchaseOrder = UTILS.prepForHMAC(purchaseOrder);
+
+            $.ajax({
+                type        : "POST",
+                url         : "https://hmac.vraymerchant.com",
+                data        : purchaseOrder,
+                timeout     : 10000,
+                async       : true,
+                dataType    : "text",
+                success     : function(hmac)
+                {
+                    PAYMENT.authorizationRequest(hmac, paymentResponseURL);
+                },
+                error: function()
+                {
+                    UTILS.errorDetected("Couldn't calculate HMAC!");
+                    PAYMENT.completed();
+                }
+            });
+        },
+
+        defaultPayRequestCallback:  function(reason, error, data)
+        {
+
+            if(reason === REASON.AuthorizationStatus)
             {
                 if (data) {
                     console.log("Payment failed w/ error:" + data);
                 }
                 else {
                     console.log("Payment done successfully.");
-                 
+
                 }
             }
-            else if (reason === REASON.ConfirmationCode) 
+            else if (reason === REASON.ConfirmationCode)
             {
 
-                console.log("Thank You!  \n" + 
-                             "You will receive a text message to authorize payment on your mobile phone.\n" + 
-                             "Please confirm the security code on the phone matches this one: " + 
-                             data + "\n");
+                console.log("Thank You!  \n" +
+                    "You will receive a text message to authorize payment on your mobile phone.\n" +
+                    "Please confirm the security code on the phone matches this one: " +
+                    data + "\n");
             }
             else if(reason === REASON.Error) {
 
                 console.log("Transaction ID " + tid + " received error call back = " + error);
-            }         
-    },
+            }
+        },
 
-    setDeviceType: function(deviceType)
-    {
-        VRAY.deviceType = deviceType;
-    },
+        setDeviceType: function(deviceType)
+        {
+            VRAY.deviceType = deviceType;
+        },
 
-    setLoginStatus: function(loginStatus)
-    {
-        VRAY.loginStatus = loginStatus;
-    },
+        setLoginStatus: function(loginStatus)
+        {
+            VRAY.loginStatus = loginStatus;
+        },
 
-    setShippingAddress(street, city, state, zipCode)
-    {
-        VRAY.streetAddr = street;
-        VRAY.city = city;
-        VRAY.state = state;
-        VRAY.zipCode = zipCode;
-        VRAY.shippingAddr = [streetAddr, city, state, zipCode];
-    },
+        setShippingAddress(street, city, state, zipCode)
+        {
+            VRAY.streetAddr = street;
+            VRAY.city = city;
+            VRAY.state = state;
+            VRAY.zipCode = zipCode;
+            VRAY.shippingAddr = [streetAddr, city, state, zipCode];
+        },
 
-    setTotalAmount: function(totalAmount)
-    {
-        VRAY.totalAmount = totalAmount;
-    },
+        setTotalAmount: function(totalAmount)
+        {
+            VRAY.totalAmount = totalAmount;
+        },
 
-    getCardHolderName: function()
-    {
-        return VRAY.cardHolderName;
-    },
+        getCardHolderName: function()
+        {
+            return VRAY.cardHolderName;
+        },
 
-    getMyVId: function()
-    {
-        return VRAY.myVId;
-    },
+        getMyVId: function()
+        {
+            return VRAY.myVId;
+        },
 
-    getPhoneNumber: function()
-    {
-        return VRAY.phoneNumber;
-    },
+        getPhoneNumber: function()
+        {
+            return VRAY.phoneNumber;
+        },
 
-    getPurchaseItem: function()
-    {
-        return VRAY.purchaseItem;
-    },
+        getPurchaseItem: function()
+        {
+            return VRAY.purchaseItem;
+        },
 
-    getStreetAddr: function()
-    {
-        return VRAY.streetAddr;
-    },
+        getStreetAddr: function()
+        {
+            return VRAY.streetAddr;
+        },
 
-    getCity: function()
-    {
-        return VRAY.city;
-    },
+        getCity: function()
+        {
+            return VRAY.city;
+        },
 
-    getZipCode: function()
-    {
-        return VRAY.zipCode;
-    },
+        getZipCode: function()
+        {
+            return VRAY.zipCode;
+        },
 
-    getShippingAddr: function()
-    {
-        return VRAY.shippingAddr;
-    },
-    
-    getShippingHistory: function(email, mobile, callback)
-    {
-        CARDHOLDER.getShippingHistory(email, mobile, callback);
-    },
-    
-    getDeviceType: function()
-    {
-        return VRAY.deviceType;
-    },
+        getShippingAddr: function()
+        {
+            return VRAY.shippingAddr;
+        },
 
-    getLoginStatus: function()
-    {
-        return VRAY.loginStatus;
-    },
+        getShippingHistory: function(email, mobile, callback)
+        {
+            CARDHOLDER.getShippingHistory(email, mobile, callback);
+        },
 
-    getTotalAmount: function()
-    {
-        return VRAY.totalAmount;
-    }
-};
+        getDeviceType: function()
+        {
+            return VRAY.deviceType;
+        },
+
+        getLoginStatus: function()
+        {
+            return VRAY.loginStatus;
+        },
+
+        getTotalAmount: function()
+        {
+            return VRAY.totalAmount;
+        }
+    };
