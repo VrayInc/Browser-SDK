@@ -586,8 +586,31 @@ var PAYMENT =
                 "merchantName"      : MERCHANT.name,
                 "lineItems"         : TRANSACTION.lineItems,
                 "paymentResponseURL": paymentResponseURL,
+                "subscriptionId" : TRANSACTION.subscriptionId,
                 "messageAuthenticationCode": UTILS.ab2hexText(hmac)
             };
+
+            // if(TRANSACTION.loginStatus == 2){
+            //     paymentReqParam = {
+            //         "msgId"             : MESSAGE.id.PaymentRequest,
+            //         "tid"               : TRANSACTION.id,
+            //         "ttime"             : TRANSACTION.date,
+            //         "vid"               : CARDHOLDER.id,
+            //         "deviceType"        : TRANSACTION.deviceType,
+            //         "loginStatus"       : TRANSACTION.loginStatus,
+            //         "phoneNumber"       : CARDHOLDER.phone,
+            //         "shippingInfo"      : CARDHOLDER.shippingAddress,
+            //         "amount"            : TRANSACTION.amount,
+            //         "countryCode"       : TRANSACTION.countryCode,
+            //         "currencyCode"      : TRANSACTION.currencyCode,
+            //         "merchantIdentifier": MERCHANT.id,
+            //         "merchantName"      : MERCHANT.name,
+            //         "lineItems"         : TRANSACTION.lineItems,
+            //         "paymentResponseURL": paymentResponseURL,
+            //         "subscriptionId" : TRANSACTION.subscriptionId,
+            //         "messageAuthenticationCode": UTILS.ab2hexText(hmac)
+            //     };
+            // }
 
             var  paymentReqParamText =  JSON.stringify(paymentReqParam).toString();
             TRANSACTION.paymentRequest = paymentReqParamText;
@@ -913,6 +936,7 @@ var PAYMENT =
                     "merchantName": MERCHANT.name,
                     "lineItems": TRANSACTION.lineItems,
                     "paymentResponseURL": paymentResponseURL,
+                    "subscriptionId": TRANSACTION.subscriptionId,
                     "messageAuthenticationCode": ""
                 };
             }
@@ -934,9 +958,14 @@ var PAYMENT =
                     "merchantName": MERCHANT.name,
                     "lineItems": TRANSACTION.lineItems,
                     "paymentResponseURL": paymentResponseURL,
+                    "subscriptionId": TRANSACTION.subscriptionId,
                     "messageAuthenticationCode": ""
                 };
             }
+
+            // if(TRANSACTION.loginStatus == 2){
+            //     paymentReqParam.subscriptionId = TRANSACTION.subscriptionId;
+            // }
 
             return JSON.stringify(paymentReqParam).toString();
         },
@@ -1195,6 +1224,9 @@ var PAYMENT =
             TRANSACTION.publicKey = paymentInfo.publicKey;
             TRANSACTION.deviceType = paymentInfo.deviceType;
             TRANSACTION.paymentResponseURL = paymentInfo.paymentResponseURL;
+            TRANSACTION.t3Start = paymentInfo.t3Start;
+            TRANSACTION.t3Duration = paymentInfo.t3Duration;
+            TRANSACTION.subscriptionId = paymentInfo.subscriptionId;
         },
 
         reauthorizationRequest: function()
@@ -2439,20 +2471,21 @@ var SIGNUP =
 
                                 if(phoneVerificationResp.status === STATUS.code.SUCCESS)
                                 {
-                                    window.alert("Phone verification completed.\n" +
-                                        "Please check your mobile phone for payment notification.");
+                                    // window.alert("Phone verification completed.\n" +
+                                    //     "Please check your mobile phone for payment notification.");
 
                                     SIGNUP.browserSignupComplete();
                                 }
                                 else if ((phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber) ||
                                     (phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber2))
                                 {
-                                    window.alert("Invalid Mobile Phone Number.\n" +
-                                        "Please enter a different mobile number associated with " + CARDHOLDER.id +  ".\n");
+                                    window.alert("Invalid cell phone number.\n" +
+                                        "Please enter a different cell phone number associated with " + CARDHOLDER.id +  ".\n");
+                                    PAYMENT.completed();
                                 }
                                 else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
 
-                                    window.alert("Mobile Phone Number Verification failed.\n");
+                                    window.alert("Cell phone number verification failed.\n");
                                     PAYMENT.completed();
                                 }
                                 else
@@ -2539,6 +2572,9 @@ var TRANSACTION =
         publicKey  : "",
         securityCode : 0,
         startTime : 0,
+        subscriptionId : null,
+        t3Start : 0,
+        t3Duration : 0,
         t1Timer  : null,
         t17Timer  : null,
         t1Timeout : 300000, // msec
@@ -2568,6 +2604,9 @@ var TRANSACTION =
             TRANSACTION.currencyCode = "usd";
             TRANSACTION.countryCode = "US";
             TRANSACTION.paymentResponseURL = null;
+            TRANSACTION.subscriptionId = null;
+            TRANSACTION.t3Start = 0;
+            TRANSACTION.t3Duration = 0;
         }
     };
 

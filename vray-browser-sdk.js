@@ -1,13 +1,13 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/chargeservices.js', chargeServicesAdded);
-// loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
-// loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.16/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.17/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.17/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.17/js/chargeservices.js', chargeServicesAdded);
+//loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
+//loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.17/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.17/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -522,6 +522,7 @@ var VRAY =
         phoneNumber: null,
         purchaseItem: null,
         shippingAddr: [],
+        subscriptionId : null,
         deviceType: 0,
         loginStatus: 0,
         totalAmount: 0,
@@ -549,7 +550,7 @@ var VRAY =
             // MERCHANT.configure(VRAY.merchantId, VRAY.merchantName);
         },
 
-        setupPayment: function(cardHolderName, eMail, phoneNumber, purchaseItem, shippingAddress, loginStatus, totalAmount)
+        setupPayment: function(cardHolderName, eMail, phoneNumber, purchaseItem, shippingAddress, loginStatus, totalAmount, subscriptionId)
         {
             // Card Holder Information
             VRAY.cardHolderName = cardHolderName;
@@ -559,6 +560,7 @@ var VRAY =
             VRAY.purchaseItem = purchaseItem;
             VRAY.shippingAddr = shippingAddress;
             VRAY.totalAmount = totalAmount;
+            VRAY.subscriptionId = subscriptionId;
 
             if((VRAY.loginStatus !== 0) && (VRAY.loginStatus !== 1) && (VRAY.loginStatus !== 2))
                 VRAY.loginStatus = parseInt(loginStatus);
@@ -604,6 +606,7 @@ var VRAY =
             TRANSACTION.init();
             TRANSACTION.deviceType = (UTILS.isMobile() ? 1 : 0);
             TRANSACTION.loginStatus = VRAY.getLoginStatus();
+            TRANSACTION.subscriptionId = VRAY.subscriptionId;
 
             //
             // Create payment
