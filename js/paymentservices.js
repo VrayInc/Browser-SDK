@@ -2399,9 +2399,7 @@ var SIGNUP =
             });
         },
 
-        securityCodeIndication: function(rxCode, UMID)
-        {
-            // Phone Verification Request
+        securityCodeIndication: function(rxCode, UMID) {
             var securityCodeInd = {
                 "msgId": MESSAGE.id.SecurityCodeIndication,
                 "tid": TRANSACTION.id,
@@ -2412,25 +2410,14 @@ var SIGNUP =
                 "UMID": UMID,
                 "messageAuthenticationCode": ""
             };
-
-            var securityCodeIndText = JSON.stringify(securityCodeInd).toString();
-            securityCodeIndText = UTILS.prepForHMAC(securityCodeIndText);
-            $.ajax({
-                type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
-                data        : securityCodeIndText,
-                timeout     : 10000,
-                async       : true,
-                dataType    : "text",
-                success     : function(hmac) {
-                    securityCodeInd.messageAuthenticationCode = UTILS.ab2hexText(hmac);
+            return new Promise(function (resolve, reject) {
+                SIGNUP.hmacService(securityCodeInd).then(function (contentMac) {
+                    securityCodeInd.messageAuthenticationCode = UTILS.ab2hexText(contentMac);
                     securityCodeIndText = JSON.stringify(securityCodeInd).toString();
-
                     if (UTILS.debug.enabled())
                     {
                         console.log("Broswer Phone Verification Request: \n\n" + securityCodeIndText + "\n\n");
                     }
-
                     $.ajax(
                         {
                             type: "POST",
@@ -2444,9 +2431,18 @@ var SIGNUP =
                                 {
                                     withCredentials: true
                                 },
-                            success: function(result)
-                            {
-                                var phoneVerificationResp = JSON.parse(result);
+                        })
+                        .done(function (resp) {
+                            var phoneVerificationResp = JSON.parse(resp);
+
+                                if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
+                                    if (TRANSACTION.deviceType == 1) {
+                                        window.location.href = TRANSACTION.paymentResponseURL +
+                                            "?reason=" + "2" +
+                                            "&data=" + "PhoneNumberVerificationFailure" +
+                                            "&tid=" + TRANSACTION.id;
+                                    }
+                                }
 
                                 if ((phoneVerificationResp === null) || (phoneVerificationResp === undefined) ||
                                     (phoneVerificationResp.msgId !== MESSAGE.id.OptimalBrowserPhoneVerificationResp))
@@ -2468,49 +2464,36 @@ var SIGNUP =
                                 TRANSACTION.id = phoneVerificationResp.tid;
                                 CARDHOLDER.id = phoneVerificationResp.vid;
                                 CARDHOLDER.phone = phoneVerificationResp.phoneNumber;
-
-                                if(phoneVerificationResp.status === STATUS.code.SUCCESS)
-                                {
-                                    // window.alert("Phone verification completed.\n" +
-                                    //     "Please check your mobile phone for payment notification.");
-
-                                    SIGNUP.browserSignupComplete();
-                                }
-                                else if ((phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber) ||
-                                    (phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber2))
-                                {
-                                    window.alert("Invalid cell phone number.\n" +
-                                        "Please enter a different cell phone number associated with " + CARDHOLDER.id +  ".\n");
-                                    PAYMENT.completed();
-                                }
-                                else if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
-
-                                    window.alert("Cell phone number verification failed.\n");
-                                    PAYMENT.completed();
-                                }
-                                else
-                                {
-                                    UTILS.errorDetected("ERROR - Unknown mobile phone verification failure.");
-                                    PAYMENT.completed();
-                                }
-                            },
-                            error: function()
-                            {
-                                UTILS.errorDetected("ERROR - Failed to Security Code Display Response.");
-                                PAYMENT.completed();
-                            }
+                            resolve(phoneVerificationResp);
+                        })
+                        .fail(function (err) {
+                            reject(err);
                         });
-                },
-                error: function(xhr, status, error){
-                    UTILS.errorDetected("Error status" + xhr.status);
-                    UTILS.errorDetected("Error status" + xhr.response);
-                    UTILS.errorDetected("Error status" + status);
-                    UTILS.errorDetected("Error status" + error);
-                    UTILS.errorDetected("ERROR - Couldn't calculate HMAC!");
-                    PAYMENT.completed();
-                }
+                });
             });
-        }
+        },
+
+        hmacService: function (requestObject) {
+            return new Promise(function (resolve, reject) {
+                let message = JSON.stringify(requestObject);
+                requestObject = UTILS.prepForHMAC(message, false);
+                var url = "https://hmac.vraymerchant.com";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: requestObject,
+                    timeout: 10000,
+                    async: true,
+                    dataType: "text"
+                })
+                    .done(function (resp) {
+                        resolve(resp);
+                    })
+                    .fail(function (err) {
+                        reject(err);
+                    });
+            });
+        },
     };
 
 ////////////////////////////////////////////////////////////////////////////////

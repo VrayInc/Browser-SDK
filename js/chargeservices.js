@@ -24,7 +24,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
             var a = CALLBACK.paymentResponseURL;
             if(a.indexOf("?") > -1) {
                 window.location.href = CALLBACK.paymentResponseURL +
-                    "&reason=" + REASON.AuthorizationStatus +
+                    "?reason=" + REASON.AuthorizationStatus +
                     "&data=" + data +
                     "&tid=" + tid;
             }else{
@@ -40,7 +40,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
                 var a = TRANSACTION.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
                     window.location.href = TRANSACTION.paymentResponseURL +
-                        "&reason=" + REASON.AuthorizationStatus +
+                        "?reason=" + REASON.AuthorizationStatus +
                         "&data=" + data +
                         "&tid=" + tid;
                 }else{
@@ -66,7 +66,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
                 var a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
                     window.location.href = CALLBACK.paymentResponseURL +
-                        "&reason=" + REASON.Error +
+                        "?reason=" + REASON.Error +
                         "&data=Cancel&tid=" + tid;
                 }else{
                     window.location.href = CALLBACK.paymentResponseURL +
@@ -80,7 +80,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
                     var a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
                         window.location.href = TRANSACTION.paymentResponseURL +
-                            "&reason=" + REASON.Error +
+                            "?reason=" + REASON.Error +
                             "&data=Cancel&tid=" + tid;
                     }else{
                         window.location.href = TRANSACTION.paymentResponseURL +
@@ -100,7 +100,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
                 var a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
                     window.location.href = CALLBACK.paymentResponseURL +
-                        "&reason=" + REASON.Error +
+                        "?reason=" + REASON.Error +
                         "&data=" + "Payment failed" +
                         "&tid=" + tid;
                 }else{
@@ -116,7 +116,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
                     var a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
                         window.location.href = TRANSACTION.paymentResponseURL +
-                            "&reason=" + REASON.Error +
+                            "?reason=" + REASON.Error +
                             "&data=" + "Payment failed" +
                             "&tid=" + tid;
                     }else{
