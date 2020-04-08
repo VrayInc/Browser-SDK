@@ -2434,13 +2434,35 @@ var SIGNUP =
                         })
                         .done(function (resp) {
                             var phoneVerificationResp = JSON.parse(resp);
-
                                 if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
-                                    if (TRANSACTION.deviceType == 1) {
-                                        window.location.href = TRANSACTION.paymentResponseURL +
-                                            "?reason=" + "2" +
-                                            "&data=" + "PhoneNumberVerificationFailure" +
-                                            "&tid=" + TRANSACTION.id;
+                                    if(CALLBACK.paymentResponseURL){
+                                        var a = CALLBACK.paymentResponseURL;
+                                        if(a.indexOf("?") > -1) {
+                                            window.location.href = CALLBACK.paymentResponseURL +
+                                                 "&reason=" + "2" +
+                                                "&data=" + "PhoneNumberVerificationFailure" +
+                                                "&tid=" + TRANSACTION.id;
+                                        }else{
+                                            window.location.href = CALLBACK.paymentResponseURL +
+                                                "?reason=" + "2" +
+                                                "&data=" + "PhoneNumberVerificationFailure" +
+                                                "&tid=" + TRANSACTION.id;
+                                        }
+                                    } else {
+                                        if(TRANSACTION.paymentResponseURL){
+                                            var a = TRANSACTION.paymentResponseURL;
+                                            if(a.indexOf("?") > -1) {
+                                                window.location.href = TRANSACTION.paymentResponseURL +
+                                                    "&reason=" + "2" +
+                                                    "&data=" + "PhoneNumberVerificationFailure" +
+                                                    "&tid=" + TRANSACTION.id;
+                                            }else{
+                                                window.location.href = TRANSACTION.paymentResponseURL +
+                                                    "?reason=" + "2" +
+                                                    "&data=" + "PhoneNumberVerificationFailure" +
+                                                    "&tid=" + TRANSACTION.id;
+                                            }
+                                        }
                                     }
                                 }
 
