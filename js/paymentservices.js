@@ -118,7 +118,7 @@ var CARDHOLDER =
         securityAnswer      : null,
         signinAccessToken   : null,
         signinType          : 0,
-        shippingAddress     : [null], // address: street, city, zip, country
+        shippingAddress     : {}, // address: street, city, zip, country
         shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping
         shippingHistoryCallBack :
             {
@@ -578,7 +578,7 @@ var PAYMENT =
                 "deviceType"        : TRANSACTION.deviceType,
                 "loginStatus"       : TRANSACTION.loginStatus,
                 "phoneNumber"       : CARDHOLDER.phone,
-                "shippingInfo"      : CARDHOLDER.shippingAddress,
+                "shippingInfo"      : JSON.stringify(CARDHOLDER.shippingAddress),
                 "amount"            : TRANSACTION.amount,
                 "countryCode"       : TRANSACTION.countryCode,
                 "currencyCode"      : TRANSACTION.currencyCode,
@@ -950,7 +950,7 @@ var PAYMENT =
                     "deviceType": TRANSACTION.deviceType,
                     "loginStatus": TRANSACTION.loginStatus,
                     "phoneNumber": CARDHOLDER.phone,
-                    "shippingInfo": CARDHOLDER.shippingAddress,
+                    "shippingInfo": JSON.stringify(CARDHOLDER.shippingAddress),
                     "amount": TRANSACTION.amount,
                     "countryCode": TRANSACTION.countryCode,
                     "currencyCode": TRANSACTION.currencyCode,

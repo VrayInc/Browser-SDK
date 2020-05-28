@@ -1,13 +1,13 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.19/js/jquery.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.19/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.19/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.20/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.20/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.20/js/chargeservices.js', chargeServicesAdded);
 // loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
 // loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.19/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.19/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.20/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.20/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -521,12 +521,12 @@ var VRAY =
         myVId: null,
         phoneNumber: null,
         purchaseItem: null,
-        shippingAddr: [],
+        shippingAddr: {},
         subscriptionId : null,
         deviceType: 0,
         loginStatus: 0,
         totalAmount: 0,
-        shippingAddress     : [null], // address: street, city, zip, country
+        shippingAddress     : {}, // address: street, city, zip, country
         shippingHistory     : [[null, null, null, null], [null, null, null, null]], // shipping
 
         init: function(merchantId, merchantName, serverType)
@@ -678,7 +678,13 @@ var VRAY =
             VRAY.city = city;
             VRAY.state = state;
             VRAY.zipCode = zipCode;
-            VRAY.shippingAddr = [streetAddr, city, state, zipCode];
+            VRAY.shippingAddr = {
+                "street" : streetAddr,
+                "city" : city,
+                "state" : state,
+                "postalCode" : zipCode,
+                "country":"US"
+            };
         },
 
         setTotalAmount: function(totalAmount)
