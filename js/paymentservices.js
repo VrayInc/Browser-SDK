@@ -279,6 +279,10 @@ var CARDHOLDER =
                 "messageAuthenticationCode": ""
             };
 
+            if(TRANSACTION.isRPATransaction){
+                prePayment.verifyCookie = 1;
+            }
+
             var prePaymentText = JSON.stringify(prePayment).toString();
             prePaymentText = UTILS.prepForHMAC(prePaymentText);
 
@@ -2383,7 +2387,7 @@ var SIGNUP =
                             },
                             error: function()
                             {
-                                UTILS.errorDetected("ERROR - Invalid Security Code Display Response.");
+                                UTILS.errorDetected("PhoneNumberVerificationFailure");
                                 PAYMENT.completed();
                             }
                         });
@@ -2549,6 +2553,8 @@ var STATUS =
                 InvalidPhoneNumber2: 24,
                 BrowserCodeCheck: 25,
                 Unsubscribe: 25,
+                PhoneNumberVerificationComplete: 27,
+                ValidCookie: 30,
 
                 UNKNOWN : -1
             }
@@ -2588,6 +2594,7 @@ var TRANSACTION =
         t17Timeout : 30000, // 30 sec
         token : "",
         tokenType  : "",
+        isRPATransaction : false,
         //
         MAC  : "",
 
