@@ -1,7 +1,7 @@
 //////////////////////////
 // Necessary JS Files
 /////////////////////////
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.21/js/jquery.min.js', jQueryAdded);
+// loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.21/js/jquery.min.js', jQueryAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.21/js/paymentservices.js', paymentServicesAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.21/js/chargeservices.js', chargeServicesAdded);
 // loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
