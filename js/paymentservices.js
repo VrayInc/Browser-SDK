@@ -147,7 +147,7 @@ var CARDHOLDER =
         emailChange: function(anotherVid)
         {
             var emailChangeReq = {
-                "msgId"              : MESSAGE.id.PrePaymentRequest,
+                "msgId"              : MESSAGE.id.EmailChangeRequest,
                 "tid"                : TRANSACTION.id,
                 "oldVid"             : anotherVid,
                 "newVid"             : CARDHOLDER.id,
@@ -207,7 +207,7 @@ var CARDHOLDER =
                                 UTILS.errorDetected("INFO - Email Change completed.");
                             }
                             else if ((emailChangeResp.status === STATUS.code.MACVerificationFailure) ||
-                                (emailChangeResp.status === STATUS.code.VIDFailure))
+                                (emailChangeResp.status === STATUS.code.VIDFailure) || (emailChangeResp.status === STATUS.code.InactiveMerchantAccount))
                             {
                                 UTILS.errorDetected("ERROR - Email Change failed: " + emailChangeResp.status.toString());
 
@@ -2553,6 +2553,7 @@ var STATUS =
                 InvalidPhoneNumber2: 24,
                 BrowserCodeCheck: 25,
                 Unsubscribe: 25,
+                InactiveMerchantAccount: 26,
                 PhoneNumberVerificationComplete: 27,
                 ValidCookie: 30,
 
