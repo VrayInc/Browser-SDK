@@ -2,6 +2,7 @@
 // Necessary JS Files
 /////////////////////////
 // loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.24/js/jquery.min.js', jQueryAdded);
+loadJSFile('https://code.jquery.com/jquery-3.5.1.min.js', jQueryAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.24/js/paymentservices.js', paymentServicesAdded);
 loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.24/js/chargeservices.js', chargeServicesAdded);
 // loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);

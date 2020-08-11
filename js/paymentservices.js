@@ -386,7 +386,8 @@ var CARDHOLDER =
                         //     CARDHOLDER.shippingHistoryCallBack.call(result);
                         // },
                         function (prePaymentResp) {
-                            if ( (prePaymentResp.status === STATUS.code.SUCCESS) || (prePaymentResp.status === STATUS.code.VIDFailure) )
+                            if ( (prePaymentResp.status === STATUS.code.SUCCESS) || (prePaymentResp.status === STATUS.code.VIDFailure)
+                                || (prePaymentResp.status === STATUS.code.AnotherVID))
                             {
                                 // parameters of shippingHistoryCallBack: callBackReason = 0 (ShippingInfos); data = array of shipping addresses or null
                                 CARDHOLDER.shippingHistoryCallBack.call(0, CARDHOLDER.shippingHistory);
