@@ -1935,6 +1935,113 @@ var SIGNUP =
             });
         },
 
+        optimalPhoneVerificationOnlyRequest: function()
+        {
+            // Phone Verification Request
+            var phoneVerificationReq = {
+                "msgId": MESSAGE.id.OptimalBrowserPhoneVerificationReq,
+                "tid": TRANSACTION.id,
+                "phoneNumber": CARDHOLDER.phone,
+                "emailAddress": CARDHOLDER.id,
+                "merchantIdentifier": MERCHANT.id,
+                "merchantName": MERCHANT.name,
+                "verifyPhoneOnly" : 1,
+                "messageAuthenticationCode": ""
+            };
+
+            var phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
+            phoneVerificationText = UTILS.prepForHMAC(phoneVerificationText);
+            $.ajax({
+                type        : "POST",
+                url         : "https://hmac.vraymerchant.com",
+                data        : phoneVerificationText,
+                timeout     : 10000,
+                async       : true,
+                dataType    : "text",
+                success     : function(hmac) {
+                    phoneVerificationReq.messageAuthenticationCode = UTILS.ab2hexText(hmac);
+                    phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
+
+                    if (UTILS.debug.enabled())
+                    {
+                        console.log("Broswer Phone Verification Request: \n\n" + phoneVerificationText + "\n\n");
+                    }
+
+                    $.ajax(
+                        {
+                            type: "POST",
+                            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/OptimalBrowserPhoneVerification",
+                            contentType: "application/json",
+                            data: phoneVerificationText,
+                            timeout: 0,
+                            dataType: "text",
+                            async: true,
+                            xhrFields:
+                                {
+                                    withCredentials: true
+                                },
+                            success: function(result)
+                            {
+                                if (!result)
+                                {
+                                    UTILS.errorDetected("ERROR:  Invalid response.  Expected security code display request.\n");
+                                    PAYMENT.completed();
+                                    return;
+                                }
+
+                                var securityCodeDisplayReq = JSON.parse(result);
+                                if (!securityCodeDisplayReq)
+                                {
+                                    UTILS.errorDetected("ERROR:  Invalid security code parameters.\n");
+                                    PAYMENT.completed();
+                                    return;
+                                }
+
+                                //353b. Security Code Display Request(tid, securityCode)
+                                if (securityCodeDisplayReq.msgId === MESSAGE.id.SecurityCodeDisplayRequest)
+                                {
+                                    TRANSACTION.securityCode = securityCodeDisplayReq.securityCode; // code is a string
+
+                                    //p80 - 354a - Display "Thank You!" page and the received security code.
+                                    //window.alert("Thank You!  \n" +
+                                    //             "You will receive a text message to authorize payment on your mobile phone.\n" +
+                                    //             "Please confirm the security code on the phone matches this one: " +
+                                    //             securityCodeDisplayReq.securityCode + "\n");
+
+                                    CALLBACK.call(REASON.ConfirmationCode, TRANSACTION.securityCode, TRANSACTION.id);
+
+                                    var securityCodeDisplayParameters =
+                                        {
+                                            "tid": TRANSACTION.id,
+                                            "securityCode": TRANSACTION.securityCode,
+                                            "vid": CARDHOLDER.id,
+                                            "phoneNumber" : CARDHOLDER.phone,
+                                            "merchantIdentifier": MERCHANT.id,
+                                            "merchantName": MERCHANT.name,
+                                            "payCallBack": CALLBACK.callback
+                                        };
+
+                                    var securityCodeDisplayText = JSON.stringify(securityCodeDisplayParameters).toString();
+                                    // localStorage.setItem("securityCodeDisplay", securityCodeDisplayText);
+                                    //window.location = "thankyou.html"; // internal file
+
+                                    SIGNUP.securityCodeDisplayResponse();
+                                }
+                            },
+                            error: function()
+                            {
+                                UTILS.errorDetected("ERROR:  OptimalBrowserPhoneVerification failed on response.\n");
+                                PAYMENT.completed();
+                            }
+                        });
+                },
+                error: function(){
+                    UTILS.errorDetected("Couldn't calculate HMAC!");
+                    PAYMENT.completed();
+                }
+            });
+        },
+
         optimalPhoneVerificationRequest: function()
         {
             // Phone Verification Request
