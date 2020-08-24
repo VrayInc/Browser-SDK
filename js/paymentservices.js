@@ -2015,7 +2015,8 @@ var SIGNUP =
                                     //             "You will receive a text message to authorize payment on your mobile phone.\n" +
                                     //             "Please confirm the security code on the phone matches this one: " +
                                     //             securityCodeDisplayReq.securityCode + "\n");
-
+                                    
+                                    UIUtils.hideSpinner(); 
                                     CALLBACK.call(REASON.ConfirmationCode, TRANSACTION.securityCode, TRANSACTION.id);
 
                                     var securityCodeDisplayParameters =
