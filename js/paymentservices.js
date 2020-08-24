@@ -2124,8 +2124,9 @@ var SIGNUP =
                                     //             "Please confirm the security code on the phone matches this one: " +
                                     //             securityCodeDisplayReq.securityCode + "\n");
 
+                                    UIUtils.hideSpinner();
                                     CALLBACK.call(REASON.ConfirmationCode, TRANSACTION.securityCode, TRANSACTION.id);
-
+                                     
                                     var securityCodeDisplayParameters =
                                         {
                                             "tid": TRANSACTION.id,
