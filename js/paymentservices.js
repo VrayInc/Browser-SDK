@@ -163,6 +163,7 @@ var CARDHOLDER =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : prePaymentText,
                 timeout     : 10000,
                 async       : true,
@@ -291,6 +292,7 @@ var CARDHOLDER =
                 $.ajax({
                     type        : "POST",
                     url         : "https://hmac.vraymerchant.com",
+                    contentType : "text/plain",
                     data        : prePaymentText,
                     timeout     : 10000,
                     async       : true,
@@ -999,6 +1001,7 @@ var PAYMENT =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com", // for hmac
+                contentType : "text/plain",
                 data        : paymentInfoText,
                 timeout     : 10000,
                 async       : true,
@@ -1059,6 +1062,7 @@ var PAYMENT =
                 {
                     type        : "POST",
                     url         : "https://hmac.vraymerchant.com", // for hmac
+                    contentType : "text/plain",
                     data        : paymentInfoText,
                     timeout     : 10000,
                     async       : true,
@@ -1308,6 +1312,7 @@ var PAYMENT =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com", // for hmac
+                contentType : "text/plain",
                 data        : paymentRequestContinueText,
                 timeout     : 10000,
                 async       : true,
@@ -1736,6 +1741,7 @@ var SIGNUP =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : signupCompleteText,
                 timeout     : 10000,
                 async       : true,
@@ -1879,6 +1885,7 @@ var SIGNUP =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : signinRequestText,
                 timeout     : 10000,
                 async       : true,
@@ -1954,6 +1961,7 @@ var SIGNUP =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : phoneVerificationText,
                 timeout     : 10000,
                 async       : true,
@@ -2060,6 +2068,7 @@ var SIGNUP =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : phoneVerificationText,
                 timeout     : 10000,
                 async       : true,
@@ -2165,6 +2174,7 @@ var SIGNUP =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : phoneVerificationText,
                 timeout     : 10000,
                 async       : true,
@@ -2288,6 +2298,7 @@ var SIGNUP =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com", // for hmac
+                contentType : "text/plain",
                 data        : phoneIndicationText,
                 timeout     : 10000,
                 async       : true,
@@ -2402,6 +2413,7 @@ var SIGNUP =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : securityCodeDisplayRespText,
                 timeout     : 10000,
                 async       : true,
@@ -2615,6 +2627,7 @@ var SIGNUP =
                 $.ajax({
                     type: "POST",
                     url: url,
+                    contentType : "text/plain",
                     data: requestObject,
                     timeout: 10000,
                     async: true,

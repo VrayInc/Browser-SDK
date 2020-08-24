@@ -231,6 +231,7 @@ function signupWithSecurityQ()
         $.ajax({
             type        : "POST",
             url         : "https://hmac.vraymerchant.com",
+            contentType : "text/plain",
             data        : signupRequest,
             timeout     : 10000,
             async       : true,
@@ -497,6 +498,7 @@ function calculateHMAC(message)
     $.ajax({
         type        : "POST",
         url         : "https://hmac.vraymerchant.com",
+        contentType : "text/plain",
         data        : message,
         timeout     : 10000,
         async       : true,
@@ -620,6 +622,7 @@ var VRAY =
             $.ajax({
                 type        : "POST",
                 url         : "https://hmac.vraymerchant.com",
+                contentType : "text/plain",
                 data        : purchaseOrder,
                 timeout     : 10000,
                 async       : true,

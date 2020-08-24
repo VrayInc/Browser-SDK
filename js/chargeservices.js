@@ -245,6 +245,7 @@ function hmacService (requestObject) {
         $.ajax({
             type: "POST",
             url: url,
+            contentType : "text/plain",
             data: requestObject,
             timeout: 10000,
             async: true,
