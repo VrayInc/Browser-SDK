@@ -8,7 +8,7 @@
 //  Application Servers Instances (Assigned Statically or Dyanmically)
 //
 console.log("APP INIT");
-var APPSERVER =
+let APPSERVER =
     {
         merchantHost:
             {
@@ -44,7 +44,7 @@ var APPSERVER =
         paymentGWHost:
             {
                 domainName: 'GIFM',
-                domainURL: 'https://gateway.vraymerchant.com',
+                domainURL: 'https://devgateway.vraymerchant.com',
 
                 getDomainName: function()
                 {
@@ -70,7 +70,7 @@ var APPSERVER =
         vrayHost:
             {
                 domainName: 'VRAYHost',
-                domainURL: 'https://vraystagingportal.azurewebsites.net',
+                domainURL: 'https://vraydevportal.azurewebsites.net',
                 serverType: 0, // default to Development Server
 
                 getDomainName: function()
@@ -78,7 +78,7 @@ var APPSERVER =
                     return APPSERVER.vrayHost.domainName;
                 },
 
-                getDomainURL: function()
+                getURL: function()
                 {
                     return APPSERVER.vrayHost.domainURL;
                 },
@@ -102,13 +102,49 @@ var APPSERVER =
                     APPSERVER.vrayHost.serverType = type;
 
                 }
+            },
+        hmacHost:
+        {
+            domainName: 'HMACHost',
+            domainURL: 'https://devhmac.vraymerchant.com',
+            serverType: 0, // default to Development Server
+
+            getDomainName: function()
+            {
+                return APPSERVER.hmacHost.domainName;
+            },
+
+            getURL: function()
+            {
+                return APPSERVER.hmacHost.domainURL;
+            },
+
+            getServerType: function ()
+            {
+                return APPSERVER.hmacHost.serverType;
+            },
+
+            setDomainName: function(name)
+            {
+                APPSERVER.hmacHost.domainName = name;
+            },
+
+            setURL: function(url)
+            {
+                APPSERVER.hmacHost.domainURL = url;
+            },
+            setServerType: function (type) {
+
+                APPSERVER.hmacHost.serverType = type;
+
             }
+        }
     };
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Cardholder Info & Configuration
 //
-var CARDHOLDER =
+let CARDHOLDER =
     {
         id                  : null,  // VID = eMail
         name                : null,
@@ -146,7 +182,7 @@ var CARDHOLDER =
 
         emailChange: function(anotherVid)
         {
-            var emailChangeReq = {
+            let emailChangeReq = {
                 "msgId"              : MESSAGE.id.EmailChangeRequest,
                 "tid"                : TRANSACTION.id,
                 "oldVid"             : anotherVid,
@@ -157,12 +193,12 @@ var CARDHOLDER =
                 "messageAuthenticationCode": ""
             };
 
-            var emailChangeReqText = JSON.stringify(emailChangeReq).toString();
-            prePaymentText = UTILS.prepForHMAC(emailChangeReqText);
+            let emailChangeReqText = JSON.stringify(emailChangeReq).toString();
+            let prePaymentText = UTILS.prepForHMAC(emailChangeReqText);
 
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : prePaymentText,
                 timeout     : 10000,
@@ -179,7 +215,7 @@ var CARDHOLDER =
 
                     $.ajax({
                         type        : "POST",
-                        url         : APPSERVER.vrayHost.getDomainURL() + "/api/accounts/EmailChange",
+                        url         : APPSERVER.vrayHost.getURL() + "/api/accounts/EmailChange",
                         contentType : "application/json",
                         data        : emailChangeReqText,
                         timeout     : TRANSACTION.t1Timeout,
@@ -189,7 +225,7 @@ var CARDHOLDER =
                         success     : function(result) {
 
                             // From 9, step 150b. Start Payment Info Indication(tid, vid)
-                            var emailChangeResp = JSON.parse(result);
+                            let emailChangeResp = JSON.parse(result);
                             if (!emailChangeResp)
                             {
                                 UTILS.errorDetected("ERROR - Unexpected email change response.\n" + emailChangeResp.toString());
@@ -252,13 +288,13 @@ var CARDHOLDER =
             CARDHOLDER.id = vid;
             CARDHOLDER.phone = mobile;
 
-            var today = new Date();
+            let today = new Date();
             TRANSACTION.date = today.toString();
             TRANSACTION.startTime = today.getTime();
             TRANSACTION.id = Math.floor(Math.random() * (9007199254740991 - 10));
-            var oldTIDString = TRANSACTION.id.toString();
-            var newTIDString = oldTIDString.slice(0, -1);
-            var serverType = APPSERVER.vrayHost.getServerType();
+            let oldTIDString = TRANSACTION.id.toString();
+            let newTIDString = oldTIDString.slice(0, -1);
+            let serverType = APPSERVER.vrayHost.getServerType();
             if (serverType === 0) {
                 newTIDString = newTIDString + "0";
             }
@@ -268,9 +304,11 @@ var CARDHOLDER =
             else if (serverType === 2) {
                 newTIDString = newTIDString + "2";
             }
+            let allUrls = getURLs(serverType.toString());
+            APPSERVER.hmacHost.setURL(allUrls.hmacURL);
             TRANSACTION.id = parseInt(newTIDString);
 
-            var prePayment = {
+            let prePayment = {
                 "msgId"              : MESSAGE.id.PrePaymentRequest,
                 "tid"                : TRANSACTION.id,
                 "vid"                : vid,
@@ -284,14 +322,14 @@ var CARDHOLDER =
                 prePayment.verifyCookie = 1;
             }
 
-            var prePaymentText = JSON.stringify(prePayment).toString();
+            let prePaymentText = JSON.stringify(prePayment).toString();
             prePaymentText = UTILS.prepForHMAC(prePaymentText);
 
-            var hmacPromise = new Promise(function(resolve1, reject1)
+            let hmacPromise = new Promise(function(resolve1, reject1)
             {
                 $.ajax({
                     type        : "POST",
-                    url         : "https://hmac.vraymerchant.com",
+                    url         : APPSERVER.hmacHost.getURL(),
                     contentType : "text/plain",
                     data        : prePaymentText,
                     timeout     : 10000,
@@ -319,12 +357,12 @@ var CARDHOLDER =
                     prePayment.messageAuthenticationCode = UTILS.ab2hexText(hmac);
                     prePaymentText =  JSON.stringify(prePayment).toString();
 
-                    var  prepaymentPromise = new Promise(function(resolve2, reject2)
+                    let prepaymentPromise = new Promise(function(resolve2, reject2)
                     {
 
                         $.ajax({
                             type        : "POST",
-                            url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/PrePayment",
+                            url         : APPSERVER.vrayHost.getURL() + "/api/payments/PrePayment",
                             contentType : "application/json",
                             data        : prePaymentText,
                             timeout     : TRANSACTION.t1Timeout,
@@ -334,7 +372,7 @@ var CARDHOLDER =
                             success     : function(result)
                             {
                                 // From 9, step 150b. Start Payment Info Indication(tid, vid)
-                                var prePaymentResp = JSON.parse(result);
+                                let prePaymentResp = JSON.parse(result);
                                 if (!prePaymentResp)
                                 {
                                     UTILS.errorDetected("ERROR - Unexpected pre-payment result.\n");
@@ -420,7 +458,7 @@ var CARDHOLDER =
             CARDHOLDER.securityAnswer = securityAnswer;
 
             // Payment Authorization Request
-            var configureSecurityQReq = {
+            let configureSecurityQReq = {
                 "msgId"              : MESSAGE.id.BrowserConfigureSecurityQReq,
                 "vid"                : CARDHOLDER.id,
                 "merchantIdentifier" : MERCHANT.id,
@@ -438,7 +476,7 @@ var CARDHOLDER =
 ////////////////////////////////////////////////////////////////////////////////
 //  Merchant Info & Configuration
 //
-var MERCHANT =
+let MERCHANT =
     {
         id: 'merchant.com.vray.vpay',
         name: 'VRAY',
@@ -452,12 +490,13 @@ var MERCHANT =
             //
             // TODO:  Query the VRAY Server for host for each Merchant ID (configuration in Merchant Portal)
             //
-            var DEVELOPMENT_SERVER = "https://vraydevportal.azurewebsites.net";
-            var STAGING_SERVER = "https://vraystagingportal.azurewebsites.net";
-            var PRODUCTION_SERVER = "https://vrayproduction.azurewebsites.net";
+            let DEVELOPMENT_SERVER = "https://vraydevportal.azurewebsites.net";
+            let STAGING_SERVER = "https://vraystagingportal.azurewebsites.net";
+            let PRODUCTION_SERVER = "https://vrayproduction.azurewebsites.net";
 
-            var hostServerURL = DEVELOPMENT_SERVER;
-
+            let hostServerURL = DEVELOPMENT_SERVER;
+            let allUrls = getURLs(serverType.toString());
+            APPSERVER.hmacHost.setURL(allUrls.hmacURL);
             switch (serverType)
             {
                 case vServerType.Dev:
@@ -503,7 +542,7 @@ var MERCHANT =
 ////////////////////////////////////////////////////////////////////////////////
 //  Messaging Services
 //
-var MESSAGE =
+let MESSAGE =
     {
         id:
             {
@@ -568,7 +607,7 @@ var MESSAGE =
 ////////////////////////////////////////////////////////////////////////////////
 // Payment Processing Services.
 //
-var PAYMENT =
+let PAYMENT =
     {
         signupCalled: false,
 
@@ -577,7 +616,7 @@ var PAYMENT =
             UIUtils.showSpinner();
 
             // Payment Authorization Request
-            var paymentReqParam = {
+            let paymentReqParam = {
                 "msgId"             : MESSAGE.id.PaymentRequest,
                 "tid"               : TRANSACTION.id,
                 "ttime"             : TRANSACTION.date,
@@ -619,7 +658,7 @@ var PAYMENT =
             //     };
             // }
 
-            var  paymentReqParamText =  JSON.stringify(paymentReqParam).toString();
+            let  paymentReqParamText =  JSON.stringify(paymentReqParam).toString();
             TRANSACTION.paymentRequest = paymentReqParamText;
 
             if (UTILS.debug.enabled())
@@ -648,7 +687,7 @@ var PAYMENT =
             $.ajax(
                 {
                     type: "POST",
-                    url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/payrequest",
+                    url: APPSERVER.vrayHost.getURL() + "/api/payments/payrequest",
                     contentType: "application/json",
                     data: paymentReqParamText,
                     timeout: TRANSACTION.t1Timeout,
@@ -660,14 +699,14 @@ var PAYMENT =
                         },
                     success: function(result)
                     {
-                        var paymentRespond = JSON.parse(result);
+                        let paymentRespond = JSON.parse(result);
                         if (paymentRespond === null)
                         {
                             UTILS.errorDetected("ERROR:  Invalid payment authorization respond.\n");
                             return;
                         }
 
-                        var tid = parseInt(paymentRespond.tid);
+                        let tid = parseInt(paymentRespond.tid);
                         if (tid !== Number(TRANSACTION.id))
                         {
                             UTILS.errorDetected("ERROR:  Invalid transaction ID in payment authorization respond.\n");
@@ -677,7 +716,7 @@ var PAYMENT =
                         // Clear the T1 transaction timer
                         window.clearTimeout(TRANSACTION.t1Timer);
 
-                        var messageId = paymentRespond.msgId;
+                        let messageId = paymentRespond.msgId;
                         switch (messageId)
                         {
                             case MESSAGE.id.PaymentResponse:
@@ -724,13 +763,13 @@ var PAYMENT =
                 return;
             }
 
-            var tid = parseInt(paymentResponse.tid);
+            let tid = parseInt(paymentResponse.tid);
             if (tid !== Number(TRANSACTION.id))
             {
                 UTILS.errorDetected("ERROR - Invalid transaction ID: " + paymentResponse.tid);
             }
 
-            var ccToken = paymentResponse.token;
+            let ccToken = paymentResponse.token;
             if (paymentResponse.status === STATUS.code.SUCCESS)
             {
                 if(!ccToken) {
@@ -753,7 +792,7 @@ var PAYMENT =
             else if ((paymentResponse.status === STATUS.code.InvalidPhoneNumber) ||
                 (paymentResponse.status === STATUS.code.InvalidPhoneNumber2))
             {
-                var newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
+                let newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
                     "Please enter the mobile# associated with " + CARDHOLDER.id +  ".\n");
                 CARDHOLDER.id = newPhone;
                 SIGNUP.phoneVerificationRequest();
@@ -804,7 +843,7 @@ var PAYMENT =
                 return;
             }
 
-            var tid = parseInt(codeCommand.tid);
+            let tid = parseInt(codeCommand.tid);
             if (tid !== Number(TRANSACTION.id)) {
 
                 UTILS.errorDetected("ERROR - Invalid transaction ID: " + codeCommand.tid);
@@ -823,7 +862,7 @@ var PAYMENT =
             TRANSACTION.t1Timer = window.setInterval(UTILS.timerHandler, TRANSACTION.t1Timeout);
 
             // Send Code Command Verify
-            var codeCommandVerify = {
+            let codeCommandVerify = {
                 "msgId": 19,
                 "tid": codeCommand.tid,
                 "status": 0
@@ -832,7 +871,7 @@ var PAYMENT =
             $.ajax(
                 {
                     type: "POST",
-                    url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/codersp",
+                    url: APPSERVER.vrayHost.getURL() + "/api/payments/codersp",
                     contentType: "application/json",
                     data: JSON.stringify(codeCommandVerify),
                     timeout: TRANSACTION.t1Timeout,
@@ -854,7 +893,7 @@ var PAYMENT =
                             return;
                         }
 
-                        var codeVerify = JSON.parse(result);
+                        let codeVerify = JSON.parse(result);
                         if (codeVerify.msgId === 2)
                         {
                             PAYMENT.authorizationResponse(JSON.parse(result));
@@ -878,7 +917,7 @@ var PAYMENT =
             SIGNUP.phoneVerificationCounter = 0;
 
             // Transaction info
-            var today = new Date();
+            let today = new Date();
             TRANSACTION.endTime = today.getTime();
             //TRANSACTION.id = 0;
             TRANSACTION.amount = 0.0;
@@ -903,16 +942,16 @@ var PAYMENT =
             }
 
             // Create new transaction
-            var today = new Date();
+            let today = new Date();
             TRANSACTION.date = today.toString();
             TRANSACTION.startTime = today.getTime();
             TRANSACTION.amount = amount;
             TRANSACTION.lineItems = items;
             //TRANSACTION.id = (Math.floor((Math.floor(Math.random() * (9223372036854775807 - 11 + 1)) + 11) / 10) * 10) + APPSERVER.vrayHost.getServerType();   // positive # 0 - 7FFF,FFFF,FFFF,FFF9)
             TRANSACTION.id = Math.floor(Math.random() * (9007199254740991 - 10));
-            var oldTIDString = TRANSACTION.id.toString();
-            var newTIDString = oldTIDString.slice(0, -1);
-            var serverType = APPSERVER.vrayHost.getServerType();
+            let oldTIDString = TRANSACTION.id.toString();
+            let newTIDString = oldTIDString.slice(0, -1);
+            let serverType = APPSERVER.vrayHost.getServerType();
             if (serverType === 0) {
                 newTIDString = newTIDString + "0";
             }
@@ -996,11 +1035,11 @@ var PAYMENT =
                 "messageAuthenticationCode" : ""
             };
 
-            var paymentInfoText = JSON.stringify(paymentInfo).toString();
+            let paymentInfoText = JSON.stringify(paymentInfo).toString();
             paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com", // for hmac
+                url         : APPSERVER.hmacHost.getURL(), // for hmac
                 contentType : "text/plain",
                 data        : paymentInfoText,
                 timeout     : 10000,
@@ -1026,11 +1065,10 @@ var PAYMENT =
                 PAYMENT.completed();
                 return;
             }
-
-
+            let paymentInfo = {}
             if (status == 0)
             {
-                var paymentInfo =
+                 paymentInfo =
                     {
                         "msgId" : MESSAGE.id.BrowserTokenIndication,
                         "tid" : TRANSACTION.id,
@@ -1044,7 +1082,7 @@ var PAYMENT =
             }
             else
             {
-                var paymentInfo =
+                paymentInfo =
                     {
                         "msgId" : MESSAGE.id.BrowserTokenIndication,
                         "tid" : TRANSACTION.id,
@@ -1056,12 +1094,12 @@ var PAYMENT =
                     };
             }
 
-            var paymentInfoText = JSON.stringify(paymentInfo).toString();
+            let paymentInfoText = JSON.stringify(paymentInfo).toString();
             paymentInfoText = UTILS.prepForHMAC(paymentInfoText);
             $.ajax(
                 {
                     type        : "POST",
-                    url         : "https://hmac.vraymerchant.com", // for hmac
+                    url         : APPSERVER.hmacHost.getURL(), // for hmac
                     contentType : "text/plain",
                     data        : paymentInfoText,
                     timeout     : 10000,
@@ -1080,7 +1118,7 @@ var PAYMENT =
 
                         $.ajax({
                             type        : "POST",
-                            url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserTokenIndication",
+                            url         : APPSERVER.vrayHost.getURL() + "/api/payments/BrowserTokenIndication",
                             contentType : "application/json",
                             data        : paymentInfoText,
                             timeout     : TRANSACTION.t1Timeout,
@@ -1131,7 +1169,7 @@ var PAYMENT =
 
             $.ajax({
                 type        : "POST",
-                url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserPaymentInfo",
+                url         : APPSERVER.vrayHost.getURL() + "/api/payments/BrowserPaymentInfo",
                 contentType : "application/json",
                 data        : getPaymentInfoText,
                 timeout     : TRANSACTION.t15Timeout,
@@ -1251,7 +1289,7 @@ var PAYMENT =
             $.ajax(
                 {
                     type        : "POST",
-                    url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/payrequest",
+                    url         : APPSERVER.vrayHost.getURL() + "/api/payments/payrequest",
                     contentType : "application/json",
                     data        : TRANSACTION.paymentRequest,
                     timeout     : TRANSACTION.t1Timeout,
@@ -1311,7 +1349,7 @@ var PAYMENT =
             paymentRequestContinueText = UTILS.prepForHMAC(paymentRequestContinueText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com", // for hmac
+                url         : APPSERVER.hmacHost.getURL(), // for hmac
                 contentType : "text/plain",
                 data        : paymentRequestContinueText,
                 timeout     : 10000,
@@ -1327,7 +1365,7 @@ var PAYMENT =
 
                     $.ajax({
                         type        : "POST",
-                        url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/PaymentRequestContinueIndication",
+                        url         : APPSERVER.vrayHost.getURL() + "/api/payments/PaymentRequestContinueIndication",
                         contentType : "application/json",
                         data        : paymentRequestContinueText,
                         timeout     : 2000,
@@ -1486,7 +1524,7 @@ var PAYMENT =
 
                 $.ajax({
                     type        : "POST",
-                    url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/SecurityQuestionAnswer",
+                    url         : APPSERVER.vrayHost.getURL() + "/api/payments/SecurityQuestionAnswer",
                     contentType : "application/json",
                     data        : JSON.stringify(verifyAnswer).toString(),
                     timeout     : TRANSACTION.t1Timeout,
@@ -1567,7 +1605,7 @@ var PAYMENT =
 
             $.ajax({
                 type        : "POST",
-                url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserPaymentInfo",
+                url         : APPSERVER.vrayHost.getURL() + "/api/payments/BrowserPaymentInfo",
                 contentType : "application/json",
                 data        : getPaymentInfoText,
                 timeout     : TRANSACTION.t15Timeout,
@@ -1658,7 +1696,7 @@ var PAYMENT =
             $.ajax(
                 {
                     type: "POST",
-                    url: APPSERVER.vrayHost.getDomainURL() + "/api/payments/VidRetry",
+                    url: APPSERVER.vrayHost.getURL() + "/api/payments/VidRetry",
                     contentType: "application/json",
                     data: JSON.stringify(idResponse).toString(),
                     timeout: TRANSACTION.t1Timeout,
@@ -1740,7 +1778,7 @@ var SIGNUP =
             signupCompleteText = UTILS.prepForHMAC(signupCompleteText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : signupCompleteText,
                 timeout     : 10000,
@@ -1756,7 +1794,7 @@ var SIGNUP =
 
                     $.ajax({
                         type        : "POST",
-                        url         : APPSERVER.vrayHost.getDomainURL() + "/api/payments/BrowserSignupCompleteIndication",
+                        url         : APPSERVER.vrayHost.getURL() + "/api/payments/BrowserSignupCompleteIndication",
                         contentType : "application/json",
                         data        : signupCompleteText,
                         timeout     : TRANSACTION.t1Timeout,
@@ -1822,7 +1860,7 @@ var SIGNUP =
 
             $.ajax({
                 type        : "POST",
-                url         : APPSERVER.vrayHost.getDomainURL() + "/api/accounts/BrowserConfigureSecurityQuestion",
+                url         : APPSERVER.vrayHost.getURL() + "/api/accounts/BrowserConfigureSecurityQuestion",
                 contentType : "application/json",
                 data        : configureSecurityQText,
                 timeout     : TRANSACTION.t1Timeout,
@@ -1884,7 +1922,7 @@ var SIGNUP =
             signinRequestText = UTILS.prepForHMAC(signinRequestText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : signinRequestText,
                 timeout     : 10000,
@@ -1900,7 +1938,7 @@ var SIGNUP =
 
                     $.ajax({
                         type        : "POST",
-                        url         : APPSERVER.vrayHost.getDomainURL() + "api/ThirdParty/ConfigureSignin",
+                        url         : APPSERVER.vrayHost.getURL() + "api/ThirdParty/ConfigureSignin",
                         contentType : "application/json",
                         data        : signinRequestText,
                         timeout     : TRANSACTION.t14Timeout,
@@ -1960,7 +1998,7 @@ var SIGNUP =
             phoneVerificationText = UTILS.prepForHMAC(phoneVerificationText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : phoneVerificationText,
                 timeout     : 10000,
@@ -1978,7 +2016,7 @@ var SIGNUP =
                     $.ajax(
                         {
                             type: "POST",
-                            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/OptimalBrowserPhoneVerification",
+                            url: APPSERVER.vrayHost.getURL() + "/api/accounts/OptimalBrowserPhoneVerification",
                             contentType: "application/json",
                             data: phoneVerificationText,
                             timeout: 0,
@@ -2068,7 +2106,7 @@ var SIGNUP =
             phoneVerificationText = UTILS.prepForHMAC(phoneVerificationText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : phoneVerificationText,
                 timeout     : 10000,
@@ -2086,7 +2124,7 @@ var SIGNUP =
                     $.ajax(
                         {
                             type: "POST",
-                            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/OptimalBrowserPhoneVerification",
+                            url: APPSERVER.vrayHost.getURL() + "/api/accounts/OptimalBrowserPhoneVerification",
                             contentType: "application/json",
                             data: phoneVerificationText,
                             timeout: 0,
@@ -2171,11 +2209,11 @@ var SIGNUP =
                 "messageAuthenticationCode": ""
             };
 
-            var phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
+            let phoneVerificationText = JSON.stringify(phoneVerificationReq).toString();
             phoneVerificationText = UTILS.prepForHMAC(phoneVerificationText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : phoneVerificationText,
                 timeout     : 10000,
@@ -2193,7 +2231,7 @@ var SIGNUP =
                     $.ajax(
                         {
                             type: "POST",
-                            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/BrowserPhoneVerification",
+                            url: APPSERVER.vrayHost.getURL() + "/api/accounts/BrowserPhoneVerification",
                             contentType: "application/json",
                             data: phoneVerificationText,
                             timeout: TRANSACTION.t15Timeout,
@@ -2211,7 +2249,7 @@ var SIGNUP =
                                     PAYMENT.completed();
                                 }
 
-                                var phoneVerificationResp = JSON.parse(result);
+                                let phoneVerificationResp = JSON.parse(result);
 
                                 if ((phoneVerificationResp === null) || (phoneVerificationResp === undefined) ||
                                     (phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse)) {
@@ -2228,7 +2266,7 @@ var SIGNUP =
                                 else if ((phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber) ||
                                     (phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber2))
                                 {
-                                    var newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
+                                    let newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
                                         "Please enter the mobile# associated with " + CARDHOLDER.id +  ".\n");
                                     CARDHOLDER.id = newPhone;
                                     SIGNUP.phoneVerificationRequest();
@@ -2240,7 +2278,7 @@ var SIGNUP =
 
                                         SIGNUP.phoneVerificationCounter += 1;
 
-                                        var smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
+                                        let smsCode = window.prompt("Re-enter the 6-digit verification code sent to mobile#: " + CARDHOLDER.phone);
                                         CARDHOLDER.phoneCode = smsCode;
                                         SIGNUP.phoneVerificationIndication();
                                     }
@@ -2285,7 +2323,7 @@ var SIGNUP =
 
         phoneVerificationIndication: function()
         {
-            var phoneVerificationIndication = {
+            let phoneVerificationIndication = {
                 "msgId": MESSAGE.id.BrowserCodeIndication,
                 "merchantIdentifier": MERCHANT.id,
                 "merchantName": MERCHANT.name,
@@ -2295,11 +2333,11 @@ var SIGNUP =
                 "messageAuthenticationCode": ""
             };
 
-            var phoneIndicationText = JSON.stringify(phoneVerificationIndication).toString();
+            let phoneIndicationText = JSON.stringify(phoneVerificationIndication).toString();
             phoneIndicationText = UTILS.prepForHMAC(phoneIndicationText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com", // for hmac
+                url         : APPSERVER.hmacHost.getURL(), // for hmac
                 contentType : "text/plain",
                 data        : phoneIndicationText,
                 timeout     : 10000,
@@ -2316,7 +2354,7 @@ var SIGNUP =
                     $.ajax(
                         {
                             type: "POST",
-                            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/BrowserCodeIndication",
+                            url: APPSERVER.vrayHost.getURL() + "/api/accounts/BrowserCodeIndication",
                             contentType: "application/json",
                             data: phoneIndicationText,
                             timeout: TRANSACTION.t15Timeout,
@@ -2328,7 +2366,7 @@ var SIGNUP =
                                 },
                             success: function(result)
                             {
-                                var phoneVerificationResp = JSON.parse(result);
+                                let phoneVerificationResp = JSON.parse(result);
 
                                 if ((phoneVerificationResp === null) || (phoneVerificationResp === undefined) ||
                                     (phoneVerificationResp.msgId !== MESSAGE.id.BrowserVerificationResponse))
@@ -2348,7 +2386,7 @@ var SIGNUP =
                                 else if ((phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber) ||
                                     (phoneVerificationResp.status === STATUS.code.InvalidPhoneNumber2))
                                 {
-                                    var newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
+                                    let newPhone = window.prompt("A different mobile# had been associated with " + CARDHOLDER.id +  ".\n\n" +
                                         "Please enter the mobile# associated with " + CARDHOLDER.id +  ".\n");
                                     CARDHOLDER.id = newPhone;
                                     SIGNUP.phoneVerificationRequest();
@@ -2400,7 +2438,7 @@ var SIGNUP =
         securityCodeDisplayResponse: function()
         {
             // Security Code Display Response
-            var securityCodeDisplayResp = {
+            let securityCodeDisplayResp = {
                 "msgId": MESSAGE.id.SecurityCodeDisplayResponse,
                 "tid": TRANSACTION.id,
                 "phoneNumber" : CARDHOLDER.phone,
@@ -2410,11 +2448,11 @@ var SIGNUP =
                 "messageAuthenticationCode": ""
             };
 
-            var securityCodeDisplayRespText = JSON.stringify(securityCodeDisplayResp).toString();
+            let securityCodeDisplayRespText = JSON.stringify(securityCodeDisplayResp).toString();
             securityCodeDisplayRespText = UTILS.prepForHMAC(securityCodeDisplayRespText);
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : securityCodeDisplayRespText,
                 timeout     : 10000,
@@ -2432,7 +2470,7 @@ var SIGNUP =
                     $.ajax(
                         {
                             type: "POST",
-                            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/SecurityCodeDisplayResponse",
+                            url: APPSERVER.vrayHost.getURL() + "/api/accounts/SecurityCodeDisplayResponse",
                             contentType: "application/json",
                             data: securityCodeDisplayRespText,
                             timeout: 0,
@@ -2444,7 +2482,7 @@ var SIGNUP =
                                 },
                             success: function(result)
                             {
-                                var paymentResponse = JSON.parse(result);
+                                let paymentResponse = JSON.parse(result);
 
                                 if(!paymentResponse) {
                                     UTILS.errorDetected("ERROR - Payment Response.");
@@ -2458,7 +2496,7 @@ var SIGNUP =
                                     return;
                                 }
 
-                                var tid = parseInt(paymentResponse.tid);
+                                let tid = parseInt(paymentResponse.tid);
                                 if (tid !== Number(TRANSACTION.id))
                                 {
                                     UTILS.errorDetected("ERROR - Invalid transaction ID: " + paymentResponse.tid);
@@ -2468,7 +2506,7 @@ var SIGNUP =
 
                                 if (paymentResponse.status === STATUS.code.SUCCESS)
                                 {
-                                    var ccToken = paymentResponse.token;
+                                    let ccToken = paymentResponse.token;
                                     if(!ccToken) {
                                         UTILS.errorDetected("ERROR - No CC Token in Payment Response.");
                                         PAYMENT.completed();
@@ -2526,7 +2564,7 @@ var SIGNUP =
         },
 
         securityCodeIndication: function(rxCode, UMID) {
-            var securityCodeInd = {
+            let securityCodeInd = {
                 "msgId": MESSAGE.id.SecurityCodeIndication,
                 "tid": TRANSACTION.id,
                 "phoneNumber": CARDHOLDER.phone,
@@ -2547,7 +2585,7 @@ var SIGNUP =
                     $.ajax(
                         {
                             type: "POST",
-                            url: APPSERVER.vrayHost.getDomainURL() + "/api/accounts/SecurityCodeIndication",
+                            url: APPSERVER.vrayHost.getURL() + "/api/accounts/SecurityCodeIndication",
                             contentType: "application/json",
                             data: securityCodeIndText,
                             timeout: 0,
@@ -2559,10 +2597,10 @@ var SIGNUP =
                                 },
                         })
                         .done(function (resp) {
-                            var phoneVerificationResp = JSON.parse(resp);
+                            let phoneVerificationResp = JSON.parse(resp);
                                 if(phoneVerificationResp.status === STATUS.code.PhoneNumberVerificationFailure) {
                                     if(CALLBACK.paymentResponseURL){
-                                        var a = CALLBACK.paymentResponseURL;
+                                        let a = CALLBACK.paymentResponseURL;
                                         if(a.indexOf("?") > -1) {
                                             window.location.href = CALLBACK.paymentResponseURL +
                                                  "&reason=" + "2" +
@@ -2576,7 +2614,7 @@ var SIGNUP =
                                         }
                                     } else {
                                         if(TRANSACTION.paymentResponseURL){
-                                            var a = TRANSACTION.paymentResponseURL;
+                                            let a = TRANSACTION.paymentResponseURL;
                                             if(a.indexOf("?") > -1) {
                                                 window.location.href = TRANSACTION.paymentResponseURL +
                                                     "&reason=" + "2" +
@@ -2625,7 +2663,7 @@ var SIGNUP =
             return new Promise(function (resolve, reject) {
                 let message = JSON.stringify(requestObject);
                 requestObject = UTILS.prepForHMAC(message, false);
-                var url = "https://hmac.vraymerchant.com";
+                let url = APPSERVER.hmacHost.getURL();
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -2648,7 +2686,7 @@ var SIGNUP =
 ////////////////////////////////////////////////////////////////////////////////
 //  States and Status Code.
 //
-var STATUS =
+let STATUS =
     {
         code:
             {
@@ -2687,7 +2725,7 @@ var STATUS =
 ////////////////////////////////////////////////////////////////////////////////
 //  Payment Session Transaction Info
 //
-var TRANSACTION =
+let TRANSACTION =
     {
         amount  :  0.0,
         currencyCode  : null,
@@ -2748,7 +2786,7 @@ var TRANSACTION =
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Utilities & Helper Services.
-var UTILS =
+let UTILS =
     {
         ab2hexText : function (buffer) {
             return buffer;
@@ -2757,22 +2795,22 @@ var UTILS =
         getChargeInfoStored: function()
         {
             // Retrieve charge info from local storage
-            var chargeInfoStored = localStorage.getItem("chargeInfo");
-            var chargeInfo = JSON.parse(chargeInfoStored);
+            let chargeInfoStored = localStorage.getItem("chargeInfo");
+            let chargeInfo = JSON.parse(chargeInfoStored);
             return chargeInfo;
         },
 
         getPaymentResponseURL: function()
         {
             // Retrieve payment response URL from local storage
-            var paymentResponseURLStored = localStorage.getItem("paymentResponseURL");
-            var url = JSON.parse(paymentResponseURLStored);
+            let paymentResponseURLStored = localStorage.getItem("paymentResponseURL");
+            let url = JSON.parse(paymentResponseURLStored);
             return url;
         },
 
         setChargeInfoStored: function(tid, vid, mid, token, amount, paymentURL)
         {
-            var chargeParameters =
+            let chargeParameters =
                 {
                     "tid" :  tid,
                     "vid" : vid,
@@ -2782,18 +2820,18 @@ var UTILS =
                     "paymentResponseURL" : paymentURL
                 };
 
-            var chargeParametersText = JSON.stringify(chargeParameters).toString();
+            let chargeParametersText = JSON.stringify(chargeParameters).toString();
             localStorage.setItem("chargeInfo", chargeParametersText);
         },
 
         setPaymentResponseURL: function(paymentURL)
         {
-            var paymentResponseURL =
+            let paymentResponseURL =
                 {
                     "paymentResponseURL" : paymentURL
                 };
 
-            var paymentResponseURLText = JSON.stringify(paymentResponseURL).toString();
+            let paymentResponseURLText = JSON.stringify(paymentResponseURL).toString();
             localStorage.setItem("paymentResponseURL", paymentResponseURLText);
         },
 
@@ -2823,14 +2861,14 @@ var UTILS =
 
         isMobile: function()
         {
-            var check = false;
+            let check = false;
             (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
             return check;
         },
 
         prepForHMAC: function(message, cond) {
-            payVal = (cond) ? "yes" : "no";
-            var obj = {
+            let payVal = (cond) ? "yes" : "no";
+            let obj = {
                 "val" : message,
                 "pay" : payVal,
                 "merchantId" : MERCHANT.id,
@@ -2906,7 +2944,7 @@ var UTILS =
 
         validPhoneNumber: function(inputtxt)
         {
-            var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            let phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
             if (inputtxt.value.match(phoneno))
             {
                 return true;
@@ -2921,7 +2959,7 @@ var UTILS =
 //////////////////////////////////////////////////////////
 // UI changes for payment transactions
 /////////////////////////////////////////////////////////
-var UIUtils = {
+let UIUtils = {
     showSpinner : function () {
         document.getElementById('waitForAuthorization').style.display = "block";
         document.getElementById('mobilepay').innerHTML='Please authorize payment from your mobile device...';
@@ -2937,9 +2975,9 @@ var UIUtils = {
 // CALLBACK once payment is done
 ////////////////////////////////////////////////////////
 
-var REASON = Object.freeze({"AuthorizationStatus":0, "ConfirmationCode":1, "Error":2, "Info":3});
+let REASON = Object.freeze({"AuthorizationStatus":0, "ConfirmationCode":1, "Error":2, "Info":3});
 
-var CALLBACK =
+let CALLBACK =
     {
         callback : null,
 

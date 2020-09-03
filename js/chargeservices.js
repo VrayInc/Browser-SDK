@@ -7,7 +7,7 @@ var IE;
 
 function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
 {
-    var data;
+    let data;
 
     if (token == "good-token")
     {
@@ -21,7 +21,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
     {
         if(CALLBACK.paymentResponseURL){
             console.log('paymentResponseURL Found');
-            var a = CALLBACK.paymentResponseURL;
+            let a = CALLBACK.paymentResponseURL;
             if(a.indexOf("?") > -1) {
                 window.location.href = CALLBACK.paymentResponseURL +
                     "&reason=" + REASON.AuthorizationStatus +
@@ -37,7 +37,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
         } else {
             console.log('paymentResponseURL not Found');
             if(TRANSACTION.paymentResponseURL){
-                var a = TRANSACTION.paymentResponseURL;
+                let a = TRANSACTION.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
                     window.location.href = TRANSACTION.paymentResponseURL +
                         "&reason=" + REASON.AuthorizationStatus +
@@ -63,7 +63,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
 
-                var a = CALLBACK.paymentResponseURL;
+                let a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
                     window.location.href = CALLBACK.paymentResponseURL +
                         "&reason=" + REASON.Error +
@@ -77,7 +77,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
 
-                    var a = TRANSACTION.paymentResponseURL;
+                    let a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
                         window.location.href = TRANSACTION.paymentResponseURL +
                             "&reason=" + REASON.Error +
@@ -97,7 +97,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
             if(CALLBACK.paymentResponseURL){
                 console.log('paymentResponseURL Found');
 
-                var a = CALLBACK.paymentResponseURL;
+                let a = CALLBACK.paymentResponseURL;
                 if(a.indexOf("?") > -1) {
                     window.location.href = CALLBACK.paymentResponseURL +
                         "&reason=" + REASON.Error +
@@ -113,7 +113,7 @@ function doMerchantCallback (tid, vid, merchantId, merchantName, token, amount)
                 console.log('paymentResponseURL not Found');
                 if(TRANSACTION.paymentResponseURL){
 
-                    var a = TRANSACTION.paymentResponseURL;
+                    let a = TRANSACTION.paymentResponseURL;
                     if(a.indexOf("?") > -1) {
                         window.location.href = TRANSACTION.paymentResponseURL +
                             "&reason=" + REASON.Error +
@@ -191,9 +191,9 @@ function sendChargePayment(tid, token, amount, merchant, charge) {
     if((token !== undefined) && (token !== null)) {
 
         //POST to ChargePaymentServlet.java
-        var url = "ChargePayment?action=submittoken&token=" + token +
+        let url = "ChargePayment?action=submittoken&token=" + token +
             "&amount=" + amount + "&merchant=" + merchant;
-        var chargeRequest = getHTTPRequest();
+        let chargeRequest = getHTTPRequest();
         chargeRequest.open("POST", url, true);
         chargeRequest.onreadystatechange = chargeResult;
         chargeRequest.send(charge);
@@ -241,7 +241,7 @@ function hmacService (requestObject) {
     return new Promise(function (resolve, reject) {
         let message = JSON.stringify(requestObject);
         requestObject = prepForHMAC(message, false, requestObject);
-        var url = "https://hmac.vraymerchant.com";
+        let url = APPSERVER.hmacHost.getURL();
         $.ajax({
             type: "POST",
             url: url,
@@ -262,8 +262,8 @@ function hmacService (requestObject) {
 }
 
 function prepForHMAC(message, cond, requestObject) {
-    payVal = (cond) ? "yes" : "no";
-    var obj = {
+    let payVal = (cond) ? "yes" : "no";
+    let obj = {
         "val" : message,
         "pay" : payVal,
         "merchantId" : requestObject.merchantId,
@@ -273,28 +273,47 @@ function prepForHMAC(message, cond, requestObject) {
 }
 
 function getURLs(serverType) {
-    var domainURL = "";
-    var gatewayURL = "";
-    var vrayBaseURL = "";
-    var urls = {};
+    let domainURL = "";
+    let gatewayURL = "";
+    let vrayBaseURL = "";
+    let hmacURL = "";
+    let urls = {};
 
     if (serverType == "0") {
         domainURL = "https://vraydevportal.azurewebsites.net";
         gatewayURL = "https://devgateway.vraymerchant.com/";
         vrayBaseURL = "https://devpay.vraymerchant.com/";
-        urls = { domainURL: domainURL, gatewayURL: gatewayURL, vrayBaseURL: vrayBaseURL };
+        hmacURL = "https://devhmac.vraymerchant.com";
+        urls = {
+            domainURL: domainURL,
+            gatewayURL: gatewayURL,
+            vrayBaseURL: vrayBaseURL,
+            hmacURL: hmacURL
+        };
     }
     else if (serverType == "1") {
         domainURL = "https://vraystagingportal.azurewebsites.net";
-        gatewayURL = "https://devgateway.vraymerchant.com/";
+        gatewayURL = "https://staginggateway.vraymerchant.com/";
         vrayBaseURL = "https://stagingpay.vraymerchant.com/";
-        urls = { domainURL: domainURL, gatewayURL: gatewayURL, vrayBaseURL: vrayBaseURL };
+        hmacURL = "https://staginghmac.vraymerchant.com";
+        urls = {
+            domainURL: domainURL,
+            gatewayURL: gatewayURL,
+            vrayBaseURL: vrayBaseURL,
+            hmacURL: hmacURL
+        };
     }
     else if (serverType == "2") {
         domainURL = "https://vrayproduction.azurewebsites.net";
         gatewayURL = "https://gateway.vraymerchant.com/";
         vrayBaseURL = "https://pay.vraymerchant.com/";
-        urls = { domainURL: domainURL, gatewayURL: gatewayURL, vrayBaseURL: vrayBaseURL };
+        hmacURL = "https://hmac.vraymerchant.com";
+        urls = {
+            domainURL: domainURL,
+            gatewayURL: gatewayURL,
+            vrayBaseURL: vrayBaseURL,
+            hmacURL: hmacURL
+        };
     }
     return urls;
 }

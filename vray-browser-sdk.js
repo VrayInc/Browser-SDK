@@ -3,12 +3,12 @@
 /////////////////////////
 // loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.29/js/jquery.min.js', jQueryAdded);
 loadJSFile('https://code.jquery.com/jquery-3.5.1.min.js', jQueryAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.29/js/paymentservices.js', paymentServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.29/js/chargeservices.js', chargeServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.30/js/paymentservices.js', paymentServicesAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.30/js/chargeservices.js', chargeServicesAdded);
 // loadJSFile('sdk/js/paymentservices.js', paymentServicesAdded);
 // loadJSFile('sdk/js/chargeservices.js', chargeServicesAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.29/js/digest.js', digestAdded);
-loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.29/js/hmac-sha256.js', hmacAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.30/js/digest.js', digestAdded);
+loadJSFile('https://cdn.jsdelivr.net/gh/VrayInc/Browser-SDK@Commercial-v1.3.30/js/hmac-sha256.js', hmacAdded);
 
 //////////////////////////
 //Callbacks after JS Files
@@ -230,7 +230,7 @@ function signupWithSecurityQ()
         signupRequest = UTILS.prepForHMAC(signupRequest);
         $.ajax({
             type        : "POST",
-            url         : "https://hmac.vraymerchant.com",
+            url         : APPSERVER.hmacHost.getURL(),
             contentType : "text/plain",
             data        : signupRequest,
             timeout     : 10000,
@@ -497,7 +497,7 @@ function calculateHMAC(message)
     message = UTILS.prepForHMAC(message);
     $.ajax({
         type        : "POST",
-        url         : "https://hmac.vraymerchant.com",
+        url         : APPSERVER.hmacHost.getURL(),
         contentType : "text/plain",
         data        : message,
         timeout     : 10000,
@@ -621,7 +621,7 @@ var VRAY =
 
             $.ajax({
                 type        : "POST",
-                url         : "https://hmac.vraymerchant.com",
+                url         : APPSERVER.hmacHost.getURL(),
                 contentType : "text/plain",
                 data        : purchaseOrder,
                 timeout     : 10000,
